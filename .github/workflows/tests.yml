@@ -32,4 +32,4 @@ jobs:
         run: composer cs-check
 
       - name: Test
-        run: composer test
+        run: php artisan test
