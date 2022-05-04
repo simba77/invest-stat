@@ -19,6 +19,7 @@
     <exclude-pattern>*.ts</exclude-pattern>
     <exclude-pattern>*.vue</exclude-pattern>
     <exclude-pattern>config/*</exclude-pattern>
+    <exclude-pattern>resources/*</exclude-pattern>
 
     <!-- inherit rules from: -->
     <rule ref="PSR12"/>
