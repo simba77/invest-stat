@@ -56,6 +56,7 @@
 <script lang="ts">
 import {LockClosedIcon} from '@heroicons/vue/solid'
 import axios from "axios";
+import {authStore} from "@/stores/authStore";
 
 export default {
   name: "HomePage",
@@ -75,8 +76,16 @@ export default {
     authorize() {
       this.loading = true;
       axios.post('/api/login', this.form)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
+          // Check auth and redirect to homepage
+          authStore()
+            .checkAuth()
+            .then(() => {
+              this.$router.push({name: 'HomePage'});
+            })
+            .catch(() => {
+              alert('An error has occurred');
+            });
         })
         .catch((error) => {
           if (error.response.status === 401) {
