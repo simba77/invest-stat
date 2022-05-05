@@ -6,9 +6,18 @@ import {createApp} from 'vue'
 import {createPinia} from 'pinia'
 import router from './router';
 import AppComponent from "./App.vue";
-
+import {authStore} from "@/stores/authStore";
 
 const app = createApp(AppComponent)
 app.use(createPinia())
+
+// Check auth
+router.beforeEach((to) => {
+  const auth = authStore();
+  if (to.meta.requiresAuth && !auth.id) {
+    return '/login'
+  }
+})
+
 app.use(router)
 app.mount('#app')
