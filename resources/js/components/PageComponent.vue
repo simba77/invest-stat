@@ -18,14 +18,13 @@
             <div class="ml-4 flex items-center md:ml-6">
               <!-- Profile dropdown -->
               <Menu as="div" class="ml-3 relative">
-                <div>
-                  <MenuButton class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <span class="sr-only">Open user menu</span>
-                    <div class="bg-indigo-100 ring-2 ring-indigo-400 h-10 w-10 rounded-full shadow flex items-center justify-center font-extrabold text-xl">
-                      <user-icon class="text-gray-500 h-6 w-6"></user-icon>
-                    </div>
-                  </MenuButton>
-                </div>
+                <MenuButton class="max-w-xs flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:rounded-full">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="bg-indigo-100 ring-2 ring-indigo-400 h-10 w-10 rounded-full shadow flex items-center justify-center font-extrabold text-xl">
+                    <user-icon class="text-gray-500 h-6 w-6"></user-icon>
+                  </div>
+                  <div class="text-white ml-4 mr-4 font-bold">{{ user.name }}</div>
+                </MenuButton>
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
                             leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -102,13 +101,10 @@
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {MenuIcon, XIcon, UserIcon} from '@heroicons/vue/outline'
+import {authStore} from "@/stores/authStore";
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+const user = authStore().userData;
+
 const navigation = [
   {name: 'Dashboard', href: '#', current: true},
   {name: 'Expenses', href: '#', current: false},
@@ -116,8 +112,6 @@ const navigation = [
   {name: 'Accounts', href: '#', current: false}
 ]
 const userNavigation = [
-  {name: 'Your Profile', href: '#'},
-  {name: 'Settings', href: '#'},
   {name: 'Sign out', href: '#'},
 ]
 </script>
