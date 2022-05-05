@@ -14,10 +14,21 @@ app.use(createPinia())
 // Check auth
 router.beforeEach((to) => {
   const auth = authStore();
-  if (to.meta.requiresAuth && !auth.id) {
+  if (to.meta.requiresAuth && !auth.userData) {
     return '/login'
+  }
+
+  // Redirect authorized users from guest pages
+  if (to.meta.onlyGuests && auth.userData) {
+    return '/'
   }
 })
 
-app.use(router)
-app.mount('#app')
+const auth = authStore();
+
+// Checking auth and mount app
+auth.checkAuth()
+  .finally(() => {
+    app.use(router)
+    app.mount('#app')
+  });
