@@ -5,8 +5,9 @@
         <img class="mx-auto h-12 w-auto" src="@/../images/workflow-mark-indigo-600.svg" alt="Workflow"/>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
-        <input type="hidden" name="remember" value="true"/>
+      <form class="mt-8 space-y-6" action="#" method="POST" @submit.prevent="authorize">
+        <div class="bg-red-500 text-white rounded px-4 py-2" v-if="error">{{ error }}</div>
+
         <div class="rounded-md shadow-sm -space-y-px">
           <div class="mb-4">
             <label for="email-address" class="sr-only">Email address</label>
@@ -41,7 +42,7 @@
           <label for="remember-me" class="form-checkbox-label">Remember me</label>
         </div>
 
-        <button type="submit" class="btn-primary w-full">
+        <button type="submit" class="btn-primary w-full" :disabled="loading">
           <span class="absolute left-0 inset-y-0 flex items-center pl-3">
             <LockClosedIcon class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true"/>
           </span>
@@ -54,6 +55,7 @@
 
 <script lang="ts">
 import {LockClosedIcon} from '@heroicons/vue/solid'
+import axios from "axios";
 
 export default {
   name: "HomePage",
@@ -64,9 +66,30 @@ export default {
         email: '',
         password: '',
         remember: true,
-      }
+      },
+      loading: false,
+      error: null,
     }
   },
+  methods: {
+    authorize() {
+      this.loading = true;
+      axios.post('/api/login', this.form)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            this.error = error.response.data.message;
+          } else {
+            alert('An error has occurred');
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    }
+  }
 }
 </script>
 
