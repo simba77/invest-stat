@@ -22,4 +22,3 @@ mix.ts('resources/js/app.ts', 'public/assets')
   .sass('resources/sass/app.scss', 'public/assets')
   .tailwind()
   .version();
-
