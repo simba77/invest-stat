@@ -108,7 +108,7 @@ const user = authStore().userData;
 const navigation = [
   {name: 'Dashboard', href: '#', current: true},
   {name: 'Expenses', href: '#', current: false},
-  {name: 'Investments and results', href: '#', current: false},
+  {name: 'Investments and Results', href: '#', current: false},
   {name: 'Accounts', href: '#', current: false}
 ]
 const userNavigation = [

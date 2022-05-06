@@ -78,7 +78,7 @@ export default {
           cards: [
             {
               name: 'Profit',
-              percent: 32,
+              percent: -32,
               total: -9334,
             },
             {
