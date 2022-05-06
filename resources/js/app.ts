@@ -7,9 +7,13 @@ import {createPinia} from 'pinia'
 import router from './router';
 import AppComponent from "./App.vue";
 import {authStore} from "@/stores/authStore";
+import FloatingVue from 'floating-vue'
+import 'floating-vue/dist/style.css'
 
 const app = createApp(AppComponent)
 app.use(createPinia())
+
+app.use(FloatingVue)
 
 // Check auth
 router.beforeEach((to) => {
