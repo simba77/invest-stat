@@ -81,9 +81,9 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <header class="bg-white shadow">
+    <header class="bg-white shadow" v-if="title">
       <div class="max-w-7xl mx-auto py-3.5 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
+        <h1 class="text-xl font-bold text-gray-900">{{ props.title }}</h1>
       </div>
     </header>
     <main>
@@ -102,20 +102,26 @@
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {MenuIcon, XIcon, UserIcon} from '@heroicons/vue/outline'
 import {authStore} from "@/stores/authStore";
+import {defineProps} from "vue";
+import router from "@/router";
+
+const props = defineProps({
+  title: {
+    type: String,
+    default: null,
+  }
+})
 
 const user = authStore().userData;
+const routeName = router.currentRoute.value.name;
 
 const navigation = [
-  {name: 'Dashboard', href: '#', current: true},
+  {name: 'Dashboard', href: '/', current: routeName === 'HomePage'},
   {name: 'Expenses', href: '#', current: false},
-  {name: 'Investments and Results', href: '#', current: false},
+  {name: 'Investments and Results', href: '/investments', current: routeName === 'Investments'},
   {name: 'Accounts', href: '#', current: false}
 ]
 const userNavigation = [
   {name: 'Sign out', href: '#'},
 ]
 </script>
-
-<style scoped>
-
-</style>

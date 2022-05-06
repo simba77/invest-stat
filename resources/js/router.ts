@@ -10,6 +10,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/HomePage.vue')
   },
   {
+    name: 'Investments',
+    path: '/investments',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/InvestmentsPage.vue')
+  },
+  {
     name: 'Login',
     path: '/login',
     meta: {

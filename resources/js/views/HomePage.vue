@@ -1,5 +1,5 @@
 <template>
-  <page-component>
+  <page-component title="Dashboard">
     <div class="text-xl mb-3">Investment Result</div>
     <div class="grid grid-cols-3 gap-4">
       <stat-card

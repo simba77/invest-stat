@@ -16,7 +16,7 @@
           <arrow-sm-up-icon class="h-5 mr-0.5 text-green-500"></arrow-sm-up-icon>
         </template>
         <template v-else>
-          <arrow-sm-down-icon class="h-5 mr-0.5"></arrow-sm-down-icon>
+          <arrow-sm-down-icon class="h-5 mr-0.5 text-red-500"></arrow-sm-down-icon>
         </template>
         {{ Math.abs(percent) }}%
       </div>

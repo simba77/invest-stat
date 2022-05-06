@@ -20,4 +20,29 @@
   .btn-primary {
     @apply relative py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:ring-offset-2 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500;
   }
+
+  .simple-table {
+    @apply bg-white shadow rounded-lg w-full ring-1 ring-gray-200 overflow-hidden;
+
+    thead {
+      @apply border-b bg-gray-50;
+    }
+
+    th {
+      @apply px-4 py-3 text-left;
+    }
+
+    tbody {
+      tr {
+        @apply border-b hover:bg-gray-100;
+        &:last-of-type {
+          @apply border-b-0;
+        }
+      }
+
+      td {
+        @apply px-4 py-3;
+      }
+    }
+  }
 }
