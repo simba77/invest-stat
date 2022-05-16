@@ -28,6 +28,12 @@
       @apply border-b bg-gray-50;
     }
 
+    &.white-header {
+      thead {
+        @apply border-b bg-white;
+      }
+    }
+
     th {
       @apply px-4 py-3 text-left;
     }
@@ -42,6 +48,16 @@
 
       td {
         @apply px-4 py-3;
+      }
+    }
+
+    .table-subtitle {
+      @apply cursor-text text-left font-medium bg-gray-50 hover:bg-gray-50 border-b-gray-300
+    }
+
+    .table-subtitle {
+      td {
+        @apply px-4 py-1.5;
       }
     }
   }

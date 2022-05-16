@@ -117,7 +117,7 @@ const routeName = router.currentRoute.value.name;
 
 const navigation = [
   {name: 'Dashboard', href: '/', current: routeName === 'HomePage'},
-  {name: 'Expenses', href: '#', current: false},
+  {name: 'Expenses', href: '/expenses', current: routeName === 'Expenses'},
   {name: 'Investments and Results', href: '/investments', current: routeName === 'Investments'},
   {name: 'Accounts', href: '#', current: false}
 ]
