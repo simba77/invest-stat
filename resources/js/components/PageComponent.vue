@@ -9,8 +9,14 @@
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-indigo-700 text-white' : 'text-white hover:bg-indigo-800 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
-                   :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+                <router-link
+                  v-for="item in navigation"
+                  :key="item.name"
+                  :to="{name: item.routeName}"
+                  :class="[item.current ? 'bg-indigo-700 text-white' : 'text-white hover:bg-indigo-800 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
+                  :aria-current="item.current ? 'page' : undefined"
+                >{{ item.name }}
+                </router-link>
               </div>
             </div>
           </div>
@@ -116,10 +122,26 @@ const user = authStore().userData;
 const routeName = router.currentRoute.value.name;
 
 const navigation = [
-  {name: 'Dashboard', href: '/', current: routeName === 'HomePage'},
-  {name: 'Expenses', href: '/expenses', current: routeName === 'Expenses'},
-  {name: 'Investments and Results', href: '/investments', current: routeName === 'Investments'},
-  {name: 'Accounts', href: '#', current: false}
+  {
+    name: 'Dashboard',
+    routeName: 'HomePage',
+    current: routeName === 'HomePage'
+  },
+  {
+    name: 'Expenses',
+    routeName: 'Expenses',
+    current: routeName === 'Expenses'
+  },
+  {
+    name: 'Investments and Results',
+    routeName: 'Investments',
+    current: routeName === 'Investments'
+  },
+  {
+    name: 'Accounts',
+    routeName: '',
+    current: false
+  }
 ]
 const userNavigation = [
   {name: 'Sign out', href: '#'},
