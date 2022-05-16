@@ -1,5 +1,8 @@
 <template>
   <page-component title="Expenses">
+    <div class="mb-4">
+      <router-link :to="{name: 'CreateCategory'}" class="btn btn-primary">Create Category</router-link>
+    </div>
     <table class="simple-table white-header">
       <thead>
       <tr>

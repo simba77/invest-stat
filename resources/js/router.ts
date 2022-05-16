@@ -26,6 +26,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/ExpensesPage.vue')
   },
   {
+    name: 'CreateCategory',
+    path: '/create-category',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Expenses/CategoryForm.vue')
+  },
+  {
     name: 'Login',
     path: '/login',
     meta: {
