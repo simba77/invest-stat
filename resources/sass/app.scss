@@ -21,6 +21,10 @@
     @apply relative py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:ring-offset-2 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500;
   }
 
+  .btn-cancel {
+    @apply ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  }
+
   .simple-table {
     @apply bg-white shadow rounded-lg w-full ring-1 ring-gray-200 overflow-hidden;
 
@@ -52,7 +56,7 @@
     }
 
     .table-subtitle {
-      @apply cursor-text text-left font-medium bg-gray-50 hover:bg-gray-50 border-b-gray-300
+      @apply cursor-text text-left font-medium bg-gray-50 hover:bg-gray-50 border-b-gray-300;
     }
 
     .table-subtitle {
@@ -60,5 +64,9 @@
         @apply px-4 py-1.5;
       }
     }
+  }
+
+  .card {
+    @apply bg-white shadow rounded p-6;
   }
 }
