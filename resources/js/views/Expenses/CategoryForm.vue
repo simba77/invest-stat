@@ -6,10 +6,12 @@
           <h3 class="text-lg font-medium text-gray-900">Category</h3>
           <p class="mt-1 text-sm text-gray-600">Enter the name of the category to group expenses</p>
         </div>
-        <div class="bg-red-500 inline-block text-white rounded px-4 py-2" v-if="error">{{ error }}</div>
+        <div class="bg-red-500 inline-block text-white rounded px-4 py-2" v-if="errors && errors.message">{{ errors.message }}</div>
         <div class="w-2/4">
           <input-text
             v-model="form.name"
+            :key="componentKey"
+            :error="errors?.name"
             name="name"
             label="Category Name"
             placeholder="Enter a category name"
@@ -26,6 +28,7 @@
 <script lang="ts">
 import PageComponent from "@/components/PageComponent.vue";
 import InputText from "@/components/Forms/InputText.vue";
+import axios from "axios";
 
 export default {
   name: "CategoryForm",
@@ -36,12 +39,28 @@ export default {
         name: '',
       },
       loading: false,
-      error: null,
+      errors: null,
+      componentKey: 0,
     }
   },
   methods: {
     submitForm() {
-      alert('Submit');
+      this.loading = true;
+      axios.post('/api/expenses/create-category', this.form)
+        .then(() => {
+          this.$router.push({name: 'Expenses'});
+        })
+        .catch((error) => {
+          if (error.response.data.errors) {
+            this.errors = error.response.data.errors;
+            this.componentKey += 1;
+          } else {
+            alert('An error has occurred');
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
     }
   }
 }

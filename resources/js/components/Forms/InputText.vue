@@ -2,7 +2,7 @@
   <div class="">
     <label :for="elementId" class="block text-sm font-medium text-gray-700">{{ label }}</label>
     <input
-      class="mt-1 form-input"
+      :class="[error ? 'border-red-500' : '', 'mt-1 form-input']"
       :id="elementId"
       :name="name"
       :type="type"
@@ -16,6 +16,7 @@
       v-model="value"
     >
     <div class="mt-1 text-sm text-gray-500" v-if="help" v-html="help"></div>
+    <div class="mt-1 text-sm text-red-500" v-if="error">{{ typeof error === 'object' ? error.join(',') : error }}</div>
   </div>
 </template>
 
@@ -54,7 +55,7 @@ export default {
       default: '',
     },
     error: {
-      type: [String, Number],
+      type: [String, Number, Object],
       default: null,
     },
     help: {
