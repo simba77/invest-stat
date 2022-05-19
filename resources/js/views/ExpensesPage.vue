@@ -12,15 +12,21 @@
       </thead>
       <tbody>
       <template v-for="(cat, index) in expenses.data" :key="index">
-        <tr class="table-subtitle">
-          <td colspan="2">{{ cat.name }}</td>
-        </tr>
-        <template v-if="cat.expenses.length > 0">
-          <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
-            <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
-            <td>{{ expense.sum }}</td>
+        <template v-if="! cat.isTotal">
+          <tr class="table-subtitle">
+            <td colspan="2">{{ cat.name }}</td>
           </tr>
+          <template v-if="cat.expenses.length > 0">
+            <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
+              <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
+              <td>{{ new Intl.NumberFormat('ru-RU').format(expense.sum) }} {{ expense.currency }}</td>
+            </tr>
+          </template>
         </template>
+        <tr class="font-bold" v-else>
+          <td class="text-right">{{ cat.name }}</td>
+          <td>{{ new Intl.NumberFormat('ru-RU').format(cat.sum) }} {{ cat.currency }}</td>
+        </tr>
       </template>
       </tbody>
     </table>
