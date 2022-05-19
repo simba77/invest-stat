@@ -15,6 +15,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group(['prefix' => 'expenses'], function () {
             Route::post('create-category', [ExpensesController::class, 'createCategory'])->name('expenses.create-category');
+            Route::get('list', [ExpensesController::class, 'expensesList'])->name('expenses.expenses-list');
         });
     });
 });

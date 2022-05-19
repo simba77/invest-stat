@@ -11,73 +11,52 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="table-subtitle">
-        <td colspan="2">Basic</td>
-      </tr>
-      <tr>
-        <td>Item one</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td>Item two</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td>Item three</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td class="text-right">Subtotal:</td>
-        <td>5 000,00</td>
-      </tr>
-
-
-      <tr class="table-subtitle">
-        <td colspan="2">Payments</td>
-      </tr>
-      <tr>
-        <td>Mobile</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td>Internet</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td class="text-right">Subtotal:</td>
-        <td>5 000,00</td>
-      </tr>
-
-
-      <tr class="table-subtitle">
-        <td colspan="2">Shops and Others</td>
-      </tr>
-      <tr>
-        <td>Shop name</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td>Supermarket</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr>
-        <td class="text-right">Subtotal:</td>
-        <td>5 000,00</td>
-      </tr>
-      <tr class="font-bold">
-        <td class="text-right">Total:</td>
-        <td>5 000,00</td>
-      </tr>
+      <template v-for="(cat, index) in expenses.data" :key="index">
+        <tr class="table-subtitle">
+          <td colspan="2">{{ cat.name }}</td>
+        </tr>
+        <template v-if="cat.expenses.length > 0">
+          <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
+            <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
+            <td>{{ expense.sum }}</td>
+          </tr>
+        </template>
+      </template>
       </tbody>
     </table>
   </page-component>
 </template>
 
-<script>
-import PageComponent from "../components/PageComponent";
+<script lang="ts">
+import PageComponent from "../components/PageComponent.vue";
+import axios from "axios";
 
 export default {
   name: "ExpensesPage",
-  components: {PageComponent}
+  components: {PageComponent},
+  mounted() {
+    this.getItems();
+  },
+  data() {
+    return {
+      loading: true,
+      expenses: {},
+    }
+  },
+  methods: {
+    getItems() {
+      this.loading = true;
+      axios.get('/api/expenses/list')
+        .then((response) => {
+          this.expenses = response.data;
+        })
+        .catch(() => {
+          alert('An error has occurred');
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    }
+  }
 }
 </script>
