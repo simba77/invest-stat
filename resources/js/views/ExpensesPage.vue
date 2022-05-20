@@ -8,6 +8,7 @@
       <tr>
         <th>Name</th>
         <th>Sum</th>
+        <th class="flex justify-end">Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -15,11 +16,44 @@
         <template v-if="! cat.isTotal">
           <tr class="table-subtitle">
             <td colspan="2">{{ cat.name }}</td>
+            <td class="flex justify-end items-center">
+              <template v-if="cat.id">
+                <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                  <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
+                </router-link>
+                <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                  <pencil-icon class="h-5 w-5"></pencil-icon>
+                </router-link>
+                <button
+                  type="button"
+                  class="text-gray-300 hover:text-red-500"
+                  @click="openConfirmModal(cat, 'category')"
+                >
+                  <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                </button>
+              </template>
+            </td>
           </tr>
           <template v-if="cat.expenses.length > 0">
             <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
               <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
               <td>{{ new Intl.NumberFormat('ru-RU').format(expense.sum) }} {{ expense.currency }}</td>
+              <td class="table-actions">
+                <template v-if="expense.id">
+                  <div class="flex justify-end items-center show-on-row-hover">
+                    <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                      <pencil-icon class="h-5 w-5"></pencil-icon>
+                    </router-link>
+                    <button
+                      type="button"
+                      class="text-gray-300 hover:text-red-500"
+                      @click="openConfirmModal(expense, 'expense')"
+                    >
+                      <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                    </button>
+                  </div>
+                </template>
+              </td>
             </tr>
           </template>
         </template>
@@ -31,25 +65,58 @@
       </tbody>
     </table>
   </page-component>
+
+  <button class="btn btn-primary" @click="openConfirmModal">Show modal</button>
+
+  <base-modal ref="baseModal" v-if="showModal">
+    <confirm-modal
+      :close="closeModal"
+      :confirm="confirmDeletion"
+      title="Deletion confirmation"
+      :text="'Are you sure you want to delete &quot;<b>'+ deleteItem.data.name +'</b>&quot;?'"
+    ></confirm-modal>
+  </base-modal>
 </template>
 
 <script lang="ts">
 import PageComponent from "../components/PageComponent.vue";
 import axios from "axios";
+import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
+import BaseModal from "@/components/Modals/BaseModal.vue";
+import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 
 export default {
   name: "ExpensesPage",
-  components: {PageComponent},
+  components: {ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon},
   mounted() {
     this.getItems();
   },
   data() {
     return {
       loading: true,
+      showModal: false,
+      deleteItem: {
+        type: '',
+        data: {},
+      },
       expenses: {},
     }
   },
   methods: {
+    openConfirmModal(item: any, type = 'expense') {
+      this.deleteItem.type = type;
+      this.deleteItem.data = item;
+      this.showModal = true;
+      setTimeout(() => {
+        this.$refs.baseModal.openModal();
+      });
+    },
+    closeModal() {
+      this.$refs.baseModal.closeModal();
+    },
+    confirmDeletion() {
+      alert('Confirm');
+    },
     getItems() {
       this.loading = true;
       axios.get('/api/expenses/list')

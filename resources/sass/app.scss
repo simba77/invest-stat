@@ -42,9 +42,24 @@
       @apply px-4 py-3 text-left;
     }
 
+    .show-on-row-hover {
+      display: none;
+    }
+
+    .table-actions {
+      @apply text-right;
+    }
+
     tbody {
       tr {
         @apply border-b hover:bg-gray-100;
+
+        &:hover {
+          .show-on-row-hover {
+            @apply flex;
+          }
+        }
+
         &:last-of-type {
           @apply border-b-0;
         }
