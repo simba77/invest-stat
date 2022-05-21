@@ -7,6 +7,7 @@ namespace Modules\Expenses\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\Expenses\Models\Expense;
 use Modules\Expenses\Models\ExpensesCategory;
 use Modules\Expenses\Resources\ResourceForTable;
 
@@ -35,6 +36,13 @@ class ExpensesController extends Controller
             $expense->delete();
         }
         $category->delete();
+        return ['success' => true];
+    }
+
+    public function deleteExpense(int $id): array
+    {
+        $expense = Expense::findOrFail($id);
+        $expense->delete();
         return ['success' => true];
     }
 

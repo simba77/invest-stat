@@ -118,7 +118,10 @@ export default {
             this.closeModal();
           });
       } else {
-        alert('Delete expense');
+        this.deleteExpense(this.deleteItem.data.id)
+          .finally(() => {
+            this.closeModal();
+          });
       }
     },
     getItems() {
@@ -137,7 +140,24 @@ export default {
     deleteCategory(id: number) {
       this.deleting = true;
       return new Promise((resolve, reject) => {
-        axios.post('/api/expenses/delete/' + id)
+        axios.post('/api/expenses/delete-category/' + id)
+          .then(() => {
+            this.getItems();
+            resolve({deleted: true});
+          })
+          .catch(() => {
+            alert('An error has occurred');
+            reject('An error has occurred');
+          })
+          .finally(() => {
+            this.deleting = false;
+          })
+      });
+    },
+    deleteExpense(id: number) {
+      this.deleting = true;
+      return new Promise((resolve, reject) => {
+        axios.post('/api/expenses/delete-expense/' + id)
           .then(() => {
             this.getItems();
             resolve({deleted: true});
