@@ -66,9 +66,7 @@
     </table>
   </page-component>
 
-  <button class="btn btn-primary" @click="openConfirmModal">Show modal</button>
-
-  <base-modal ref="baseModal" v-if="showModal">
+  <base-modal ref="deleteConfirmationModal">
     <confirm-modal
       :close="closeModal"
       :confirm="confirmDeletion"
@@ -94,7 +92,7 @@ export default {
   data() {
     return {
       loading: true,
-      showModal: false,
+      deleting: false,
       deleteItem: {
         type: '',
         data: {},
@@ -106,16 +104,22 @@ export default {
     openConfirmModal(item: any, type = 'expense') {
       this.deleteItem.type = type;
       this.deleteItem.data = item;
-      this.showModal = true;
       setTimeout(() => {
-        this.$refs.baseModal.openModal();
+        this.$refs.deleteConfirmationModal.openModal();
       });
     },
     closeModal() {
-      this.$refs.baseModal.closeModal();
+      this.$refs.deleteConfirmationModal.closeModal();
     },
     confirmDeletion() {
-      alert('Confirm');
+      if (this.deleteItem.type === 'category') {
+        this.deleteCategory(this.deleteItem.data.id)
+          .finally(() => {
+            this.closeModal();
+          });
+      } else {
+        alert('Delete expense');
+      }
     },
     getItems() {
       this.loading = true;
@@ -129,6 +133,23 @@ export default {
         .finally(() => {
           this.loading = false;
         })
+    },
+    deleteCategory(id: number) {
+      this.deleting = true;
+      return new Promise((resolve, reject) => {
+        axios.post('/api/expenses/delete/' + id)
+          .then(() => {
+            this.getItems();
+            resolve({deleted: true});
+          })
+          .catch(() => {
+            alert('An error has occurred');
+            reject('An error has occurred');
+          })
+          .finally(() => {
+            this.deleting = false;
+          })
+      });
     }
   }
 }

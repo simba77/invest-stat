@@ -28,6 +28,16 @@ class ExpensesController extends Controller
         return ['success' => true, 'id' => $category->id];
     }
 
+    public function deleteCategory(int $id): array
+    {
+        $category = ExpensesCategory::findOrFail($id);
+        foreach ($category->expenses as $expense) {
+            $expense->delete();
+        }
+        $category->delete();
+        return ['success' => true];
+    }
+
     public function expensesList(): array
     {
         $user = Auth::user();
