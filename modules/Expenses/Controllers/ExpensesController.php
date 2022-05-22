@@ -13,20 +13,42 @@ use Modules\Expenses\Resources\ResourceForTable;
 
 class ExpensesController extends Controller
 {
-    public function createCategory(Request $request): array
+    public function storeCategory(Request $request): array
     {
         $fields = $request->validate(
             [
                 'name' => ['required'],
             ]
         );
-        $category = ExpensesCategory::create(
-            [
-                'name'    => $fields['name'],
-                'user_id' => Auth::user()->id,
-            ]
-        );
+
+        $id = $request->input('id');
+        if ($id) {
+            $category = ExpensesCategory::findOrFail($id);
+            $category->update(
+                [
+                    'name' => $fields['name'],
+                ]
+            );
+        } else {
+            $category = ExpensesCategory::create(
+                [
+                    'name'    => $fields['name'],
+                    'user_id' => Auth::user()->id,
+                ]
+            );
+        }
         return ['success' => true, 'id' => $category->id];
+    }
+
+    public function editCategory(int $id): array
+    {
+        $category = ExpensesCategory::findOrFail($id);
+        return [
+            'form' => [
+                'id'   => $category->id,
+                'name' => $category->name,
+            ],
+        ];
     }
 
     public function deleteCategory(int $id): array

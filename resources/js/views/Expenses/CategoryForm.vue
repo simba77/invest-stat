@@ -18,7 +18,7 @@
           />
         </div>
         <div class="border-b"></div>
-        <button type="submit" class="btn-primary" :disabled="loading">Save</button>
+        <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
         <router-link :to="{name: 'Expenses'}" class="btn btn-cancel ml-3">Back</router-link>
       </form>
     </div>
@@ -43,10 +43,15 @@ export default {
       componentKey: 0,
     }
   },
+  mounted() {
+    if (this.$route.params.id) {
+      this.getForm(this.$route.params.id);
+    }
+  },
   methods: {
     submitForm() {
       this.loading = true;
-      axios.post('/api/expenses/create-category', this.form)
+      axios.post('/api/expenses/store-category', this.form)
         .then(() => {
           this.$router.push({name: 'Expenses'});
         })
@@ -57,6 +62,20 @@ export default {
           } else {
             alert('An error has occurred');
           }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    },
+    getForm(id: number) {
+      this.loading = true;
+      axios.get('/api/expenses/edit-category/' + id)
+        .then((response) => {
+          this.form = response.data.form;
+          this.componentKey += 1;
+        })
+        .catch(() => {
+          alert('An error has occurred');
         })
         .finally(() => {
           this.loading = false;

@@ -21,7 +21,7 @@
                 <router-link :to="{name: 'AddExpense', params: {category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                   <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
                 </router-link>
-                <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                <router-link :to="{name: 'EditCategory', params: {id: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                   <pencil-icon class="h-5 w-5"></pencil-icon>
                 </router-link>
                 <button

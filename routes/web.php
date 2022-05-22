@@ -14,8 +14,9 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/checkAuth', [AuthController::class, 'getCurrentAuth'])->name('api.currentAuth');
 
         Route::group(['prefix' => 'expenses'], function () {
-            Route::post('create-category', [ExpensesController::class, 'createCategory'])->name('expenses.create-category');
             Route::get('list', [ExpensesController::class, 'expensesList'])->name('expenses.expenses-list');
+            Route::post('store-category', [ExpensesController::class, 'storeCategory'])->name('expenses.store-category');
+            Route::get('edit-category/{id:number}', [ExpensesController::class, 'editCategory'])->name('expenses.edit-category');
             Route::post('delete-category/{id:number}', [ExpensesController::class, 'deleteCategory'])->name('expenses.delete-category');
             Route::post('delete-expense/{id:number}', [ExpensesController::class, 'deleteExpense'])->name('expenses.delete-expense');
             Route::post('add-expense/{category:number}', [ExpensesController::class, 'addExpense'])->name('expenses.add-expense');
