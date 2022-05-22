@@ -54,10 +54,15 @@ export default {
       componentKey: 0,
     }
   },
+  mounted() {
+    if (this.$route.params.id) {
+      this.getForm(this.$route.params.id);
+    }
+  },
   methods: {
     submitForm() {
       this.loading = true;
-      axios.post('/api/expenses/add-expense/' + this.$route.params.category, this.form)
+      axios.post('/api/expenses/store-expense/' + this.$route.params.category, this.form)
         .then(() => {
           this.$router.push({name: 'Expenses'});
         })
@@ -68,6 +73,20 @@ export default {
           } else {
             alert('An error has occurred');
           }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    },
+    getForm(id: number) {
+      this.loading = true;
+      axios.get('/api/expenses/edit-expense/' + id)
+        .then((response) => {
+          this.form = response.data.form;
+          this.componentKey += 1;
+        })
+        .catch(() => {
+          alert('An error has occurred');
         })
         .finally(() => {
           this.loading = false;

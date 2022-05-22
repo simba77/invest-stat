@@ -19,7 +19,8 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('edit-category/{id:number}', [ExpensesController::class, 'editCategory'])->name('expenses.edit-category');
             Route::post('delete-category/{id:number}', [ExpensesController::class, 'deleteCategory'])->name('expenses.delete-category');
             Route::post('delete-expense/{id:number}', [ExpensesController::class, 'deleteExpense'])->name('expenses.delete-expense');
-            Route::post('add-expense/{category:number}', [ExpensesController::class, 'addExpense'])->name('expenses.add-expense');
+            Route::get('edit-expense/{id:number}', [ExpensesController::class, 'editExpense'])->name('expenses.edit-expense');
+            Route::post('store-expense/{category:number}', [ExpensesController::class, 'storeExpense'])->name('expenses.store-expense');
         });
     });
 });

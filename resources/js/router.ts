@@ -50,6 +50,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Expenses/ExpenseForm.vue')
   },
   {
+    name: 'EditExpense',
+    path: '/expenses/edit-expense/:category/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Expenses/ExpenseForm.vue')
+  },
+  {
     name: 'Login',
     path: '/login',
     meta: {

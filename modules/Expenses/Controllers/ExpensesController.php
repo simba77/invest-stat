@@ -61,7 +61,19 @@ class ExpensesController extends Controller
         return ['success' => true];
     }
 
-    public function addExpense(int $category, Request $request): array
+    public function editExpense(int $id): array
+    {
+        $expense = Expense::findOrFail($id);
+        return [
+            'form' => [
+                'id'   => $expense->id,
+                'name' => $expense->name,
+                'sum'  => $expense->sum,
+            ],
+        ];
+    }
+
+    public function storeExpense(int $category, Request $request): array
     {
         $fields = $request->validate(
             [
@@ -69,14 +81,27 @@ class ExpensesController extends Controller
                 'sum'  => ['required', 'numeric'],
             ]
         );
-        $expense = Expense::create(
-            [
-                'name'        => $fields['name'],
-                'sum'         => $fields['sum'],
-                'category_id' => $category,
-                'user_id'     => Auth::user()->id,
-            ]
-        );
+
+        $id = $request->input('id');
+        if ($id) {
+            $expense = Expense::findOrFail($id);
+            $expense->update(
+                [
+                    'name' => $fields['name'],
+                    'sum'  => $fields['sum'],
+                ]
+            );
+        } else {
+            $expense = Expense::create(
+                [
+                    'name'        => $fields['name'],
+                    'sum'         => $fields['sum'],
+                    'category_id' => $category,
+                    'user_id'     => Auth::user()->id,
+                ]
+            );
+        }
+
         return ['success' => true, 'id' => $expense->id];
     }
 

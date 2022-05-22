@@ -41,7 +41,7 @@
               <td class="table-actions">
                 <template v-if="expense.id">
                   <div class="flex justify-end items-center show-on-row-hover">
-                    <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                    <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                       <pencil-icon class="h-5 w-5"></pencil-icon>
                     </router-link>
                     <button
