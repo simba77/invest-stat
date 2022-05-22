@@ -27,11 +27,19 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     name: 'CreateCategory',
-    path: '/create-category',
+    path: '/expenses/create-category',
     meta: {
       requiresAuth: true,
     },
     component: () => import('@/views/Expenses/CategoryForm.vue')
+  },
+  {
+    name: 'AddExpense',
+    path: '/expenses/add-expense/:category',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Expenses/ExpenseForm.vue')
   },
   {
     name: 'Login',

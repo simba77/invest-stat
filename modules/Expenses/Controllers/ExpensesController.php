@@ -39,6 +39,25 @@ class ExpensesController extends Controller
         return ['success' => true];
     }
 
+    public function addExpense(int $category, Request $request): array
+    {
+        $fields = $request->validate(
+            [
+                'name' => ['required'],
+                'sum'  => ['required', 'numeric'],
+            ]
+        );
+        $expense = Expense::create(
+            [
+                'name'        => $fields['name'],
+                'sum'         => $fields['sum'],
+                'category_id' => $category,
+                'user_id'     => Auth::user()->id,
+            ]
+        );
+        return ['success' => true, 'id' => $expense->id];
+    }
+
     public function deleteExpense(int $id): array
     {
         $expense = Expense::findOrFail($id);

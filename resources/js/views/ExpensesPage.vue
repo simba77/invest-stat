@@ -18,7 +18,7 @@
             <td colspan="2">{{ cat.name }}</td>
             <td class="flex justify-end items-center">
               <template v-if="cat.id">
-                <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
+                <router-link :to="{name: 'AddExpense', params: {category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                   <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
                 </router-link>
                 <router-link to="" class="text-gray-300 hover:text-gray-600 mr-2">
