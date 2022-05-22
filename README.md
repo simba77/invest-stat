@@ -21,6 +21,20 @@ cp .env.example .env
 php artisan key:generate
 ```
 
+```bash
+npm install
+```
+
+```bash
+npm run prod
+```
+
+For development mode, use the command
+
+```bash
+npm run hot
+```
+
 
 ## License
 
