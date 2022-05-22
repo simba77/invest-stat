@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Expenses\Controllers\ExpensesController;
+use Modules\Investments\Controllers\DepositsController;
 
 Route::group(['prefix' => 'api'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('api.login');
@@ -21,6 +22,12 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('delete-expense/{id:number}', [ExpensesController::class, 'deleteExpense'])->name('expenses.delete-expense');
             Route::get('edit-expense/{id:number}', [ExpensesController::class, 'editExpense'])->name('expenses.edit-expense');
             Route::post('store-expense/{category:number}', [ExpensesController::class, 'storeExpense'])->name('expenses.store-expense');
+        });
+
+        Route::group(['prefix' => 'investments'], function () {
+            Route::get('deposits', [DepositsController::class, 'depositsList'])->name('investments.deposits');
+            Route::post('deposits/store', [DepositsController::class, 'store'])->name('investments.deposits.store');
+            Route::post('deposits/delete/{id:number}', [DepositsController::class, 'delete'])->name('investments.deposits.delete');
         });
     });
 });
