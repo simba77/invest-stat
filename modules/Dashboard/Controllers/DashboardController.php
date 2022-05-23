@@ -15,28 +15,42 @@ class DashboardController extends Controller
         return [
             'summary' => [
                 [
-                    'name'     => 'Profit',
-                    'helpText' => 'Assets for The Current Day - The Invested Amount',
-                    'percent'  => 132,
-                    'total'    => 9334,
+                    'name'     => 'The Invested Amount',
+                    'total'    => $invested,
+                    'currency' => '₽',
                 ],
                 [
-                    'name'  => 'The Invested Amount',
-                    'total' => $invested,
-                ],
-                [
-                    'name'  => 'The Saving Amount',
-                    'total' => config('invest.savingAmount'),
+                    'name'     => 'The Saving Amount',
+                    'total'    => config('invest.savingAmount'),
+                    'currency' => '₽',
                 ],
                 [
                     'name'     => 'Savings + Invested',
                     'helpText' => 'The Saving Amount + The Invested Amount',
                     'total'    => $invested + config('invest.savingAmount'),
+                    'currency' => '₽',
                 ],
+
                 [
-                    'name'     => 'Savings and Investments (Today)',
-                    'helpText' => 'Saving + Assets for The Current Day',
+                    'name'     => 'All Assets',
+                    'helpText' => 'The sum of all assets held by brokers',
                     'total'    => $invested + config('invest.savingAmount'),
+                    'currency' => '₽',
+                ],
+
+                [
+                    'name'     => 'Profit',
+                    'helpText' => 'Assets for The Current Day - The Invested Amount',
+                    'percent'  => -27.86,
+                    'total'    => -130516.22,
+                    'currency' => '₽',
+                ],
+
+                [
+                    'name'     => 'Saving + All Brokers Assets',
+                    'helpText' => 'Assets for The Current Day + The Saving Amount',
+                    'total'    => 387893.95,
+                    'currency' => '₽',
                 ],
             ],
         ];
