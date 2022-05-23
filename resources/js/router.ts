@@ -18,6 +18,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/InvestmentsPage.vue')
   },
   {
+    name: 'AddDeposit',
+    path: '/investments/add-deposit',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Investments/DepositForm.vue')
+  },
+  {
     name: 'Expenses',
     path: '/expenses',
     meta: {

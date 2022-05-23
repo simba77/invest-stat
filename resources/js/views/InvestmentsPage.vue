@@ -1,5 +1,8 @@
 <template>
   <page-component title="Investments and Results">
+    <div class="mb-4">
+      <router-link :to="{name: 'AddDeposit'}" class="btn btn-primary">Add Deposit</router-link>
+    </div>
     <table class="simple-table">
       <thead>
       <tr>
