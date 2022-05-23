@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Controllers\AuthController;
+use Modules\Dashboard\Controllers\DashboardController;
 use Modules\Expenses\Controllers\ExpensesController;
 use Modules\Investments\Controllers\DepositsController;
 
@@ -13,6 +14,8 @@ Route::group(['prefix' => 'api'], function () {
     // For authorized users
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/checkAuth', [AuthController::class, 'getCurrentAuth'])->name('api.currentAuth');
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
         Route::group(['prefix' => 'expenses'], function () {
             Route::get('list', [ExpensesController::class, 'expensesList'])->name('expenses.expenses-list');

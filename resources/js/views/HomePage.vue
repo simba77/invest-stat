@@ -1,59 +1,48 @@
 <template>
   <page-component title="Dashboard">
-    <div class="text-xl mb-3">Investment Result</div>
-    <div class="grid grid-cols-3 gap-4">
-      <stat-card
-        v-for="(card, i) in summary"
-        :key="i"
-        :name="card.name"
-        :help-text="card.helpText ?? null"
-        :percent="card.percent ?? null"
-        :total="card.total"
-      ></stat-card>
-    </div>
-
-    <div class="text-2xl font-extrabold mt-6 mb-3">Assets by Brokers</div>
-    <div v-for="(broker, index) in brokers" :key="index">
-      <div class="text-xl mb-3 mt-5">{{ broker.name }}</div>
+    <div v-if="loading">Loading Data...</div>
+    <template v-else>
+      <div class="text-xl mb-3">Investment Result</div>
       <div class="grid grid-cols-3 gap-4">
         <stat-card
-          v-for="(card, i) in broker.cards"
+          v-for="(card, i) in data.summary"
           :key="i"
           :name="card.name"
+          :help-text="card.helpText ?? null"
           :percent="card.percent ?? null"
           :total="card.total"
         ></stat-card>
       </div>
-    </div>
+
+      <div class="text-2xl font-extrabold mt-6 mb-3">Assets by Brokers</div>
+      <div v-for="(broker, index) in brokers" :key="index">
+        <div class="text-xl mb-3 mt-5">{{ broker.name }}</div>
+        <div class="grid grid-cols-3 gap-4">
+          <stat-card
+            v-for="(card, i) in broker.cards"
+            :key="i"
+            :name="card.name"
+            :percent="card.percent ?? null"
+            :total="card.total"
+          ></stat-card>
+        </div>
+      </div>
+    </template>
   </page-component>
 </template>
 
 <script lang="ts">
 import PageComponent from "@/components/PageComponent.vue";
 import StatCard from "@/components/Cards/StatCard.vue";
+import axios from "axios";
 
 export default {
   name: "HomePage",
   components: {StatCard, PageComponent},
   data() {
     return {
-      summary: [
-        {
-          name: 'Profit',
-          helpText: 'Assets for The Current Day - The Invested Amount',
-          percent: 132,
-          total: 9334,
-        },
-        {
-          name: 'The Invested Amount',
-          total: 9334,
-        },
-        {
-          name: 'Savings and Investments',
-          helpText: 'Saving + Assets for The Current Day',
-          total: 9334,
-        }
-      ],
+      loading: true,
+      data: {},
       brokers: [
         {
           name: 'Broker Credit Service',
@@ -92,6 +81,24 @@ export default {
           ]
         }
       ]
+    }
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      this.loading = true;
+      axios.get('/api/dashboard')
+        .then((response) => {
+          this.data = response.data;
+        })
+        .catch(() => {
+          alert('An error has occurred');
+        })
+        .finally(() => {
+          this.loading = false;
+        })
     }
   }
 }
