@@ -112,6 +112,28 @@ class ExpensesController extends Controller
         return ['success' => true];
     }
 
+    public function expensesSummary(): array
+    {
+        $expenses = Expense::where('user_id', Auth::user()->id)->sum('sum');
+        return [
+            'summary' => [
+                [
+                    'name'  => 'Salary',
+                    'total' => config('invest.salary'),
+                ],
+                [
+                    'name'  => 'All Expenses',
+                    'total' => $expenses,
+                ],
+                [
+                    'name'     => 'Salary - Expenses',
+                    'helpText' => 'Free Money for Investments',
+                    'total'    => config('invest.salary') - $expenses,
+                ],
+            ],
+        ];
+    }
+
     public function expensesList(): array
     {
         $user = Auth::user();

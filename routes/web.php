@@ -19,6 +19,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group(['prefix' => 'expenses'], function () {
             Route::get('list', [ExpensesController::class, 'expensesList'])->name('expenses.expenses-list');
+            Route::get('summary', [ExpensesController::class, 'expensesSummary'])->name('expenses.expenses-summary');
             Route::post('store-category', [ExpensesController::class, 'storeCategory'])->name('expenses.store-category');
             Route::get('edit-category/{id:number}', [ExpensesController::class, 'editCategory'])->name('expenses.edit-category');
             Route::post('delete-category/{id:number}', [ExpensesController::class, 'deleteCategory'])->name('expenses.delete-category');

@@ -1,5 +1,19 @@
 <template>
   <page-component title="Expenses">
+    <template v-if="stat">
+      <div class="text-xl mb-3">Summary</div>
+      <div class="grid grid-cols-3 gap-4 mb-5">
+        <stat-card
+          v-for="(card, i) in stat.summary"
+          :key="i"
+          :name="card.name"
+          :help-text="card.helpText ?? null"
+          :percent="card.percent ?? null"
+          :total="card.total"
+        ></stat-card>
+      </div>
+    </template>
+
     <div class="mb-4">
       <router-link :to="{name: 'CreateCategory'}" class="btn btn-primary">Create Category</router-link>
     </div>
@@ -82,17 +96,20 @@ import axios from "axios";
 import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
 import BaseModal from "@/components/Modals/BaseModal.vue";
 import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
+import StatCard from "@/components/Cards/StatCard.vue";
 
 export default {
   name: "ExpensesPage",
-  components: {ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon},
+  components: {StatCard, ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon},
   mounted() {
     this.getItems();
+    this.getStat();
   },
   data() {
     return {
       loading: true,
       deleting: false,
+      stat: {},
       deleteItem: {
         type: '',
         data: {},
@@ -129,6 +146,19 @@ export default {
       axios.get('/api/expenses/list')
         .then((response) => {
           this.expenses = response.data;
+        })
+        .catch(() => {
+          alert('An error has occurred');
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    },
+    getStat() {
+      this.loading = true;
+      axios.get('/api/expenses/summary')
+        .then((response) => {
+          this.stat = response.data;
         })
         .catch(() => {
           alert('An error has occurred');
