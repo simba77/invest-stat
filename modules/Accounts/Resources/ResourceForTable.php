@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Modules\Accounts\Resources;
 
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Accounts\Models\Account;
 use Modules\Expenses\Models\Expense;
-use Modules\Expenses\Models\ExpensesCategory;
 
 class ResourceForTable
 {
     private float $total = 0;
 
     /**
-     * @var ExpensesCategory[]
+     * @var Account[]
      */
     private Collection | array $categories;
 
@@ -29,6 +29,8 @@ class ResourceForTable
             $expenses[] = [
                 'id'       => $category->id,
                 'name'     => $category->name,
+                'balance'  => $category->balance,
+                'currency' => $category->currency === 'RUB' ? '₽' : '$',
                 'expenses' => $this->getExpenses($category->expenses),
             ];
         }

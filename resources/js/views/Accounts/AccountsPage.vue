@@ -29,7 +29,10 @@
       <template v-for="(cat, index) in expenses.data" :key="index">
         <template v-if="! cat.isTotal">
           <tr class="table-subtitle">
-            <td colspan="2">{{ cat.name }}</td>
+            <td colspan="2">
+              <div>{{ cat.name }}</div>
+              <div class="text-sm"><span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(cat.balance) }} {{ cat.currency }}</span></div>
+            </td>
             <td class="flex justify-end items-center">
               <template v-if="cat.id">
                 <router-link :to="{name: 'AddExpense', params: {category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
@@ -51,7 +54,7 @@
           <template v-if="cat.expenses.length > 0">
             <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
               <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
-              <td>{{ new Intl.NumberFormat('ru-RU').format(expense.sum) }} {{ expense.currency }}</td>
+              <td>{{ helpers.formatPrice(expense.sum) }} {{ expense.currency }}</td>
               <td class="table-actions">
                 <template v-if="expense.id">
                   <div class="flex justify-end items-center show-on-row-hover">
@@ -73,7 +76,7 @@
         </template>
         <tr class="font-bold" v-else>
           <td class="text-right">{{ cat.name }}</td>
-          <td>{{ new Intl.NumberFormat('ru-RU').format(cat.sum) }} {{ cat.currency }}</td>
+          <td>{{ helpers.formatPrice(cat.sum) }} {{ cat.currency }}</td>
         </tr>
       </template>
       </tbody>
@@ -97,6 +100,7 @@ import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
 import BaseModal from "@/components/Modals/BaseModal.vue";
 import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 import StatCard from "@/components/Cards/StatCard.vue";
+import helpers from "@/helpers";
 
 export default {
   name: "AccountsPage",
@@ -115,6 +119,7 @@ export default {
         data: {},
       },
       expenses: {},
+      helpers,
     }
   },
   methods: {
