@@ -73,6 +73,32 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/LoginPage.vue')
   },
+
+  // Accounts
+  {
+    name: 'Accounts',
+    path: '/accounts',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AccountsPage.vue')
+  },
+  {
+    name: 'CreateAccount',
+    path: '/accounts/create-account',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AccountForm.vue')
+  },
+  {
+    name: 'EditAccount',
+    path: '/accounts/edit-accounts/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AccountForm.vue')
+  },
 ];
 
 const router = createRouter({

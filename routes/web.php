@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Accounts\Controllers\AccountsController;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Dashboard\Controllers\DashboardController;
 use Modules\Expenses\Controllers\ExpensesController;
@@ -32,6 +33,19 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('deposits', [DepositsController::class, 'depositsList'])->name('investments.deposits');
             Route::post('deposits/store', [DepositsController::class, 'store'])->name('investments.deposits.store');
             Route::post('deposits/delete/{id:number}', [DepositsController::class, 'delete'])->name('investments.deposits.delete');
+        });
+
+        Route::group(['prefix' => 'accounts'], function () {
+            Route::get('list', [AccountsController::class, 'index'])->name('accounts.list');
+            Route::get('summary', [AccountsController::class, 'summary'])->name('accounts.summary');
+            Route::post('store', [AccountsController::class, 'store'])->name('accounts.store');
+            Route::get('edit/{id:number}', [AccountsController::class, 'edit'])->name('accounts.edit');
+            Route::post('delete/{id:number}', [AccountsController::class, 'delete'])->name('accounts.delete');
+
+            // TODO: Change it
+            Route::post('delete-expense/{id:number}', [ExpensesController::class, 'deleteExpense'])->name('expenses.delete-expense');
+            Route::get('edit-expense/{id:number}', [ExpensesController::class, 'editExpense'])->name('expenses.edit-expense');
+            Route::post('store-expense/{category:number}', [ExpensesController::class, 'storeExpense'])->name('expenses.store-expense');
         });
     });
 });

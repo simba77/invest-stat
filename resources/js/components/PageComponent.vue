@@ -139,8 +139,8 @@ const navigation = [
   },
   {
     name: 'Accounts',
-    routeName: '',
-    current: false
+    routeName: 'Accounts',
+    current: routeName === 'Accounts'
   }
 ]
 const userNavigation = [
