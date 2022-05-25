@@ -8,19 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\System\Database\CreatedByTrait;
 
-class Expense extends Model
+class Asset extends Model
 {
     use CreatedByTrait;
 
     protected $fillable = [
         'user_id',
-        'name',
-        'sum',
-        'category_id',
+        'currency',
+        'buy_price',
+        'sell_price',
+        'account_id',
+        'quantity',
+        'status',
+        'stock_market',
+        'ticker',
     ];
 
-    public function category(): HasOne
+    public function account(): HasOne
     {
-        return $this->hasOne(Account::class, 'id', 'category_id');
+        return $this->hasOne(Account::class, 'id', 'account_id');
     }
 }

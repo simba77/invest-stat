@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Accounts\Controllers\AccountsController;
+use Modules\Accounts\Controllers\AssetsController;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Dashboard\Controllers\DashboardController;
 use Modules\Expenses\Controllers\ExpensesController;
@@ -41,11 +42,12 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('store', [AccountsController::class, 'store'])->name('accounts.store');
             Route::get('edit/{id:number}', [AccountsController::class, 'edit'])->name('accounts.edit');
             Route::post('delete/{id:number}', [AccountsController::class, 'delete'])->name('accounts.delete');
+        });
 
-            // TODO: Change it
-            Route::post('delete-expense/{id:number}', [ExpensesController::class, 'deleteExpense'])->name('expenses.delete-expense');
-            Route::get('edit-expense/{id:number}', [ExpensesController::class, 'editExpense'])->name('expenses.edit-expense');
-            Route::post('store-expense/{category:number}', [ExpensesController::class, 'storeExpense'])->name('expenses.store-expense');
+        Route::group(['prefix' => 'assets'], function () {
+            Route::post('delete/{id:number}', [AssetsController::class, 'delete'])->name('assets.delete');
+            Route::get('edit/{id:number}', [AssetsController::class, 'edit'])->name('assets.edit');
+            Route::post('store/{account:number}', [AssetsController::class, 'store'])->name('assets.store');
         });
     });
 });

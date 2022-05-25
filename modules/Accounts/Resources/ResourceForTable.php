@@ -6,7 +6,7 @@ namespace Modules\Accounts\Resources;
 
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Accounts\Models\Account;
-use Modules\Expenses\Models\Expense;
+use Modules\Accounts\Models\Asset;
 
 class ResourceForTable
 {
@@ -15,23 +15,23 @@ class ResourceForTable
     /**
      * @var Account[]
      */
-    private Collection | array $categories;
+    private Collection | array $accounts;
 
-    public function __construct(Collection | array $categories)
+    public function __construct(Collection | array $accounts)
     {
-        $this->categories = $categories;
+        $this->accounts = $accounts;
     }
 
     public function toArray(): array
     {
         $expenses = [];
-        foreach ($this->categories as $category) {
+        foreach ($this->accounts as $account) {
             $expenses[] = [
-                'id'       => $category->id,
-                'name'     => $category->name,
-                'balance'  => $category->balance,
-                'currency' => $category->currency === 'RUB' ? '₽' : '$',
-                'expenses' => $this->getExpenses($category->expenses),
+                'id'       => $account->id,
+                'name'     => $account->name,
+                'balance'  => $account->balance,
+                'currency' => $account->currency === 'RUB' ? '₽' : '$',
+                'expenses' => $this->getAssets($account->assets),
             ];
         }
 
@@ -46,20 +46,22 @@ class ResourceForTable
     }
 
     /**
-     * @param Collection|Expense[] $expenses
+     * @param Collection|Asset[] $assets
      * @return array
      */
-    private function getExpenses(Collection | array $expenses): array
+    private function getAssets(Collection | array $assets): array
     {
         $items = [];
-        foreach ($expenses as $expense) {
+        foreach ($assets as $asset) {
             $items[] = [
-                'id'       => $expense->id,
-                'name'     => $expense->name,
-                'sum'      => $expense->sum,
-                'currency' => '₽',
+                'id'          => $asset->id,
+                'ticker'      => $asset->ticker,
+                'stockMarket' => $asset->stock_market,
+                'buyPrice'    => $asset->buy_price,
+                'sellPrice'   => $asset->sell_price,
+                'currency'    => getCurrencyName($asset->currency),
             ];
-            $this->total += $expense->sum;
+            $this->total += $asset->sum;
         }
 
         $items[] = [

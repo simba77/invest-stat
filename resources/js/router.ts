@@ -99,6 +99,24 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Accounts/AccountForm.vue')
   },
+
+  // Assets
+  {
+    name: 'AddAsset',
+    path: '/accounts/assets/add/:account',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AssetForm.vue')
+  },
+  {
+    name: 'EditAsset',
+    path: '/accounts/assets/edit/:account/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AssetForm.vue')
+  },
 ];
 
 const router = createRouter({

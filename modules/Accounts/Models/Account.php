@@ -19,8 +19,8 @@ class Account extends Model
         'currency',
     ];
 
-    public function expenses(): HasMany
+    public function assets(): HasMany
     {
-        return $this->hasMany(Expense::class, 'category_id', 'id');
+        return $this->hasMany(Asset::class, 'account_id', 'id');
     }
 }

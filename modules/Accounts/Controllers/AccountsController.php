@@ -7,7 +7,7 @@ namespace Modules\Accounts\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Modules\Accounts\Models\Expense;
+use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Resources\ResourceForTable;
 
@@ -69,60 +69,8 @@ class AccountsController extends Controller
         return ['success' => true];
     }
 
-    public function editExpense(int $id): array
-    {
-        $expense = Expense::findOrFail($id);
-        return [
-            'form' => [
-                'id'   => $expense->id,
-                'name' => $expense->name,
-                'sum'  => $expense->sum,
-            ],
-        ];
-    }
-
-    public function storeExpense(int $category, Request $request): array
-    {
-        $fields = $request->validate(
-            [
-                'name' => ['required'],
-                'sum'  => ['required', 'numeric'],
-            ]
-        );
-
-        $id = $request->input('id');
-        if ($id) {
-            $expense = Expense::findOrFail($id);
-            $expense->update(
-                [
-                    'name' => $fields['name'],
-                    'sum'  => $fields['sum'],
-                ]
-            );
-        } else {
-            $expense = Expense::create(
-                [
-                    'name'        => $fields['name'],
-                    'sum'         => $fields['sum'],
-                    'category_id' => $category,
-                    'user_id'     => Auth::user()->id,
-                ]
-            );
-        }
-
-        return ['success' => true, 'id' => $expense->id];
-    }
-
-    public function deleteExpense(int $id): array
-    {
-        $expense = Expense::findOrFail($id);
-        $expense->delete();
-        return ['success' => true];
-    }
-
     public function summary(): array
     {
-        $expenses = Expense::where('user_id', Auth::user()->id)->sum('sum');
         return [
             'summary' => [
                 [
@@ -131,12 +79,12 @@ class AccountsController extends Controller
                 ],
                 [
                     'name'  => 'All Expenses',
-                    'total' => $expenses,
+                    'total' => 0,
                 ],
                 [
                     'name'     => 'Salary - Expenses',
                     'helpText' => 'Free Money for Investments',
-                    'total'    => config('invest.salary') - $expenses,
+                    'total'    => config('invest.salary') - 0,
                 ],
             ],
         ];

@@ -26,39 +26,39 @@
       </tr>
       </thead>
       <tbody>
-      <template v-for="(cat, index) in expenses.data" :key="index">
-        <template v-if="! cat.isTotal">
+      <template v-for="(account, index) in expenses.data" :key="index">
+        <template v-if="! account.isTotal">
           <tr class="table-subtitle">
             <td colspan="2">
-              <div>{{ cat.name }}</div>
-              <div class="text-sm"><span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(cat.balance) }} {{ cat.currency }}</span></div>
+              <div>{{ account.name }}</div>
+              <div class="text-sm"><span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} {{ account.currency }}</span></div>
             </td>
             <td class="flex justify-end items-center">
-              <template v-if="cat.id">
-                <router-link :to="{name: 'AddExpense', params: {category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+              <template v-if="account.id">
+                <router-link :to="{name: 'AddAsset', params: {account: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                   <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
                 </router-link>
-                <router-link :to="{name: 'EditAccount', params: {id: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                <router-link :to="{name: 'EditAccount', params: {id: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                   <pencil-icon class="h-5 w-5"></pencil-icon>
                 </router-link>
                 <button
                   type="button"
                   class="text-gray-300 hover:text-red-500"
-                  @click="openConfirmModal(cat, 'category')"
+                  @click="openConfirmModal(account, 'category')"
                 >
                   <x-circle-icon class="h-5 w-5"></x-circle-icon>
                 </button>
               </template>
             </td>
           </tr>
-          <template v-if="cat.expenses.length > 0">
-            <tr v-for="(expense, i) in cat.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
+          <template v-if="account.expenses.length > 0">
+            <tr v-for="(expense, i) in account.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
               <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.name }}</td>
               <td>{{ helpers.formatPrice(expense.sum) }} {{ expense.currency }}</td>
               <td class="table-actions">
                 <template v-if="expense.id">
                   <div class="flex justify-end items-center show-on-row-hover">
-                    <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: cat.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                    <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
                       <pencil-icon class="h-5 w-5"></pencil-icon>
                     </router-link>
                     <button
@@ -75,8 +75,8 @@
           </template>
         </template>
         <tr class="font-bold" v-else>
-          <td class="text-right">{{ cat.name }}</td>
-          <td>{{ helpers.formatPrice(cat.sum) }} {{ cat.currency }}</td>
+          <td class="text-right">{{ account.name }}</td>
+          <td>{{ helpers.formatPrice(account.sum) }} {{ account.currency }}</td>
         </tr>
       </template>
       </tbody>
