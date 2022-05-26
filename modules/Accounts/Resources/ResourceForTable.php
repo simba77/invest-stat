@@ -7,6 +7,7 @@ namespace Modules\Accounts\Resources;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
+use Modules\Markets\Models\Security;
 
 class ResourceForTable
 {
@@ -53,25 +54,39 @@ class ResourceForTable
     {
         $items = [];
         foreach ($assets as $asset) {
+            $stock = Security::query()->where('stock_market', $asset->stock_market)->where('ticker', $asset->ticker)->first();
+            $fillBuyPrice = $asset->quantity * $asset->buy_price;
+            // Current full price
+            $fullPrice = $asset->quantity * $stock->price;
+            $profit = $fullPrice - $fillBuyPrice;
+
             $items[] = [
-                'id'           => $asset->id,
-                'ticker'       => $asset->ticker,
-                'stockMarket'  => $asset->stock_market,
-                'buyPrice'     => $asset->buy_price,
-                'sellPrice'    => $asset->sell_price,
-                'quantity'     => $asset->quantity,
-                'fullBuyPrice' => ($asset->quantity * $asset->buy_price),
-                'currency'     => getCurrencyName($asset->currency),
+                'id'            => $asset->id,
+                'ticker'        => $asset->ticker,
+                'name'          => $stock->short_name,
+                'stockMarket'   => $asset->stock_market,
+                'buyPrice'      => $asset->buy_price,
+                'sellPrice'     => $asset->sell_price,
+                'price'         => $stock->price,
+                'quantity'      => $asset->quantity,
+                'fullBuyPrice'  => $fillBuyPrice,
+                'fullPrice'     => $fullPrice,
+                'profit'        => $profit,
+                'profitPercent' => round($profit / $fillBuyPrice * 100, 2),
+                'currency'      => getCurrencyName($stock->currency),
             ];
             $this->total += $asset->sum;
         }
 
         $items[] = [
-            'name'         => 'Subtotal:',
-            'isSubTotal'   => true,
-            'buyPrice'     => array_sum(array_column($items, 'buyPrice')),
-            'fullBuyPrice' => array_sum(array_column($items, 'fullBuyPrice')),
-            'currency'     => getCurrencyName($asset->currency ?? ''),
+            'name'          => 'Subtotal:',
+            'isSubTotal'    => true,
+            'buyPrice'      => array_sum(array_column($items, 'buyPrice')),
+            'fullBuyPrice'  => array_sum(array_column($items, 'fullBuyPrice')),
+            'fullPrice'     => array_sum(array_column($items, 'fullPrice')),
+            'profit'        => array_sum(array_column($items, 'profit')),
+            'profitPercent' => array_sum(array_column($items, 'profitPercent')),
+            'currency'      => getCurrencyName($stock->currency ?? ''),
         ];
 
         return $items;

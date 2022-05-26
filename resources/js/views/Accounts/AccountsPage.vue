@@ -58,34 +58,74 @@
                   <thead>
                   <tr>
                     <th>Ticker</th>
+                    <th>Name</th>
                     <th>Quantity</th>
                     <th>Buy Price</th>
+                    <th>Price</th>
                     <th>Full Buy Price</th>
+                    <th>Full Price</th>
+                    <th>Profit</th>
+                    <th>Percent</th>
                     <th class="flex justify-end">Actions</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr v-for="(expense, i) in account.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
-                    <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.ticker }}</td>
-                    <td>{{ expense.quantity }}</td>
-                    <td>{{ helpers.formatPrice(expense.buyPrice) }} {{ expense.currency }}</td>
-                    <td>{{ helpers.formatPrice(expense.fullBuyPrice) }} {{ expense.currency }}</td>
-                    <td class="table-actions">
-                      <template v-if="expense.id">
-                        <div class="flex justify-end items-center show-on-row-hover">
-                          <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
-                            <pencil-icon class="h-5 w-5"></pencil-icon>
-                          </router-link>
-                          <button
-                            type="button"
-                            class="text-gray-300 hover:text-red-500"
-                            @click="openConfirmModal(expense, 'expense')"
-                          >
-                            <x-circle-icon class="h-5 w-5"></x-circle-icon>
-                          </button>
-                        </div>
-                      </template>
-                    </td>
+                    <template v-if="expense.isSubTotal">
+                      <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.ticker }}</td>
+                      <td>{{ expense.name }}</td>
+                      <td>{{ expense.quantity }}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{{ helpers.formatPrice(expense.fullBuyPrice) }} {{ expense.currency }}</td>
+                      <td>{{ helpers.formatPrice(expense.fullPrice) }} {{ expense.currency }}</td>
+                      <td :class="[expense.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(expense.profit) }} {{ expense.currency }} ({{ expense.profitPercent }}%)</td>
+                      <td>34%</td>
+                      <td class="table-actions">
+                        <template v-if="expense.id">
+                          <div class="flex justify-end items-center show-on-row-hover">
+                            <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                              <pencil-icon class="h-5 w-5"></pencil-icon>
+                            </router-link>
+                            <button
+                              type="button"
+                              class="text-gray-300 hover:text-red-500"
+                              @click="openConfirmModal(expense, 'expense')"
+                            >
+                              <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                            </button>
+                          </div>
+                        </template>
+                      </td>
+                    </template>
+                    <template v-else>
+                      <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.ticker }}</td>
+                      <td>{{ expense.name }}</td>
+                      <td>{{ expense.quantity }}</td>
+                      <td>{{ helpers.formatPrice(expense.buyPrice) }} {{ expense.currency }}</td>
+                      <td>{{ helpers.formatPrice(expense.price) }} {{ expense.currency }}</td>
+                      <td>{{ helpers.formatPrice(expense.fullBuyPrice) }} {{ expense.currency }}</td>
+                      <td>{{ helpers.formatPrice(expense.fullPrice) }} {{ expense.currency }}</td>
+                      <td :class="[expense.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(expense.profit) }} {{ expense.currency }} ({{ expense.profitPercent }}%)</td>
+                      <td>34%</td>
+                      <td class="table-actions">
+                        <template v-if="expense.id">
+                          <div class="flex justify-end items-center show-on-row-hover">
+                            <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                              <pencil-icon class="h-5 w-5"></pencil-icon>
+                            </router-link>
+                            <button
+                              type="button"
+                              class="text-gray-300 hover:text-red-500"
+                              @click="openConfirmModal(expense, 'expense')"
+                            >
+                              <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                            </button>
+                          </div>
+                        </template>
+                      </td>
+                    </template>
+
                   </tr>
                   </tbody>
                 </table>
