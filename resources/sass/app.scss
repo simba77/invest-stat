@@ -59,7 +59,7 @@
         @apply border-b hover:bg-gray-100;
 
         &:hover {
-          .show-on-row-hover {
+          > td > .show-on-row-hover {
             @apply flex;
           }
         }
@@ -71,6 +71,10 @@
 
       td {
         @apply px-4 py-3;
+
+        &.has-sub-table {
+          @apply px-2 py-2 bg-gray-100;
+        }
       }
     }
 
@@ -81,6 +85,24 @@
     .table-subtitle {
       td {
         @apply px-4 py-1.5;
+      }
+    }
+  }
+
+  .sub-table {
+    th {
+      @apply px-3 py-2 text-left;
+    }
+
+    thead {
+      tr {
+        @apply hover:bg-white;
+      }
+    }
+
+    tbody {
+      td {
+        @apply px-3 py-2;
       }
     }
   }

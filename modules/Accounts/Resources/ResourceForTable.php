@@ -54,21 +54,24 @@ class ResourceForTable
         $items = [];
         foreach ($assets as $asset) {
             $items[] = [
-                'id'          => $asset->id,
-                'ticker'      => $asset->ticker,
-                'stockMarket' => $asset->stock_market,
-                'buyPrice'    => $asset->buy_price,
-                'sellPrice'   => $asset->sell_price,
-                'currency'    => getCurrencyName($asset->currency),
+                'id'           => $asset->id,
+                'ticker'       => $asset->ticker,
+                'stockMarket'  => $asset->stock_market,
+                'buyPrice'     => $asset->buy_price,
+                'sellPrice'    => $asset->sell_price,
+                'quantity'     => $asset->quantity,
+                'fullBuyPrice' => ($asset->quantity * $asset->buy_price),
+                'currency'     => getCurrencyName($asset->currency),
             ];
             $this->total += $asset->sum;
         }
 
         $items[] = [
-            'name'       => 'Subtotal:',
-            'isSubTotal' => true,
-            'sum'        => array_sum(array_column($items, 'sum')),
-            'currency'   => '₽',
+            'name'         => 'Subtotal:',
+            'isSubTotal'   => true,
+            'buyPrice'     => array_sum(array_column($items, 'buyPrice')),
+            'fullBuyPrice' => array_sum(array_column($items, 'fullBuyPrice')),
+            'currency'     => getCurrencyName($asset->currency ?? ''),
         ];
 
         return $items;
