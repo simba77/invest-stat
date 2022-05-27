@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Modules\Markets\Moex\Stocks;
+use Modules\Markets\DataProviders\Moex;
 
 class UpdateSecuritiesInfo extends Command
 {
@@ -30,7 +30,7 @@ class UpdateSecuritiesInfo extends Command
      */
     public function handle(): int
     {
-        $stocksMoex = app(Stocks::class);
+        $stocksMoex = app(Moex::class);
         $stocksMoex->import();
 
         return 0;

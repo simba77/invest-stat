@@ -78,16 +78,20 @@ class ResourceForTable
             $this->total += $asset->sum;
         }
 
-        $items[] = [
-            'name'          => 'Subtotal:',
-            'isSubTotal'    => true,
-            'buyPrice'      => array_sum(array_column($items, 'buyPrice')),
-            'fullBuyPrice'  => array_sum(array_column($items, 'fullBuyPrice')),
-            'fullPrice'     => array_sum(array_column($items, 'fullPrice')),
-            'profit'        => array_sum(array_column($items, 'profit')),
-            'profitPercent' => array_sum(array_column($items, 'profitPercent')),
-            'currency'      => getCurrencyName($stock->currency ?? ''),
-        ];
+        if (! empty($items)) {
+            $fullProfit = array_sum(array_column($items, 'profit'));
+            $fullBuyPrice = array_sum(array_column($items, 'fullBuyPrice'));
+            $fullProfitPercent = round($fullProfit / $fullBuyPrice * 100, 2);
+            $items[] = [
+                'name'          => 'Subtotal:',
+                'isSubTotal'    => true,
+                'fullBuyPrice'  => $fullBuyPrice,
+                'fullPrice'     => array_sum(array_column($items, 'fullPrice')),
+                'profit'        => $fullProfit,
+                'profitPercent' => $fullProfitPercent,
+                'currency'      => getCurrencyName($stock->currency ?? ''),
+            ];
+        }
 
         return $items;
     }

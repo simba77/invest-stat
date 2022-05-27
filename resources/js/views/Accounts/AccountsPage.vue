@@ -106,7 +106,9 @@
                       <td>{{ helpers.formatPrice(expense.price) }} {{ expense.currency }}</td>
                       <td>{{ helpers.formatPrice(expense.fullBuyPrice) }} {{ expense.currency }}</td>
                       <td>{{ helpers.formatPrice(expense.fullPrice) }} {{ expense.currency }}</td>
-                      <td :class="[expense.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(expense.profit) }} {{ expense.currency }} ({{ expense.profitPercent }}%)</td>
+                      <td :class="[expense.profit > 0 ? 'text-green-600' : 'text-red-700']">
+                        {{ expense.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(expense.profit)) }} {{ expense.currency }} ({{ expense.profitPercent }}%)
+                      </td>
                       <td>34%</td>
                       <td class="table-actions">
                         <template v-if="expense.id">

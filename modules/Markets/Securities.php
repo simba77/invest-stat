@@ -10,7 +10,7 @@ class Securities
 {
     public function createOrUpdate(string $ticker, string $market, array $params): void
     {
-        Security::query()->updateOrCreate(['ticker' => $ticker, 'stock_market' => $market], [
+        $fields = [
             'name'       => $params['name'],
             'short_name' => $params['short_name'],
             'lat_name'   => $params['lat_name'],
@@ -18,7 +18,13 @@ class Securities
             'price'      => $params['price'] ?? 0,
             'currency'   => $this->getCurrencyByCode($params['currency']),
             'isin'       => $params['isin'] ?? '',
-        ]);
+        ];
+
+        if (! isset($params['price'])) {
+            unset($fields['price']);
+        }
+
+        Security::query()->updateOrCreate(['ticker' => $ticker, 'stock_market' => $market], $fields);
     }
 
     public function getCurrencyByCode(string $currency): string

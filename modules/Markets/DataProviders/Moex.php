@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Modules\Markets\Moex;
+namespace Modules\Markets\DataProviders;
 
 use Modules\Markets\Securities;
 
-class Stocks
+class Moex
 {
     private string $moexStocksUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml';
 
