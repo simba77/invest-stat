@@ -57,23 +57,23 @@ class ResourceForTable
             $stock = Security::query()->where('stock_market', $asset->stock_market)->where('ticker', $asset->ticker)->first();
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
-            $fullPrice = $asset->quantity * $stock->price;
+            $fullPrice = $asset->quantity * ($stock?->price ?? 0);
             $profit = $fullPrice - $fillBuyPrice;
 
             $items[] = [
                 'id'            => $asset->id,
                 'ticker'        => $asset->ticker,
-                'name'          => $stock->short_name,
+                'name'          => $stock?->short_name ?? '',
                 'stockMarket'   => $asset->stock_market,
                 'buyPrice'      => $asset->buy_price,
                 'sellPrice'     => $asset->sell_price,
-                'price'         => $stock->price,
+                'price'         => $stock?->price ?? 0,
                 'quantity'      => $asset->quantity,
                 'fullBuyPrice'  => $fillBuyPrice,
                 'fullPrice'     => $fullPrice,
                 'profit'        => $profit,
                 'profitPercent' => round($profit / $fillBuyPrice * 100, 2),
-                'currency'      => getCurrencyName($stock->currency),
+                'currency'      => getCurrencyName($stock?->currency ?? 'USD'),
             ];
             $this->total += $asset->sum;
         }

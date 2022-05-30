@@ -9,6 +9,7 @@ use Modules\Markets\Securities;
 class Moex
 {
     private string $moexStocksUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml';
+    private string $moexEtfsUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTF/securities.xml';
 
     public function __construct(private Securities $securities)
     {
@@ -17,6 +18,17 @@ class Moex
     public function import(): void
     {
         $xmlDataString = file_get_contents($this->moexStocksUrl);
+        $this->processData($xmlDataString);
+    }
+
+    public function importEtf(): void
+    {
+        $xmlDataString = file_get_contents($this->moexEtfsUrl);
+        $this->processData($xmlDataString);
+    }
+
+    private function processData(string $xmlDataString): void
+    {
         $xmlObject = simplexml_load_string($xmlDataString);
         $data = json_decode(json_encode($xmlObject), true) ?? [];
 
