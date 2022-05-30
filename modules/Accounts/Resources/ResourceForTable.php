@@ -32,7 +32,7 @@ class ResourceForTable
                 'name'     => $account->name,
                 'balance'  => $account->balance,
                 'currency' => $account->currency === 'RUB' ? '₽' : '$',
-                'expenses' => $this->getAssets($account->assets),
+                'expenses' => $this->getAssets($account),
             ];
         }
 
@@ -47,13 +47,13 @@ class ResourceForTable
     }
 
     /**
-     * @param Collection|Asset[] $assets
+     * @param Account $account
      * @return array
      */
-    private function getAssets(Collection | array $assets): array
+    private function getAssets(Account $account): array
     {
         $items = [];
-        foreach ($assets as $asset) {
+        foreach ($account->assets as $asset) {
             $stock = Security::query()->where('stock_market', $asset->stock_market)->where('ticker', $asset->ticker)->first();
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
@@ -61,19 +61,20 @@ class ResourceForTable
             $profit = $fullPrice - $fillBuyPrice;
 
             $items[] = [
-                'id'            => $asset->id,
-                'ticker'        => $asset->ticker,
-                'name'          => $stock?->short_name ?? '',
-                'stockMarket'   => $asset->stock_market,
-                'buyPrice'      => $asset->buy_price,
-                'sellPrice'     => $asset->sell_price,
-                'price'         => $stock?->price ?? 0,
-                'quantity'      => $asset->quantity,
-                'fullBuyPrice'  => $fillBuyPrice,
-                'fullPrice'     => $fullPrice,
-                'profit'        => $profit,
-                'profitPercent' => round($profit / $fillBuyPrice * 100, 2),
-                'currency'      => getCurrencyName($stock?->currency ?? 'USD'),
+                'id'             => $asset->id,
+                'ticker'         => $asset->ticker,
+                'name'           => $stock?->short_name ?? '',
+                'stockMarket'    => $asset->stock_market,
+                'buyPrice'       => $asset->buy_price,
+                'sellPrice'      => $asset->sell_price,
+                'price'          => $stock?->price ?? 0,
+                'quantity'       => $asset->quantity,
+                'fullBuyPrice'   => $fillBuyPrice,
+                'fullPrice'      => $fullPrice,
+                'profit'         => $profit,
+                'profitPercent'  => round($profit / $fillBuyPrice * 100, 2),
+                'accountPercent' => round($fullPrice / $account->current_sum_of_assets * 100, 2),
+                'currency'       => getCurrencyName($stock?->currency ?? 'USD'),
             ];
             $this->total += $asset->sum;
         }
