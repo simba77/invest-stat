@@ -21,6 +21,8 @@
           <stat-card
             v-for="(card, i) in broker.cards"
             :key="i"
+            :help-text="card.help"
+            :currency="broker.currency"
             :name="card.name"
             :percent="card.percent ?? null"
             :total="card.total"
@@ -43,44 +45,7 @@ export default {
     return {
       loading: true,
       data: {},
-      brokers: [
-        {
-          name: 'Broker Credit Service',
-          cards: [
-            {
-              name: 'Profit',
-              percent: 132,
-              total: 9334,
-            },
-            {
-              name: 'Current Value',
-              total: 9334,
-            },
-            {
-              name: 'Initial Cost',
-              total: 9334,
-            }
-          ]
-        },
-        {
-          name: 'Alfa Capital',
-          cards: [
-            {
-              name: 'Profit',
-              percent: -32,
-              total: -9334,
-            },
-            {
-              name: 'Current Value',
-              total: 9334,
-            },
-            {
-              name: 'Initial Cost',
-              total: 90334,
-            }
-          ]
-        }
-      ]
+      brokers: []
     }
   },
   mounted() {
@@ -92,6 +57,7 @@ export default {
       axios.get('/api/dashboard')
         .then((response) => {
           this.data = response.data;
+          this.brokers = response.data.brokers;
         })
         .catch(() => {
           alert('An error has occurred');

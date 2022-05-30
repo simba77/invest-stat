@@ -32,4 +32,14 @@ class Account extends Model
     {
         return $builder->where('user_id', '=', Auth::user()?->id);
     }
+
+    public function getProfitAttribute(): float
+    {
+        return $this->current_sum_of_assets + $this->balance - $this->start_sum_of_assets;
+    }
+
+    public function getProfitPercentAttribute(): float
+    {
+        return round(($this->current_sum_of_assets + $this->balance - $this->start_sum_of_assets) / $this->start_sum_of_assets * 100, 2);
+    }
 }

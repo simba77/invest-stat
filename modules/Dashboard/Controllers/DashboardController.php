@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Accounts\Models\Account;
 use Modules\Dashboard\Services\Counters;
 use Modules\Investments\Models\Deposit;
 
@@ -16,6 +17,35 @@ class DashboardController extends Controller
         $allAssetsSum = $counters->getAllAssetsSum();
         $profit = $allAssetsSum - $invested;
         $profitPercent = round($profit / $invested * 100, 2);
+
+        $brokers = [];
+        $accounts = Account::forCurrentUser()->get();
+        foreach ($accounts as $account) {
+            $cards = [
+                [
+                    'name'    => 'Profit',
+                    'help'    => 'Current Value + Balance - Initial Cost',
+                    'percent' => $account->profit_percent,
+                    'total'   => $account->profit,
+                ],
+                [
+                    'name'  => 'Current Value',
+                    'help'  => null,
+                    'total' => $account->current_sum_of_assets,
+                ],
+                [
+                    'name'  => 'Initial Cost',
+                    'help'  => null,
+                    'total' => $account->start_sum_of_assets,
+                ],
+            ];
+
+            $brokers[] = [
+                'name'     => $account->name,
+                'currency' => getCurrencyName($account->currency),
+                'cards'    => $cards,
+            ];
+        }
 
         return [
             'summary' => [
@@ -58,6 +88,7 @@ class DashboardController extends Controller
                     'currency' => '₽',
                 ],
             ],
+            'brokers' => $brokers,
         ];
     }
 }
