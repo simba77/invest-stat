@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Markets\DataProviders;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Modules\Markets\Securities;
 
 class Moex
 {
     private string $moexStocksUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml';
     private string $moexEtfsUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTF/securities.xml';
+    private string $rates = 'https://iss.moex.com/iss/statistics/engines/futures/markets/indicativerates/securities.xml';
 
     public function __construct(private Securities $securities)
     {
@@ -52,5 +55,17 @@ class Moex
                 'currency'   => $stock['CURRENCYID'],
             ]);
         }
+    }
+
+    public function getRate($currency = 'USD/RUB'): float
+    {
+        return Cache::remember('currencyRate' . $currency, 30, function () use ($currency) {
+            $xmlDataString = file_get_contents($this->rates);
+            $xmlObject = simplexml_load_string($xmlDataString);
+            $data = json_decode(json_encode($xmlObject), true) ?? [];
+            $collection = collect($data['data'][0]['rows']['row'] ?? []);
+            $rate = $collection->where('@attributes.secid', '=', $currency)->first() ?? [];
+            return (float) Arr::get($rate, '@attributes.rate', 0);
+        });
     }
 }

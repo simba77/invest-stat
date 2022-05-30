@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Dashboard\Services\Counters;
 use Modules\Investments\Models\Deposit;
 
 class DashboardController extends Controller
 {
-    public function index(): array
+    public function index(Counters $counters): array
     {
         $invested = Deposit::sum('sum');
+        $allAssetsSum = $counters->getAllAssetsSum();
+        $profit = $allAssetsSum - $invested;
+        $profitPercent = round($profit / $invested * 100, 2);
+
         return [
             'summary' => [
                 [
@@ -34,22 +39,22 @@ class DashboardController extends Controller
                 [
                     'name'     => 'All Assets',
                     'helpText' => 'The sum of all assets held by brokers',
-                    'total'    => $invested + config('invest.savingAmount'),
+                    'total'    => $allAssetsSum,
                     'currency' => '₽',
                 ],
 
                 [
                     'name'     => 'Profit',
                     'helpText' => 'Assets for The Current Day - The Invested Amount',
-                    'percent'  => -27.86,
-                    'total'    => -130516.22,
+                    'percent'  => $profitPercent,
+                    'total'    => $profit,
                     'currency' => '₽',
                 ],
 
                 [
                     'name'     => 'Saving + All Brokers Assets',
                     'helpText' => 'Assets for The Current Day + The Saving Amount',
-                    'total'    => 387893.95,
+                    'total'    => $allAssetsSum + config('invest.savingAmount'),
                     'currency' => '₽',
                 ],
             ],
