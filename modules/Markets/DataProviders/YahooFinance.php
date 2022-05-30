@@ -12,8 +12,10 @@ class YahooFinance
 {
     private string $apiUrl = 'https://alpha.financeapi.net/market/get-realtime-prices';
 
-    public function __construct(private Securities $securities)
-    {
+    public function __construct(
+        private Securities $securities,
+        private InvestCab $investCab
+    ) {
     }
 
     public function import(): void
@@ -36,6 +38,14 @@ class YahooFinance
             $stocksData = $data['data'];
             foreach ($stocksData as $stock) {
                 $attributes = $stock['attributes'];
+
+                // If there is no data for the ticker, use investcab
+                if (empty($attributes['name'])) {
+                    $investCabData = $this->investCab->getDataByTicker($stock['id']);
+                    $attributes['name'] = $investCabData['name'];
+                    $attributes['last'] = $investCabData['price'];
+                }
+
                 $this->securities->createOrUpdate($stock['id'], 'SPB', [
                     'name'       => $attributes['name'],
                     'short_name' => $attributes['name'],
