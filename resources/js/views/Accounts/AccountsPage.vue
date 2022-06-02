@@ -16,6 +16,7 @@
 
     <div class="mb-4">
       <router-link :to="{name: 'CreateAccount'}" class="btn btn-primary">Create Account</router-link>
+      <button class="btn btn-secondary" :disabled="loading" @click="updateData">Update Data</button>
     </div>
     <table class="simple-table white-header">
       <thead>
@@ -267,6 +268,20 @@ export default {
             this.deleting = false;
           })
       });
+    },
+
+    updateData() {
+      this.loading = true;
+      axios.get('/api/accounts/update-data')
+        .then(() => {
+          this.getItems();
+        })
+        .catch(() => {
+          alert('An error has occurred');
+        })
+        .finally(() => {
+          this.loading = false;
+        })
     }
   }
 }

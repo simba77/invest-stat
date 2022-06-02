@@ -6,8 +6,8 @@ namespace Modules\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Resources\ResourceForTable;
 
@@ -95,5 +95,11 @@ class AccountsController extends Controller
         $user = Auth::user();
         $accounts = Account::where('user_id', $user->id)->get();
         return (new ResourceForTable($accounts))->toArray();
+    }
+
+    public function updateData(): array
+    {
+        Artisan::call('securities:update-data');
+        return ['success' => true];
     }
 }
