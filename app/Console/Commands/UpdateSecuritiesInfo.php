@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Modules\Accounts\Services\AccountService;
 use Modules\Markets\DataProviders\Moex;
 use Modules\Markets\DataProviders\YahooFinance;
 
@@ -24,11 +25,12 @@ class UpdateSecuritiesInfo extends Command
      */
     protected $description = 'Update securities data';
 
-    public function handle(Moex $moex, YahooFinance $yahooFinance): int
+    public function handle(Moex $moex, YahooFinance $yahooFinance, AccountService $accountService): int
     {
         $moex->import();
         $moex->importEtf();
         $yahooFinance->import();
+        $accountService->updateAll();
 
         return 0;
     }
