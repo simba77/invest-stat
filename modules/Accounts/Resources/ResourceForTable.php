@@ -73,7 +73,7 @@ class ResourceForTable
                 'fullPrice'      => $fullPrice,
                 'profit'         => $profit,
                 'profitPercent'  => round($profit / $fillBuyPrice * 100, 2),
-                'accountPercent' => round($fullPrice / $account->current_sum_of_assets * 100, 2),
+                'accountPercent' => round($fullPrice / ($account->current_sum_of_assets + $account->balance) * 100, 2),
                 'currency'       => getCurrencyName($stock?->currency ?? 'USD'),
             ];
             $this->total += $asset->sum;
