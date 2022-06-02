@@ -64,8 +64,8 @@ class AccountsController extends Controller
     public function delete(int $id): array
     {
         $category = Account::findOrFail($id);
-        foreach ($category->expenses as $expense) {
-            $expense->delete();
+        foreach ($category->assets as $asset) {
+            $asset->delete();
         }
         $category->delete();
         return ['success' => true];

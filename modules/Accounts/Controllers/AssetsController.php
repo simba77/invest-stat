@@ -7,18 +7,20 @@ namespace Modules\Accounts\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
 
 class AssetsController extends Controller
 {
     public function edit(int $id): array
     {
-        $expense = Asset::findOrFail($id);
+        $asset = Asset::findOrFail($id);
         return [
             'form' => [
-                'id'   => $expense->id,
-                'name' => $expense->name,
-                'sum'  => $expense->sum,
+                'id'     => $asset->id,
+                'ticker' => $asset->ticker,
+                'sum'    => $asset->sum,
             ],
         ];
     }
@@ -37,8 +39,8 @@ class AssetsController extends Controller
 
         $id = $request->input('id');
         if ($id) {
-            $expense = Asset::findOrFail($id);
-            $expense->update(
+            $asset = Asset::findOrFail($id);
+            $asset->update(
                 [
                     'ticker'       => $fields['ticker'],
                     'stock_market' => $fields['stock_market'],
@@ -48,7 +50,7 @@ class AssetsController extends Controller
                 ]
             );
         } else {
-            $expense = Asset::create(
+            $asset = Asset::create(
                 [
                     'ticker'       => $fields['ticker'],
                     'stock_market' => $fields['stock_market'],
@@ -59,15 +61,21 @@ class AssetsController extends Controller
                     'user_id'      => Auth::user()->id,
                 ]
             );
+
+            // Change the balance
+            $account = Account::findOrFail($asset->account_id);
+            $sum = $fields['buy_price'] * $fields['quantity'];
+            $account->balance -= $sum;
+            $account->save();
         }
 
-        return ['success' => true, 'id' => $expense->id];
+        return ['success' => true, 'id' => $asset->id];
     }
 
     public function delete(int $id): array
     {
-        $expense = Asset::findOrFail($id);
-        $expense->delete();
+        $asset = Asset::findOrFail($id);
+        $asset->delete();
         return ['success' => true];
     }
 
@@ -78,8 +86,17 @@ class AssetsController extends Controller
                 'price' => ['required', 'numeric'],
             ]
         );
-        $expense = Asset::findOrFail($id);
-        $expense->update(['sell_price' => $fields['price'], 'status' => Asset::SOLD]);
+
+        DB::transaction(function () use ($id, $fields) {
+            $asset = Asset::findOrFail($id);
+            $asset->update(['sell_price' => $fields['price'], 'status' => Asset::SOLD]);
+
+            // Change the balance
+            $account = Account::findOrFail($asset->account_id);
+            $sum = $fields['price'] * $asset->quantity;
+            $account->balance += $sum;
+            $account->save();
+        });
         return ['success' => true];
     }
 }
