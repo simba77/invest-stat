@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Modules\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Resources\ResourceForTable;
 
 class AccountsController extends Controller
@@ -93,7 +95,14 @@ class AccountsController extends Controller
     public function index(): array
     {
         $user = Auth::user();
-        $accounts = Account::where('user_id', $user->id)->get();
+        $accounts = Account::where('user_id', $user->id)
+            ->with(
+                [
+                    'assets' => function (HasMany $query) {
+                        return $query->where('status', '!=', Asset::SOLD)->orWhereNull('status');
+                    },
+                ]
+            )->get();
         return (new ResourceForTable($accounts))->toArray();
     }
 
