@@ -10,6 +10,8 @@ use Modules\System\Database\CreatedByTrait;
 
 class Asset extends Model
 {
+    public const SOLD = 1;
+
     use CreatedByTrait;
 
     protected $fillable = [

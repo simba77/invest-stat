@@ -67,7 +67,7 @@
                     <th>Full Price</th>
                     <th>Profit</th>
                     <th>Percent</th>
-                    <th class="flex justify-end">Actions</th>
+                    <th class="flex justify-end" style="min-width: 115px;">Actions</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -114,13 +114,25 @@
                       <td class="table-actions">
                         <template v-if="expense.id">
                           <div class="flex justify-end items-center show-on-row-hover">
-                            <router-link :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                            <router-link
+                              :to="{name: 'EditExpense', params: {id: expense.id, category: account.id}}"
+                              class="text-gray-300 hover:text-gray-600 mr-2"
+                              title="Edit"
+                            >
                               <pencil-icon class="h-5 w-5"></pencil-icon>
                             </router-link>
+                            <span
+                              @click="openSellModal(expense)"
+                              class="text-gray-300 hover:text-gray-600 mr-2 cursor-pointer"
+                              title="Sell"
+                            >
+                              <cash-icon class="h-5 w-5"></cash-icon>
+                            </span>
                             <button
                               type="button"
                               class="text-gray-300 hover:text-red-500"
                               @click="openConfirmModal(expense, 'expense')"
+                              title="Delete"
                             >
                               <x-circle-icon class="h-5 w-5"></x-circle-icon>
                             </button>
@@ -153,20 +165,24 @@
       :text="'Are you sure you want to delete &quot;<b>'+ deleteItem.data.name +'</b>&quot;?'"
     ></confirm-modal>
   </base-modal>
+  <base-modal ref="sellModal">
+    <sell-modal :close="closeSellModal" :confirm="getItems" :sellAsset="sell"></sell-modal>
+  </base-modal>
 </template>
 
 <script lang="ts">
 import PageComponent from "../../components/PageComponent.vue";
 import axios from "axios";
-import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
+import {PencilIcon, XCircleIcon, PlusCircleIcon, CashIcon} from "@heroicons/vue/outline";
 import BaseModal from "@/components/Modals/BaseModal.vue";
 import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 import StatCard from "@/components/Cards/StatCard.vue";
 import helpers from "@/helpers";
+import SellModal from "@/components/Modals/SellModal.vue";
 
 export default {
   name: "AccountsPage",
-  components: {StatCard, ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon},
+  components: {SellModal, StatCard, ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon, CashIcon},
   mounted() {
     this.getItems();
     this.getStat();
@@ -180,6 +196,7 @@ export default {
         type: '',
         data: {},
       },
+      sell: {},
       expenses: {},
       helpers,
     }
@@ -192,8 +209,17 @@ export default {
         this.$refs.deleteConfirmationModal.openModal();
       });
     },
+    openSellModal(item: any) {
+      this.sell = item;
+      setTimeout(() => {
+        this.$refs.sellModal.openModal();
+      });
+    },
     closeModal() {
       this.$refs.deleteConfirmationModal.closeModal();
+    },
+    closeSellModal() {
+      this.$refs.sellModal.closeModal();
     },
     confirmDeletion() {
       if (this.deleteItem.type === 'category') {

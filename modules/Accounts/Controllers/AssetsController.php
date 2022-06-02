@@ -70,4 +70,16 @@ class AssetsController extends Controller
         $expense->delete();
         return ['success' => true];
     }
+
+    public function sell(int $id, Request $request): array
+    {
+        $fields = $request->validate(
+            [
+                'price' => ['required', 'numeric'],
+            ]
+        );
+        $expense = Asset::findOrFail($id);
+        $expense->update(['sell_price' => $fields['price'], 'status' => Asset::SOLD]);
+        return ['success' => true];
+    }
 }
