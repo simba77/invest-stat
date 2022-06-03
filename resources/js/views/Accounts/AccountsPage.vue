@@ -26,7 +26,7 @@
       </tr>
       </thead>
       <tbody>
-      <template v-for="(account, index) in expenses.data" :key="index">
+      <template v-for="(account, index) in assets.data" :key="index">
         <template v-if="! account.isTotal">
           <tr class="table-subtitle">
             <td>
@@ -59,7 +59,7 @@
               </template>
             </td>
           </tr>
-          <template v-if="account.expenses.length > 0">
+          <template v-if="account.assets.length > 0">
             <tr>
               <td class="has-sub-table" colspan="3">
                 <table class="simple-table sub-table white-header">
@@ -78,7 +78,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr v-for="(expense, i) in account.expenses" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
+                  <tr v-for="(expense, i) in account.assets" :class="[expense.isTotal ? 'font-bold' : '']" :key="i">
                     <template v-if="expense.isSubTotal">
                       <td :class="[expense.isSubTotal || expense.isTotal ? 'text-right' : '']">{{ expense.ticker }}</td>
                       <td>{{ expense.name }}</td>
@@ -204,7 +204,7 @@ export default {
         data: {},
       },
       sell: {},
-      expenses: {},
+      assets: {},
       helpers,
     }
   },
@@ -245,7 +245,7 @@ export default {
       this.loading = true;
       axios.get('/api/accounts/list')
         .then((response) => {
-          this.expenses = response.data;
+          this.assets = response.data;
         })
         .catch(() => {
           alert('An error has occurred');

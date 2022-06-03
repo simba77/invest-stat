@@ -33,7 +33,7 @@ class ResourceForTable
                 'name'     => $account->name,
                 'balance'  => $account->balance,
                 'currency' => $account->currency === 'RUB' ? '₽' : '$',
-                'expenses' => $this->getAssets($account),
+                'assets'   => $this->getAssets($account),
             ];
         }
 
