@@ -42,7 +42,7 @@
           <label for="remember-me" class="form-checkbox-label">Remember me</label>
         </div>
 
-        <button type="submit" class="btn-primary w-full" :disabled="loading">
+        <button type="submit" class="btn btn-primary relative w-full" :disabled="loading">
           <span class="absolute left-0 inset-y-0 flex items-center pl-3">
             <LockClosedIcon class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true"/>
           </span>

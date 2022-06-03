@@ -19,7 +19,7 @@
         </div>
         <div class="border-b"></div>
         <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
-        <router-link :to="{name: 'Expenses'}" class="btn btn-cancel ml-3">Back</router-link>
+        <router-link :to="{name: 'Expenses'}" class="btn btn-secondary ml-3">Back</router-link>
       </form>
     </div>
   </page-component>

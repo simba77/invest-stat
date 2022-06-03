@@ -16,13 +16,12 @@
 
     <div class="mb-4">
       <router-link :to="{name: 'CreateAccount'}" class="btn btn-primary">Create Account</router-link>
-      <button class="btn btn-secondary" :disabled="loading" @click="updateData">Update Data</button>
+      <button class="btn btn-secondary ml-3" :disabled="loading" @click="updateData">Update Data</button>
     </div>
     <table class="simple-table white-header">
       <thead>
       <tr>
         <th>Name</th>
-        <th>Sum</th>
         <th class="flex justify-end">Actions</th>
       </tr>
       </thead>
@@ -30,22 +29,30 @@
       <template v-for="(account, index) in expenses.data" :key="index">
         <template v-if="! account.isTotal">
           <tr class="table-subtitle">
-            <td colspan="2">
+            <td>
               <div class="font-extrabold">{{ account.name }}</div>
               <div class="text-sm"><span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} {{ account.currency }}</span></div>
             </td>
             <td class="flex justify-end items-center">
               <template v-if="account.id">
-                <router-link :to="{name: 'AddAsset', params: {account: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                <router-link
+                  :to="{name: 'AddAsset', params: {account: account.id}}"
+                  class="text-gray-300 hover:text-gray-600 mr-2"
+                  title="Add Asset">
                   <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
                 </router-link>
-                <router-link :to="{name: 'EditAccount', params: {id: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
+                <router-link
+                  :to="{name: 'EditAccount', params: {id: account.id}}"
+                  class="text-gray-300 hover:text-gray-600 mr-2"
+                  title="Edit Account"
+                >
                   <pencil-icon class="h-5 w-5"></pencil-icon>
                 </router-link>
                 <button
                   type="button"
                   class="text-gray-300 hover:text-red-500"
                   @click="openConfirmModal(account, 'category')"
+                  title="Delete Account"
                 >
                   <x-circle-icon class="h-5 w-5"></x-circle-icon>
                 </button>

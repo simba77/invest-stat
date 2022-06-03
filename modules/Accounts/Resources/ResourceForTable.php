@@ -26,9 +26,9 @@ class ResourceForTable
 
     public function toArray(): array
     {
-        $expenses = [];
+        $data = [];
         foreach ($this->accounts as $account) {
-            $expenses[] = [
+            $data[] = [
                 'id'       => $account->id,
                 'name'     => $account->name,
                 'balance'  => $account->balance,
@@ -37,14 +37,7 @@ class ResourceForTable
             ];
         }
 
-        $expenses[] = [
-            'name'     => 'Total:',
-            'isTotal'  => true,
-            'sum'      => $this->total,
-            'currency' => '₽',
-        ];
-
-        return ['data' => $expenses];
+        return ['data' => $data];
     }
 
     /**
