@@ -94,15 +94,7 @@ class AccountsController extends Controller
 
     public function index(): array
     {
-        $user = Auth::user();
-        $accounts = Account::where('user_id', $user->id)
-            ->with(
-                [
-                    'assets' => function (HasMany $query) {
-                        return $query->where('status', '!=', Asset::SOLD)->orWhereNull('status');
-                    },
-                ]
-            )->get();
+        $accounts = Account::forCurrentUser()->activeAssets()->get();
         return (new ResourceForTable($accounts))->toArray();
     }
 

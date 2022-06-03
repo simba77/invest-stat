@@ -11,7 +11,7 @@ class AccountService
 {
     public function updateAll(): void
     {
-        $accounts = Account::query()->get();
+        $accounts = Account::query()->activeAssets()->get();
         foreach ($accounts as $account) {
             $this->updateSummary($account);
         }

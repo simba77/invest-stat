@@ -33,6 +33,17 @@ class Account extends Model
         return $builder->where('user_id', '=', Auth::user()?->id);
     }
 
+    public function scopeActiveAssets(Builder $builder): Builder
+    {
+        return $builder->with(
+            [
+                'assets' => function (HasMany $query) {
+                    return $query->where('status', '!=', Asset::SOLD)->orWhereNull('status');
+                },
+            ]
+        );
+    }
+
     public function getProfitAttribute(): float
     {
         return $this->current_sum_of_assets + $this->balance - $this->start_sum_of_assets;

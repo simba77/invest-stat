@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Dashboard\Services;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Models\Asset;
 use Modules\Markets\DataProviders\Moex;
 
 class Counters
