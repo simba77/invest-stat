@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Modules\Accounts\Resources;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Modules\Accounts\Models\Account;
-use Modules\Accounts\Models\Asset;
 use Modules\Markets\Models\Security;
 
 class ResourceForTable
 {
     private float $total = 0;
+    public static array $securities = [];
 
     /**
      * @var Account[]
@@ -54,7 +55,7 @@ class ResourceForTable
     {
         $items = [];
         foreach ($account->assets as $asset) {
-            $stock = Security::query()->where('stock_market', $asset->stock_market)->where('ticker', $asset->ticker)->first();
+            $stock = $this->getSecurity($asset->stock_market, $asset->ticker);
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
             $fullPrice = $asset->quantity * ($stock?->price ?? 0);
@@ -95,5 +96,17 @@ class ResourceForTable
         }
 
         return $items;
+    }
+
+    private function getSecurity(string $market, string $ticker)
+    {
+        $security = Arr::get(self::$securities, $market . '.' . $ticker);
+        if ($security) {
+            return $security;
+        }
+
+        $security = Security::query()->where('stock_market', $market)->where('ticker', $ticker)->first();
+        self::$securities[$market][$ticker] = $security;
+        return $security;
     }
 }

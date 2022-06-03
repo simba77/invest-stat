@@ -25,7 +25,7 @@ class Account extends Model
 
     public function assets(): HasMany
     {
-        return $this->hasMany(Asset::class, 'account_id', 'id');
+        return $this->hasMany(Asset::class, 'account_id', 'id')->orderBy('ticker')->orderBy('created_at');
     }
 
     public function scopeForCurrentUser(Builder $builder): Builder
