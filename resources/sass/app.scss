@@ -102,6 +102,10 @@
     }
   }
 
+  .tr-clickable {
+    @apply underline cursor-pointer;
+  }
+
   .card {
     @apply bg-white shadow rounded p-6;
   }

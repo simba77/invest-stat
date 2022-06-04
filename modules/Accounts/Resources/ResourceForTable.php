@@ -69,8 +69,42 @@ class ResourceForTable
                 'profitPercent'  => round($profit / $fillBuyPrice * 100, 2),
                 'accountPercent' => round($fullPrice / ($account->current_sum_of_assets + $account->balance) * 100, 2),
                 'currency'       => getCurrencyName($stock?->currency ?? 'USD'),
+                'items'          => [],
+                'showItems'      => false,
             ];
             $this->total += $asset->sum;
+        }
+
+        /** @var \Illuminate\Support\Collection[] $collection */
+        $collection = collect($items)->groupBy('ticker');
+        $items = [];
+        foreach ($collection as $item) {
+            if ($item->count() > 1) {
+                $subItems = $item->toArray();
+                $avgItem = $this->getAvgValues($subItems);
+                $profit = $avgItem['fullPrice'] - $avgItem['fullBuyPrice'];
+
+                $items[] = [
+                    'id'             => $subItems[0]['id'],
+                    'ticker'         => $subItems[0]['ticker'],
+                    'name'           => $subItems[0]['name'],
+                    'stockMarket'    => $subItems[0]['stockMarket'],
+                    'buyPrice'       => $avgItem['buyPrice'],
+                    'sellPrice'      => $subItems[0]['sellPrice'],
+                    'price'          => $subItems[0]['price'],
+                    'quantity'       => $avgItem['quantity'],
+                    'fullBuyPrice'   => $avgItem['fullBuyPrice'],
+                    'fullPrice'      => $avgItem['fullPrice'],
+                    'profit'         => $profit,
+                    'profitPercent'  => round($profit / $avgItem['fullBuyPrice'] * 100, 2),
+                    'accountPercent' => round($avgItem['fullPrice'] / ($account->current_sum_of_assets + $account->balance) * 100, 2),
+                    'currency'       => $subItems[0]['currency'],
+                    'items'          => $subItems,
+                    'showItems'      => false,
+                ];
+            } else {
+                $items[] = $item->toArray()[0];
+            }
         }
 
         if (! empty($items)) {
@@ -101,5 +135,19 @@ class ResourceForTable
         $security = Security::query()->where('stock_market', $market)->where('ticker', $ticker)->first();
         self::$securities[$market][$ticker] = $security;
         return $security;
+    }
+
+    private function getAvgValues(array $subItems): array
+    {
+        $quantity = array_sum(array_column($subItems, 'quantity'));
+        $fullBuyPrice = array_sum(array_column($subItems, 'fullBuyPrice'));
+        $fullPrice = array_sum(array_column($subItems, 'fullPrice'));
+
+        return [
+            'buyPrice'       => round($fullBuyPrice / $quantity, 2),
+            'quantity'       => $quantity,
+            'fullBuyPrice'   => $fullBuyPrice,
+            'fullPrice'      => $fullPrice,
+        ];
     }
 }

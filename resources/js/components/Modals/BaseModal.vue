@@ -22,7 +22,10 @@
             leave="ease-in duration-200"
             leave-from="opacity-100 translate-y-0 sm:scale-100"
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <DialogPanel class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+            <DialogPanel
+              class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:w-full"
+              :class="[large ? 'sm:max-w-7xl' : 'sm:max-w-lg']"
+            >
               <slot></slot>
             </DialogPanel>
           </TransitionChild>
@@ -37,7 +40,8 @@ import {defineProps, defineExpose, ref} from 'vue';
 import {Dialog, DialogPanel, TransitionChild, TransitionRoot} from '@headlessui/vue';
 
 defineProps({
-  refName: {type: String}
+  refName: {type: String},
+  large: {default: false}
 })
 
 defineExpose({
