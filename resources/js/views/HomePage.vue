@@ -2,7 +2,10 @@
   <page-component title="Dashboard">
     <div v-if="loading">Loading Data...</div>
     <template v-else>
-      <div class="text-xl mb-3">Investment Result</div>
+      <div class="flex justify-between">
+        <div class="text-xl mb-3">Investment Result</div>
+        <div class="text-xl mb-3">1 USD = {{ data.usd }}₽</div>
+      </div>
       <div class="grid grid-cols-3 gap-4">
         <stat-card
           v-for="(card, i) in data.summary"

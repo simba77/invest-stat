@@ -8,10 +8,11 @@ use App\Http\Controllers\Controller;
 use Modules\Accounts\Models\Account;
 use Modules\Dashboard\Services\Counters;
 use Modules\Investments\Models\Deposit;
+use Modules\Markets\DataProviders\Moex;
 
 class DashboardController extends Controller
 {
-    public function index(Counters $counters): array
+    public function index(Counters $counters, Moex $moex): array
     {
         $invested = Deposit::sum('sum');
         $allAssetsSum = $counters->getAllAssetsSum();
@@ -48,6 +49,7 @@ class DashboardController extends Controller
         }
 
         return [
+            'usd'     => $moex->getRate(),
             'summary' => [
                 [
                     'name'     => 'The Invested Amount',
