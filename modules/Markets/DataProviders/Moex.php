@@ -6,6 +6,7 @@ namespace Modules\Markets\DataProviders;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Modules\Markets\Securities;
 
 class Moex
@@ -20,13 +21,13 @@ class Moex
 
     public function import(): void
     {
-        $xmlDataString = file_get_contents($this->moexStocksUrl);
+        $xmlDataString = Http::get($this->moexStocksUrl)->body();
         $this->processData($xmlDataString);
     }
 
     public function importEtf(): void
     {
-        $xmlDataString = file_get_contents($this->moexEtfsUrl);
+        $xmlDataString = Http::get($this->moexEtfsUrl)->body();
         $this->processData($xmlDataString);
     }
 
@@ -60,7 +61,7 @@ class Moex
     public function getRate($currency = 'USD/RUB'): float
     {
         return Cache::remember('currencyRate' . $currency, 30, function () use ($currency) {
-            $xmlDataString = file_get_contents($this->rates);
+            $xmlDataString = Http::get($this->rates)->body();
             $xmlObject = simplexml_load_string($xmlDataString);
             $data = json_decode(json_encode($xmlObject), true) ?? [];
             $collection = collect($data['data'][0]['rows']['row'] ?? []);
