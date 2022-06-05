@@ -78,29 +78,14 @@
               <tr v-if="asset.isSubTotal" class="font-bold">
                 <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
                 <td>{{ asset.name }}</td>
-                <td>{{ asset.quantity }}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
                 <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
                 <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }} ({{ asset.profitPercent }}%)</td>
                 <td></td>
-                <td class="table-actions">
-                  <template v-if="asset.id">
-                    <div class="flex justify-end items-center show-on-row-hover">
-                      <router-link :to="{name: 'EditExpense', params: {id: asset.id, category: account.id}}" class="text-gray-300 hover:text-gray-600 mr-2">
-                        <pencil-icon class="h-5 w-5"></pencil-icon>
-                      </router-link>
-                      <button
-                        type="button"
-                        class="text-gray-300 hover:text-red-500"
-                        @click="openConfirmModal(asset, 'expense')"
-                      >
-                        <x-circle-icon class="h-5 w-5"></x-circle-icon>
-                      </button>
-                    </div>
-                  </template>
-                </td>
+                <td class="table-actions"></td>
               </tr>
               <!-- Asset block -->
               <template v-else>
@@ -153,7 +138,7 @@
                           <td class="table-actions">
                             <div class="flex justify-end items-center show-on-row-hover">
                               <router-link
-                                :to="{name: 'EditExpense', params: {id: subItem.id, category: account.id}}"
+                                :to="{name: 'EditAsset', params: {id: subItem.id, account: account.id}}"
                                 class="text-gray-300 hover:text-gray-600 mr-2"
                                 title="Edit"
                               >
@@ -169,7 +154,7 @@
                               <button
                                 type="button"
                                 class="text-gray-300 hover:text-red-500"
-                                @click="openConfirmModal(subItem, 'expense')"
+                                @click="openConfirmModal(subItem, 'asset')"
                                 title="Delete"
                               >
                                 <x-circle-icon class="h-5 w-5"></x-circle-icon>
@@ -200,7 +185,7 @@
                     <template v-if="asset.id">
                       <div class="flex justify-end items-center show-on-row-hover">
                         <router-link
-                          :to="{name: 'EditExpense', params: {id: asset.id, category: account.id}}"
+                          :to="{name: 'EditAsset', params: {id: asset.id, account: account.id}}"
                           class="text-gray-300 hover:text-gray-600 mr-2"
                           title="Edit"
                         >
@@ -216,7 +201,7 @@
                         <button
                           type="button"
                           class="text-gray-300 hover:text-red-500"
-                          @click="openConfirmModal(asset, 'expense')"
+                          @click="openConfirmModal(asset, 'asset')"
                           title="Delete"
                         >
                           <x-circle-icon class="h-5 w-5"></x-circle-icon>
@@ -306,7 +291,7 @@ export default {
             this.closeModal();
           });
       } else {
-        this.deleteExpense(this.deleteItem.data.id)
+        this.deleteAsset(this.deleteItem.data.id)
           .finally(() => {
             this.closeModal();
           });
@@ -355,11 +340,11 @@ export default {
           })
       });
     },
-    // TODO: Change
-    deleteExpense(id: number) {
+
+    deleteAsset(id: number) {
       this.deleting = true;
       return new Promise((resolve, reject) => {
-        axios.post('/api/accounts/delete-expense/' + id)
+        axios.post('/api/assets/delete/' + id)
           .then(() => {
             this.getItems();
             resolve({deleted: true});

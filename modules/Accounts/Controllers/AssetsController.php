@@ -18,9 +18,12 @@ class AssetsController extends Controller
         $asset = Asset::findOrFail($id);
         return [
             'form' => [
-                'id'     => $asset->id,
-                'ticker' => $asset->ticker,
-                'sum'    => $asset->sum,
+                'id'           => $asset->id,
+                'ticker'       => $asset->ticker,
+                'stock_market' => $asset->stock_market,
+                'quantity'     => $asset->quantity,
+                'buy_price'    => $asset->buy_price,
+                'currency'     => $asset->currency,
             ],
         ];
     }
