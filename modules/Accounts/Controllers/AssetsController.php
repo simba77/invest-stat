@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
+use Modules\Accounts\Services\AccountService;
 
 class AssetsController extends Controller
 {
@@ -28,7 +29,7 @@ class AssetsController extends Controller
         ];
     }
 
-    public function store(int $account, Request $request): array
+    public function store(int $account, Request $request, AccountService $accountService): array
     {
         $fields = $request->validate(
             [
@@ -72,17 +73,20 @@ class AssetsController extends Controller
             $account->save();
         }
 
+        $accountService->updateAll();
+
         return ['success' => true, 'id' => $asset->id];
     }
 
-    public function delete(int $id): array
+    public function delete(int $id, AccountService $accountService): array
     {
         $asset = Asset::findOrFail($id);
         $asset->delete();
+        $accountService->updateAll();
         return ['success' => true];
     }
 
-    public function sell(int $id, Request $request): array
+    public function sell(int $id, Request $request, AccountService $accountService): array
     {
         $fields = $request->validate(
             [
@@ -100,6 +104,9 @@ class AssetsController extends Controller
             $account->balance += $sum;
             $account->save();
         });
+
+        $accountService->updateAll();
+
         return ['success' => true];
     }
 }

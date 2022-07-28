@@ -41,7 +41,12 @@ class YahooFinance
 
                 // If there is no data for the ticker, use investcab
                 if (empty($attributes['name'])) {
-                    $investCabData = $this->investCab->getDataByTicker($stock['id']);
+                    try {
+                        $investCabData = $this->investCab->getDataByTicker($stock['id']);
+                    } catch (\Throwable) {
+                        continue;
+                    }
+
                     $attributes['name'] = $investCabData['name'];
                     $attributes['last'] = $investCabData['price'];
                 }

@@ -11,14 +11,20 @@ class Securities
     public function createOrUpdate(string $ticker, string $market, array $params): void
     {
         $fields = [
-            'name'       => $params['name'],
-            'short_name' => $params['short_name'],
-            'lat_name'   => $params['lat_name'],
+            'name'       => $params['name'] ?? null,
+            'short_name' => $params['short_name'] ?? null,
+            'lat_name'   => $params['lat_name'] ?? null,
             'lot_size'   => $params['lot_size'] ?? 1,
             'price'      => $params['price'] ?? 0,
             'currency'   => $this->getCurrencyByCode($params['currency']),
             'isin'       => $params['isin'] ?? '',
         ];
+
+        foreach ($fields as $key => $field) {
+            if (is_null($field)) {
+                unset($fields[$key]);
+            }
+        }
 
         if (! isset($params['price'])) {
             unset($fields['price']);

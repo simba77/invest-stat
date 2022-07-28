@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Modules\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Modules\Accounts\Models\Account;
-use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Resources\ResourceForTable;
+use Modules\Dashboard\Services\Counters;
+use Modules\Investments\Models\Deposit;
 
 class AccountsController extends Controller
 {
@@ -71,22 +71,35 @@ class AccountsController extends Controller
         return ['success' => true];
     }
 
-    public function summary(): array
+    public function summary(Counters $counters): array
     {
+        $invested = Deposit::sum('sum');
+        $allAssetsSum = $counters->getAllAssetsSum();
+        $profit = $allAssetsSum - $invested;
+        $profitPercent = round($profit / $invested * 100, 2);
+
         return [
             'summary' => [
                 [
-                    'name'  => 'Salary',
-                    'total' => config('invest.salary'),
+                    'name'     => 'All Assets',
+                    'helpText' => 'The sum of all assets held by brokers',
+                    'total'    => $allAssetsSum,
+                    'currency' => '₽',
                 ],
+
                 [
-                    'name'  => 'All Expenses',
-                    'total' => 0,
+                    'name'     => 'Profit',
+                    'helpText' => 'Assets for The Current Day - The Invested Amount',
+                    'percent'  => $profitPercent,
+                    'total'    => $profit,
+                    'currency' => '₽',
                 ],
+
                 [
-                    'name'     => 'Salary - Expenses',
-                    'helpText' => 'Free Money for Investments',
-                    'total'    => config('invest.salary') - 0,
+                    'name'     => 'Saving + All Brokers Assets',
+                    'helpText' => 'Assets for The Current Day + The Saving Amount',
+                    'total'    => $allAssetsSum + config('invest.savingAmount'),
+                    'currency' => '₽',
                 ],
             ],
         ];

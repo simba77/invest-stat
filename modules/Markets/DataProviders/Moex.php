@@ -46,15 +46,17 @@ class Moex
 
             $price = $marketData->where('SECID', '=', $stock['SECID'])->first()['LCURRENTPRICE'];
 
-            $this->securities->createOrUpdate($stock['SECID'], 'MOEX', [
-                'name'       => $stock['SECNAME'],
-                'short_name' => $stock['SHORTNAME'],
-                'lat_name'   => $stock['LATNAME'],
-                'isin'       => $stock['ISIN'],
-                'lot_size'   => $stock['LOTSIZE'],
-                'price'      => ! empty($price) ? $price : 0,
-                'currency'   => $stock['CURRENCYID'],
-            ]);
+            if (! empty($price)) {
+                $this->securities->createOrUpdate($stock['SECID'], 'MOEX', [
+                    'name'       => $stock['SECNAME'],
+                    'short_name' => $stock['SHORTNAME'],
+                    'lat_name'   => $stock['LATNAME'],
+                    'isin'       => $stock['ISIN'],
+                    'lot_size'   => $stock['LOTSIZE'],
+                    'price'      => ! empty($price) ? $price : 0,
+                    'currency'   => $stock['CURRENCYID'],
+                ]);
+            }
         }
     }
 
