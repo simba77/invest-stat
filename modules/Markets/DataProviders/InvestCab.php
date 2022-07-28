@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Modules\Accounts\Models\Asset;
+use Modules\Accounts\Services\AccountService;
 use Modules\Markets\Securities;
 
 class InvestCab
@@ -16,6 +17,7 @@ class InvestCab
 
     public function __construct(
         private Securities $securities,
+        private AccountService $accountService,
     ) {
     }
 
@@ -61,6 +63,7 @@ class InvestCab
         $assets = Asset::query()
             ->select('ticker')
             ->where('stock_market', '=', 'SPB')
+            ->whereNull('status')
             ->groupBy('ticker')
             ->get();
 
@@ -79,7 +82,8 @@ class InvestCab
                 $console?->error($exception->getMessage());
             }
 
-            sleep(rand(10, 45));
+            $this->accountService->updateAll();
+            sleep(rand(1, 5));
         }
     }
 }
