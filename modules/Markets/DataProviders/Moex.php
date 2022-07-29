@@ -13,6 +13,7 @@ class Moex
 {
     private string $moexStocksUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml';
     private string $moexEtfsUrl = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTF/securities.xml';
+    private string $moexShares = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQIF/securities.xml';
     private string $rates = 'https://iss.moex.com/iss/statistics/engines/futures/markets/indicativerates/securities.xml';
 
     public function __construct(private Securities $securities)
@@ -28,6 +29,12 @@ class Moex
     public function importEtf(): void
     {
         $xmlDataString = Http::get($this->moexEtfsUrl)->body();
+        $this->processData($xmlDataString);
+    }
+
+    public function importShares(): void
+    {
+        $xmlDataString = Http::get($this->moexShares)->body();
         $this->processData($xmlDataString);
     }
 

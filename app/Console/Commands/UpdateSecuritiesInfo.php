@@ -29,6 +29,7 @@ class UpdateSecuritiesInfo extends Command
     {
         $moex->import();
         $moex->importEtf();
+        $moex->importShares();
         // $yahooFinance->import();
         $accountService->updateAll();
 
