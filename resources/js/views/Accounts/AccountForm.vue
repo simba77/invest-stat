@@ -1,13 +1,13 @@
 <template>
   <page-component title="Add Account">
     <div class="card">
-      <form class="space-y-6 w-2/3 mx-auto" action="#" method="POST" @submit.prevent="submitForm">
+      <form class="space-y-6 w-full md:w-2/3 mx-auto" action="#" method="POST" @submit.prevent="submitForm">
         <div>
           <h3 class="text-lg font-medium text-gray-900">Account</h3>
           <p class="mt-1 text-sm text-gray-600">Enter the name of the account to group your assets</p>
         </div>
         <div class="bg-red-500 inline-block text-white rounded px-4 py-2" v-if="errors && errors.message">{{ errors.message }}</div>
-        <div class="w-2/4">
+        <div class="w-full md:w-2/4">
           <input-text
             v-model="form.name"
             :key="componentKey"

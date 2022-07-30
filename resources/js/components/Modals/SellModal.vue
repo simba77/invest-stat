@@ -21,7 +21,7 @@
   <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <button
       type="button"
-      class="btn btn-success"
+      class="btn btn-success mr-3 md:mr-0"
       @click="sendForm"
       :disabled="loading"
     >Sell

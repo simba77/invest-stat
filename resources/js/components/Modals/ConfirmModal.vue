@@ -15,7 +15,7 @@
   <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <button
       type="button"
-      class="btn btn-danger ml-3"
+      class="btn btn-danger mr-3 md:mr-0 ml-3"
       @click="confirm"
     >Confirm
     </button>
