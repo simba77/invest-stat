@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow rounded p-6">
+  <div class="bg-white shadow rounded p-3 md:p-6">
     <div class="text-gray-400 flex items-center">
       <div>{{ name }}</div>
       <div v-if="helpText" v-tooltip="helpText">
@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="flex justify-between items-center mt-1">
-      <div class="text-3xl font-bold">{{ new Intl.NumberFormat('ru-RU').format(total) }} {{ currency }}</div>
+      <div class="text-lg md:text-3xl font-bold">{{ new Intl.NumberFormat('ru-RU').format(total) }} {{ currency }}</div>
       <div
         :class="[percent > 0 ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900', 'rounded-full pr-2 pl-1 flex items-center']"
         v-if="percent"

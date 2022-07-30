@@ -2,7 +2,7 @@
   <page-component title="Accounts">
     <template v-if="stat">
       <div class="text-xl mb-3">Summary</div>
-      <div class="grid grid-cols-3 gap-4 mb-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-5">
         <stat-card
           v-for="(card, i) in stat.summary"
           :key="i"
@@ -54,44 +54,123 @@
         </div>
         <!-- // Account block -->
 
-        <template v-if="account.assets.length > 0">
-          <table class="simple-table sub-table white-header">
-            <thead>
-            <tr>
-              <th>Ticker</th>
-              <th>Name</th>
-              <th>Quantity</th>
-              <th>Buy Price</th>
-              <th>Price</th>
-              <th>Full Buy Price</th>
-              <th>Full Price</th>
-              <th>Profit</th>
-              <th>Percent</th>
-              <th class="flex justify-end" style="min-width: 115px;">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <template v-for="(asset, i) in account.assets" :key="i">
-
-              <!-- Account block -->
-              <tr v-if="asset.isSubTotal" class="font-bold">
-                <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
-                <td>{{ asset.name }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
-                <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
-                <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }} ({{ asset.profitPercent }}%)</td>
-                <td></td>
-                <td class="table-actions"></td>
+        <div class="w-full overflow-x-auto">
+          <template v-if="account.assets.length > 0">
+            <table class="simple-table sub-table white-header">
+              <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Buy Price</th>
+                <th>Price</th>
+                <th>Full Buy Price</th>
+                <th>Full Price</th>
+                <th>Profit</th>
+                <th>Percent</th>
+                <th class="flex justify-end" style="min-width: 115px;">Actions</th>
               </tr>
-              <!-- Asset block -->
-              <template v-else>
-                <!-- Group of assets -->
-                <template v-if="asset.items.length > 0">
-                  <tr class="tr-clickable" @click="asset.showItems = !asset.showItems">
+              </thead>
+              <tbody>
+
+              <template v-for="(asset, i) in account.assets" :key="i">
+
+                <!-- Account block -->
+                <tr v-if="asset.isSubTotal" class="font-bold">
+                  <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                  <td>{{ asset.name }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
+                  <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
+                  <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }} ({{ asset.profitPercent }}%)</td>
+                  <td></td>
+                  <td class="table-actions"></td>
+                </tr>
+                <!-- Asset block -->
+                <template v-else>
+                  <!-- Group of assets -->
+                  <template v-if="asset.items.length > 0">
+                    <tr class="tr-clickable" @click="asset.showItems = !asset.showItems">
+                      <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                      <td>{{ asset.name }}</td>
+                      <td>{{ asset.quantity }}</td>
+                      <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
+                      <td>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</td>
+                      <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
+                      <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
+                      <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
+                        {{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }} ({{ asset.profitPercent }}%)
+                      </td>
+                      <td>{{ asset.accountPercent }}%</td>
+                      <td class="table-actions"></td>
+                    </tr>
+                    <tr v-if="asset.showItems">
+                      <td colspan="111" class="!p-2 !bg-white">
+                        <table class="simple-table sub-table white-header">
+                          <thead>
+                          <tr>
+                            <th>Ticker</th>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Buy Price</th>
+                            <th>Price</th>
+                            <th>Full Buy Price</th>
+                            <th>Full Price</th>
+                            <th>Profit</th>
+                            <th>Percent</th>
+                            <th class="flex justify-end" style="min-width: 115px;">Actions</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr v-for="(subItem, subIndex) in asset.items" :key="'sub' + subIndex">
+                            <td :class="[subItem.isSubTotal || subItem.isTotal ? 'text-right' : '']">{{ subItem.ticker }}</td>
+                            <td>{{ subItem.name }}</td>
+                            <td>{{ subItem.quantity }}</td>
+                            <td>{{ helpers.formatPrice(subItem.buyPrice) }} {{ subItem.currency }}</td>
+                            <td>{{ helpers.formatPrice(subItem.price) }} {{ subItem.currency }}</td>
+                            <td>{{ helpers.formatPrice(subItem.fullBuyPrice) }} {{ subItem.currency }}</td>
+                            <td>{{ helpers.formatPrice(subItem.fullPrice) }} {{ subItem.currency }}</td>
+                            <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
+                              {{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }} ({{ subItem.profitPercent }}%)
+                            </td>
+                            <td>{{ subItem.accountPercent }}%</td>
+                            <td class="table-actions">
+                              <div class="flex justify-end items-center show-on-row-hover">
+                                <router-link
+                                  :to="{name: 'EditAsset', params: {id: subItem.id, account: account.id}}"
+                                  class="text-gray-300 hover:text-gray-600 mr-2"
+                                  title="Edit"
+                                >
+                                  <pencil-icon class="h-5 w-5"></pencil-icon>
+                                </router-link>
+                                <div
+                                  @click="openSellModal(subItem)"
+                                  class="text-gray-300 hover:text-gray-600 mr-2 cursor-pointer"
+                                  title="Sell"
+                                >
+                                  <cash-icon class="h-5 w-5"></cash-icon>
+                                </div>
+                                <button
+                                  type="button"
+                                  class="text-gray-300 hover:text-red-500"
+                                  @click="openConfirmModal(subItem, 'asset')"
+                                  title="Delete"
+                                >
+                                  <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                  </template>
+                  <!-- Asset without group -->
+                  <tr v-else>
                     <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
                     <td>{{ asset.name }}</td>
                     <td>{{ asset.quantity }}</td>
@@ -103,118 +182,41 @@
                       {{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }} ({{ asset.profitPercent }}%)
                     </td>
                     <td>{{ asset.accountPercent }}%</td>
-                    <td class="table-actions"></td>
-                  </tr>
-                  <tr v-if="asset.showItems">
-                    <td colspan="111" class="!p-2 !bg-white">
-                      <table class="simple-table sub-table white-header">
-                        <thead>
-                        <tr>
-                          <th>Ticker</th>
-                          <th>Name</th>
-                          <th>Quantity</th>
-                          <th>Buy Price</th>
-                          <th>Price</th>
-                          <th>Full Buy Price</th>
-                          <th>Full Price</th>
-                          <th>Profit</th>
-                          <th>Percent</th>
-                          <th class="flex justify-end" style="min-width: 115px;">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(subItem, subIndex) in asset.items" :key="'sub' + subIndex">
-                          <td :class="[subItem.isSubTotal || subItem.isTotal ? 'text-right' : '']">{{ subItem.ticker }}</td>
-                          <td>{{ subItem.name }}</td>
-                          <td>{{ subItem.quantity }}</td>
-                          <td>{{ helpers.formatPrice(subItem.buyPrice) }} {{ subItem.currency }}</td>
-                          <td>{{ helpers.formatPrice(subItem.price) }} {{ subItem.currency }}</td>
-                          <td>{{ helpers.formatPrice(subItem.fullBuyPrice) }} {{ subItem.currency }}</td>
-                          <td>{{ helpers.formatPrice(subItem.fullPrice) }} {{ subItem.currency }}</td>
-                          <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                            {{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }} ({{ subItem.profitPercent }}%)
-                          </td>
-                          <td>{{ subItem.accountPercent }}%</td>
-                          <td class="table-actions">
-                            <div class="flex justify-end items-center show-on-row-hover">
-                              <router-link
-                                :to="{name: 'EditAsset', params: {id: subItem.id, account: account.id}}"
-                                class="text-gray-300 hover:text-gray-600 mr-2"
-                                title="Edit"
-                              >
-                                <pencil-icon class="h-5 w-5"></pencil-icon>
-                              </router-link>
-                              <div
-                                @click="openSellModal(subItem)"
-                                class="text-gray-300 hover:text-gray-600 mr-2 cursor-pointer"
-                                title="Sell"
-                              >
-                                <cash-icon class="h-5 w-5"></cash-icon>
-                              </div>
-                              <button
-                                type="button"
-                                class="text-gray-300 hover:text-red-500"
-                                @click="openConfirmModal(subItem, 'asset')"
-                                title="Delete"
-                              >
-                                <x-circle-icon class="h-5 w-5"></x-circle-icon>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        </tbody>
-                      </table>
+                    <td class="table-actions">
+                      <template v-if="asset.id">
+                        <div class="flex justify-end items-center show-on-row-hover">
+                          <router-link
+                            :to="{name: 'EditAsset', params: {id: asset.id, account: account.id}}"
+                            class="text-gray-300 hover:text-gray-600 mr-2"
+                            title="Edit"
+                          >
+                            <pencil-icon class="h-5 w-5"></pencil-icon>
+                          </router-link>
+                          <div
+                            @click="openSellModal(asset)"
+                            class="text-gray-300 hover:text-gray-600 mr-2 cursor-pointer"
+                            title="Sell"
+                          >
+                            <cash-icon class="h-5 w-5"></cash-icon>
+                          </div>
+                          <button
+                            type="button"
+                            class="text-gray-300 hover:text-red-500"
+                            @click="openConfirmModal(asset, 'asset')"
+                            title="Delete"
+                          >
+                            <x-circle-icon class="h-5 w-5"></x-circle-icon>
+                          </button>
+                        </div>
+                      </template>
                     </td>
                   </tr>
-
                 </template>
-                <!-- Asset without group -->
-                <tr v-else>
-                  <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
-                  <td>{{ asset.name }}</td>
-                  <td>{{ asset.quantity }}</td>
-                  <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
-                  <td>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</td>
-                  <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
-                  <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
-                  <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                    {{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }} ({{ asset.profitPercent }}%)
-                  </td>
-                  <td>{{ asset.accountPercent }}%</td>
-                  <td class="table-actions">
-                    <template v-if="asset.id">
-                      <div class="flex justify-end items-center show-on-row-hover">
-                        <router-link
-                          :to="{name: 'EditAsset', params: {id: asset.id, account: account.id}}"
-                          class="text-gray-300 hover:text-gray-600 mr-2"
-                          title="Edit"
-                        >
-                          <pencil-icon class="h-5 w-5"></pencil-icon>
-                        </router-link>
-                        <div
-                          @click="openSellModal(asset)"
-                          class="text-gray-300 hover:text-gray-600 mr-2 cursor-pointer"
-                          title="Sell"
-                        >
-                          <cash-icon class="h-5 w-5"></cash-icon>
-                        </div>
-                        <button
-                          type="button"
-                          class="text-gray-300 hover:text-red-500"
-                          @click="openConfirmModal(asset, 'asset')"
-                          title="Delete"
-                        >
-                          <x-circle-icon class="h-5 w-5"></x-circle-icon>
-                        </button>
-                      </div>
-                    </template>
-                  </td>
-                </tr>
               </template>
-            </template>
-            </tbody>
-          </table>
-        </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
       </div>
     </div>
   </page-component>

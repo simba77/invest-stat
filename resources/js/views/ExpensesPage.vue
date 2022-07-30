@@ -2,7 +2,7 @@
   <page-component title="Expenses">
     <template v-if="stat">
       <div class="text-xl mb-3">Summary</div>
-      <div class="grid grid-cols-3 gap-4 mb-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-5">
         <stat-card
           v-for="(card, i) in stat.summary"
           :key="i"
