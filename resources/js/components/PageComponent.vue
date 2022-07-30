@@ -5,7 +5,9 @@
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <img class="h-8 w-8" src="../../images/workflow-mark-indigo-300.svg" alt="Workflow"/>
+              <router-link to="/">
+                <img class="h-8 w-8" src="../../images/workflow-mark-indigo-300.svg" alt="Workflow"/>
+              </router-link>
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
@@ -13,7 +15,10 @@
                   v-for="item in navigation"
                   :key="item.name"
                   :to="{name: item.routeName}"
-                  :class="[item.current ? 'bg-indigo-700 text-white' : 'text-white hover:bg-indigo-800 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
+                  :class="[
+                    item.current ? 'bg-indigo-700 text-white' : 'text-white hover:bg-indigo-800 hover:text-white',
+                    'px-3 py-2 rounded-md text-sm font-medium'
+                  ]"
                   :aria-current="item.current ? 'page' : undefined"
                 >{{ item.name }}
                 </router-link>
@@ -45,7 +50,7 @@
           <div class="-mr-2 flex md:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
-              class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              class="btn btn-primary border-indigo-700">
               <span class="sr-only">Open main menu</span>
               <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true"/>
               <XIcon v-else class="block h-6 w-6" aria-hidden="true"/>
@@ -56,14 +61,14 @@
 
       <DisclosurePanel class="md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <DisclosureButton
+          <router-link
             v-for="item in navigation"
-            :key="item.name" as="a"
-            :href="item.href"
-            :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
+            :key="item.name"
+            :to="{name: item.routeName}"
+            :class="[item.current ? 'bg-indigo-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
             :aria-current="item.current ? 'page' : undefined">
             {{ item.name }}
-          </DisclosureButton>
+          </router-link>
         </div>
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
@@ -78,9 +83,13 @@
             </div>
           </div>
           <div class="mt-3 px-2 space-y-1">
-            <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">{{
-                item.name
-              }}
+            <DisclosureButton
+              v-for="item in userNavigation"
+              :key="item.name"
+              as="a"
+              :href="item.href"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+            >{{ item.name }}
             </DisclosureButton>
           </div>
         </div>

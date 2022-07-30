@@ -6,7 +6,7 @@
         <div class="text-xl mb-3">Investment Result</div>
         <div class="text-xl mb-3">1 USD = {{ data.usd }}₽</div>
       </div>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <stat-card
           v-for="(card, i) in data.summary"
           :key="i"
@@ -20,7 +20,7 @@
       <div class="text-2xl font-extrabold mt-6 mb-3">Assets by Brokers</div>
       <div v-for="(broker, index) in brokers" :key="index">
         <div class="text-xl mb-3 mt-5">{{ broker.name }}</div>
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <stat-card
             v-for="(card, i) in broker.cards"
             :key="i"
