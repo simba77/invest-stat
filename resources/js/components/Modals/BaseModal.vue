@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import {defineProps, defineExpose, ref} from 'vue';
+import {ref} from 'vue';
 import {Dialog, DialogPanel, TransitionChild, TransitionRoot} from '@headlessui/vue';
 
 defineProps({

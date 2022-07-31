@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import {DialogTitle} from '@headlessui/vue'
 import {CashIcon} from '@heroicons/vue/outline'
-import {defineProps} from "vue";
 import InputText from "@/components/Forms/InputText.vue";
 import axios from "axios";
 

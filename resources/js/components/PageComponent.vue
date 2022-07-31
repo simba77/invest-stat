@@ -117,7 +117,6 @@
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {MenuIcon, XIcon, UserIcon} from '@heroicons/vue/outline'
 import {authStore} from "@/stores/authStore";
-import {defineProps} from "vue";
 import router from "@/router";
 
 const props = defineProps({

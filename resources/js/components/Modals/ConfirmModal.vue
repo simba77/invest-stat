@@ -30,7 +30,6 @@
 <script setup lang="ts">
 import {DialogTitle} from '@headlessui/vue'
 import {ExclamationIcon} from '@heroicons/vue/outline'
-import {defineProps} from "vue";
 
 defineProps(['close', 'confirm', 'title', 'text'])
 

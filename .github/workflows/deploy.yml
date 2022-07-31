@@ -23,4 +23,4 @@ jobs:
             php artisan migrate --force
             php artisan cache:clear
             npm install
-            npm run prod
+            npm run build
