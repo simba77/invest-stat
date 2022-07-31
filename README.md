@@ -8,8 +8,8 @@ The personal project for tracking investment statistics
 ## Installation
 
 ```bash
-git clone git@github.com:simba77/invest-stat.git invest-stat.local
-cd invest-stat.local
+git clone git@github.com:simba77/invest-stat.git invest-stat.loc
+cd invest-stat.loc
 composer install
 ```
 
@@ -28,13 +28,13 @@ npm install
 ```
 
 ```bash
-npm run prod
+npm run build
 ```
 
 For development mode, use the command
 
 ```bash
-npm run hot
+npm run dev
 ```
 
 ## License
