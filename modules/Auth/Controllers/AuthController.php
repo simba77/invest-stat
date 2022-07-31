@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Response;
 
 class AuthController extends Controller
 {
-    public function login(Request $request): \Illuminate\Http\Response | array {
+    public function login(Request $request): \Illuminate\Http\Response | array
+    {
         $credentials = $request->validate(
             [
                 'email'    => ['required', 'email'],
