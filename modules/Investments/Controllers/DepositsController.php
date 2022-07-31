@@ -43,7 +43,7 @@ class DepositsController extends Controller
     public function depositsList(): AnonymousResourceCollection
     {
         $user = Auth::user();
-        $deposits = Deposit::where('user_id', $user->id)->orderBy('date')->get();
+        $deposits = Deposit::where('user_id', $user->id)->orderByDesc('date')->get();
         return DepositResource::collection($deposits);
     }
 }
