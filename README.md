@@ -1,7 +1,9 @@
 # invest-stat
 
-The personal project for tracking investment statistics
+[![CI-BUILD-TEST](https://github.com/simba77/invest-stat/workflows/CI-BUILD-TEST/badge.svg?branch=master)](https://github.com/simba77/invest-stat/actions)
+[![DEPLOY](https://github.com/simba77/invest-stat/workflows/DEPLOY/badge.svg?branch=master)](https://github.com/simba77/invest-stat/actions)
 
+The personal project for tracking investment statistics
 
 ## Installation
 
@@ -34,7 +36,6 @@ For development mode, use the command
 ```bash
 npm run hot
 ```
-
 
 ## License
 
