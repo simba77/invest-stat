@@ -22,5 +22,5 @@ jobs:
             composer install
             php artisan migrate --force
             php artisan cache:clear
-            npm install
+            npm ci
             npm run build
