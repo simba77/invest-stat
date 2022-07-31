@@ -14,4 +14,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
-            mkdir test
+            git pull
+            composer install
+            php artisan migrate --force
+            php artisan cache:clear
+            npm install
+            npm run prod
