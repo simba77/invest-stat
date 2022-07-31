@@ -96,7 +96,7 @@ import axios from "axios";
 import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
 import BaseModal from "@/components/Modals/BaseModal.vue";
 import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
-// import StatCard from "@/components/Cards/StatCard.vue";
+import StatCard from "@/components/Cards/StatCard.vue";
 
 export default {
   name: "ExpensesPage",
