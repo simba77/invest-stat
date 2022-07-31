@@ -117,6 +117,14 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Accounts/AssetForm.vue')
   },
+  {
+    name: 'SoldAssets',
+    path: '/sold-assets',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/SoldAssetsPage.vue')
+  },
 ];
 
 const router = createRouter({

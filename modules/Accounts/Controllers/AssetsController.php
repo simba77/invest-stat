@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
+use Modules\Accounts\Resources\SoldAssetsResource;
 use Modules\Accounts\Services\AccountService;
 
 class AssetsController extends Controller
@@ -108,5 +109,11 @@ class AssetsController extends Controller
         $accountService->updateAll();
 
         return ['success' => true];
+    }
+
+    public function soldAssets(): array
+    {
+        $accounts = Account::forCurrentUser()->soldAssets()->get();
+        return (new SoldAssetsResource($accounts))->toArray();
     }
 }

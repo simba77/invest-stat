@@ -50,6 +50,8 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('edit/{id:number}', [AssetsController::class, 'edit'])->name('assets.edit');
             Route::post('store/{account:number}', [AssetsController::class, 'store'])->name('assets.store');
             Route::post('sell/{id:number}', [AssetsController::class, 'sell'])->name('assets.sell');
+
+            Route::get('sold', [AssetsController::class, 'soldAssets'])->name('assets.sold-assets');
         });
     });
 });
