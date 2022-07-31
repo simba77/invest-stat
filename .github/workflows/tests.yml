@@ -1,5 +1,5 @@
-name: PHP-CI
-on: [push, pull_request]
+name: CI-BUILD-TEST
+on: [ push, pull_request ]
 
 jobs:
   coding-standard:
@@ -33,3 +33,23 @@ jobs:
 
       - name: Test
         run: php artisan test
+
+  build:
+    name: JS Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, prod
+        run: |
+          npm install
+          npm run prod
+        env:
+          CI: true
+

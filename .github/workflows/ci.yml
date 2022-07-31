@@ -1,7 +1,7 @@
 name: CI
 on:
   workflow_run:
-    workflows: [ "PHP-CI", "Node CI" ]
+    workflows: [ "CI-BUILD-TEST" ]
     types:
       - completed
 jobs:
