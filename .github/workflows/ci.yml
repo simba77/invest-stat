@@ -1,5 +1,9 @@
 name: CI
-on: [ push ]
+on:
+  workflow_run:
+    workflows: [ "PHP-CI", "Node CI" ]
+    types:
+      - completed
 jobs:
   deploy:
     if: github.ref == 'refs/heads/master'
