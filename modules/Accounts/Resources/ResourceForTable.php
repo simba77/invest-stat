@@ -56,6 +56,7 @@ class ResourceForTable
 
             $items[] = [
                 'id'             => $asset->id,
+                'updated'        => $stock->updated_at?->format('d.m.Y H:i:s'),
                 'ticker'         => $asset->ticker,
                 'name'           => $stock?->short_name ?? '',
                 'stockMarket'    => $asset->stock_market,
@@ -87,6 +88,7 @@ class ResourceForTable
                 $items[] = [
                     'id'             => $subItems[0]['id'],
                     'ticker'         => $subItems[0]['ticker'],
+                    'updated'        => $subItems[0]['updated'],
                     'name'           => $subItems[0]['name'],
                     'stockMarket'    => $subItems[0]['stockMarket'],
                     'buyPrice'       => $avgItem['buyPrice'],
@@ -144,10 +146,10 @@ class ResourceForTable
         $fullPrice = array_sum(array_column($subItems, 'fullPrice'));
 
         return [
-            'buyPrice'       => round($fullBuyPrice / $quantity, 2),
-            'quantity'       => $quantity,
-            'fullBuyPrice'   => $fullBuyPrice,
-            'fullPrice'      => $fullPrice,
+            'buyPrice'     => round($fullBuyPrice / $quantity, 2),
+            'quantity'     => $quantity,
+            'fullBuyPrice' => $fullBuyPrice,
+            'fullPrice'    => $fullPrice,
         ];
     }
 }

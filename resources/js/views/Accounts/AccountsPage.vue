@@ -77,7 +77,11 @@
 
                 <!-- Account block -->
                 <tr v-if="asset.isSubTotal" class="font-bold">
-                  <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                  <td
+                    :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
+                    v-tooltip="'Last Update:' + asset.updated"
+                  >{{ asset.ticker }}
+                  </td>
                   <td>{{ asset.name }}</td>
                   <td></td>
                   <td></td>
@@ -93,7 +97,11 @@
                   <!-- Group of assets -->
                   <template v-if="asset.items.length > 0">
                     <tr class="tr-clickable" @click="asset.showItems = !asset.showItems">
-                      <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                      <td
+                        :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
+                        v-tooltip="'Last Update: ' + asset.updated"
+                      >{{ asset.ticker }}
+                      </td>
                       <td>{{ asset.name }}</td>
                       <td>{{ asset.quantity }}</td>
                       <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
@@ -171,7 +179,11 @@
                   </template>
                   <!-- Asset without group -->
                   <tr v-else>
-                    <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                    <td
+                      :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
+                      v-tooltip="'Last Update: ' + asset.updated"
+                    >{{ asset.ticker }}
+                    </td>
                     <td>{{ asset.name }}</td>
                     <td>{{ asset.quantity }}</td>
                     <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
