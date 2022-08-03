@@ -62,6 +62,9 @@ class Account extends Model
 
     public function getProfitPercentAttribute(): float
     {
-        return round(($this->current_sum_of_assets + $this->balance - $this->start_sum_of_assets) / $this->start_sum_of_assets * 100, 2);
+        if ($this->start_sum_of_assets > 0) {
+            return round(($this->current_sum_of_assets + $this->balance - $this->start_sum_of_assets) / $this->start_sum_of_assets * 100, 2);
+        }
+        return 0;
     }
 }
