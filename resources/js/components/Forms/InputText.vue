@@ -26,7 +26,7 @@ export default {
   name: "InputText",
   emits: ['update:modelValue'],
   props: {
-    modelValue: String,
+    modelValue: [String, Number],
     label: {
       type: String,
       default: '',

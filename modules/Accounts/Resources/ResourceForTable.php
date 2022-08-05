@@ -7,6 +7,7 @@ namespace Modules\Accounts\Resources;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Models\Asset;
 use Modules\Markets\Models\Security;
 
 class ResourceForTable
@@ -41,8 +42,7 @@ class ResourceForTable
     }
 
     /**
-     * @param Account $account
-     * @return array
+     * Get assets for account
      */
     private function getAssets(Account $account): array
     {
@@ -52,11 +52,17 @@ class ResourceForTable
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
             $fullPrice = $asset->quantity * ($stock?->price ?? 0);
-            $profit = $fullPrice - $fillBuyPrice;
+
+            if ($asset->type === Asset::TYPE_SHORT) {
+                $profit = $fillBuyPrice - $fullPrice;
+            } else {
+                $profit = $fullPrice - $fillBuyPrice;
+            }
 
             $items[] = [
                 'id'             => $asset->id,
-                'updated'        => $stock->updated_at?->format('d.m.Y H:i:s'),
+                'isShort'        => $asset->type === Asset::TYPE_SHORT,
+                'updated'        => $stock->updated_at?->timezone(config('app.timezone'))->format('d.m.Y H:i:s'),
                 'ticker'         => $asset->ticker,
                 'name'           => $stock?->short_name ?? '',
                 'stockMarket'    => $asset->stock_market,
@@ -80,6 +86,7 @@ class ResourceForTable
         $collection = collect($items)->groupBy('ticker');
         $items = [];
         foreach ($collection as $item) {
+            // Group of assets
             if ($item->count() > 1) {
                 $subItems = $item->toArray();
                 $avgItem = $this->getAvgValues($subItems);
@@ -109,6 +116,7 @@ class ResourceForTable
             }
         }
 
+        // Total row
         if (! empty($items)) {
             $fullProfit = array_sum(array_column($items, 'profit'));
             $fullBuyPrice = array_sum(array_column($items, 'fullBuyPrice'));
@@ -139,6 +147,9 @@ class ResourceForTable
         return $security;
     }
 
+    /**
+     * Average data for group of assets
+     */
     private function getAvgValues(array $subItems): array
     {
         $quantity = array_sum(array_column($subItems, 'quantity'));

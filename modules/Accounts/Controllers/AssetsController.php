@@ -39,6 +39,7 @@ class AssetsController extends Controller
                 'quantity'     => ['required', 'numeric'],
                 'buy_price'    => ['required', 'numeric'],
                 'currency'     => ['required'],
+                'short'        => [],
             ]
         );
 
@@ -52,6 +53,7 @@ class AssetsController extends Controller
                     'quantity'     => $fields['quantity'],
                     'buy_price'    => $fields['buy_price'],
                     'currency'     => $fields['currency'],
+                    'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
                 ]
             );
         } else {
@@ -64,13 +66,18 @@ class AssetsController extends Controller
                     'currency'     => $fields['currency'],
                     'account_id'   => $account,
                     'user_id'      => Auth::user()->id,
+                    'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
                 ]
             );
 
             // Change the balance
             $account = Account::findOrFail($asset->account_id);
             $sum = $fields['buy_price'] * $fields['quantity'];
-            $account->balance -= $sum;
+            if (empty($fields['short'])) {
+                $account->balance -= $sum;
+            } else {
+                $account->balance += $sum;
+            }
             $account->save();
         }
 

@@ -12,6 +12,8 @@ class Asset extends Model
 {
     public const SOLD = 1;
 
+    public const TYPE_SHORT = 1;
+
     use CreatedByTrait;
 
     protected $fillable = [
@@ -24,6 +26,7 @@ class Asset extends Model
         'status',
         'stock_market',
         'ticker',
+        'type',
     ];
 
     public function account(): HasOne

@@ -8,10 +8,16 @@
         </div>
         <div class="bg-red-500 inline-block text-white rounded px-4 py-2" v-if="errors && errors.message">{{ errors.message }}</div>
         <div class="w-full md:w-2/4">
+          <checkbox-component
+            label="Short"
+            name="short"
+            v-model="form.short"
+          ></checkbox-component>
           <input-text
             v-model="form.ticker"
             :key="componentKey"
             :error="errors?.ticker"
+            class="mt-3"
             name="name"
             label="Ticker"
             placeholder="Enter a ticker"
@@ -69,10 +75,11 @@ import PageComponent from "@/components/PageComponent.vue";
 import InputText from "@/components/Forms/InputText.vue";
 import axios from "axios";
 import InputSelect from "@/components/Forms/InputSelect.vue";
+import CheckboxComponent from "@/components/Forms/CheckboxComponent.vue";
 
 export default {
   name: "AssetForm",
-  components: {InputSelect, InputText, PageComponent},
+  components: {CheckboxComponent, InputSelect, InputText, PageComponent},
   data() {
     return {
       form: {
@@ -81,6 +88,7 @@ export default {
         quantity: 1,
         buy_price: '',
         currency: 'USD',
+        short: false,
       },
       loading: false,
       errors: null,

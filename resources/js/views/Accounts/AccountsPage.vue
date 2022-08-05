@@ -77,11 +77,7 @@
 
                 <!-- Account block -->
                 <tr v-if="asset.isSubTotal" class="font-bold">
-                  <td
-                    :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
-                    v-tooltip="'Last Update:' + asset.updated"
-                  >{{ asset.ticker }}
-                  </td>
+                  <td></td>
                   <td>{{ asset.name }}</td>
                   <td></td>
                   <td></td>
@@ -100,7 +96,7 @@
                       <td
                         :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
                         v-tooltip="'Last Update: ' + asset.updated"
-                      >{{ asset.ticker }}
+                      >{{ asset.ticker }} <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span>
                       </td>
                       <td>{{ asset.name }}</td>
                       <td>{{ asset.quantity }}</td>
@@ -133,7 +129,7 @@
                           </thead>
                           <tbody>
                           <tr v-for="(subItem, subIndex) in asset.items" :key="'sub' + subIndex">
-                            <td :class="[subItem.isSubTotal || subItem.isTotal ? 'text-right' : '']">{{ subItem.ticker }}</td>
+                            <td>{{ subItem.ticker }} <span v-if="subItem.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span></td>
                             <td>{{ subItem.name }}</td>
                             <td>{{ subItem.quantity }}</td>
                             <td>{{ helpers.formatPrice(subItem.buyPrice) }} {{ subItem.currency }}</td>
@@ -182,7 +178,7 @@
                     <td
                       :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
                       v-tooltip="'Last Update: ' + asset.updated"
-                    >{{ asset.ticker }}
+                    >{{ asset.ticker }} <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span>
                     </td>
                     <td>{{ asset.name }}</td>
                     <td>{{ asset.quantity }}</td>
