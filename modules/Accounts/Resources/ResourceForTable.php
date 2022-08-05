@@ -62,7 +62,7 @@ class ResourceForTable
             $items[] = [
                 'id'             => $asset->id,
                 'isShort'        => $asset->type === Asset::TYPE_SHORT,
-                'updated'        => $stock->updated_at?->timezone(config('app.timezone'))->format('d.m.Y H:i:s'),
+                'updated'        => $stock?->updated_at?->timezone(config('app.timezone'))->format('d.m.Y H:i:s'),
                 'ticker'         => $asset->ticker,
                 'name'           => $stock?->short_name ?? '',
                 'stockMarket'    => $asset->stock_market,
