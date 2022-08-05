@@ -109,7 +109,11 @@ class AssetsController extends Controller
             // Change the balance
             $account = Account::findOrFail($asset->account_id);
             $sum = $fields['price'] * $asset->quantity;
-            $account->balance += $sum;
+            if ($asset->type === Asset::TYPE_SHORT) {
+                $account->balance -= $sum;
+            } else {
+                $account->balance += $sum;
+            }
             $account->save();
         });
 

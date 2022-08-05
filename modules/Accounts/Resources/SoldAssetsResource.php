@@ -7,6 +7,7 @@ namespace Modules\Accounts\Resources;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Models\Asset;
 use Modules\Markets\Models\Security;
 
 class SoldAssetsResource
@@ -52,7 +53,11 @@ class SoldAssetsResource
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
             $fullSellPrice = $asset->quantity * $asset->sell_price;
-            $profit = $fullSellPrice - $fillBuyPrice;
+            if ($asset->type === Asset::TYPE_SHORT) {
+                $profit = $fillBuyPrice - $fullSellPrice;
+            } else {
+                $profit = $fullSellPrice - $fillBuyPrice;
+            }
 
             $items[] = [
                 'id'            => $asset->id,
