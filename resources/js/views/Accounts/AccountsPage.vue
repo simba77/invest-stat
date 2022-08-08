@@ -59,7 +59,6 @@
             <table class="simple-table sub-table white-header">
               <thead>
               <tr>
-                <th>Ticker</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Buy Price</th>
@@ -75,47 +74,58 @@
 
               <template v-for="(asset, i) in account.assets" :key="i">
 
-                <!-- Account block -->
+                <!-- Total row -->
                 <tr v-if="asset.isSubTotal" class="font-bold">
-                  <td></td>
                   <td>{{ asset.name }}</td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
                   <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
-                  <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }} ({{ asset.profitPercent }}%)</td>
+                  <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
+                    <div>{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }}</div>
+                    <div class="text-xs">({{ asset.profitPercent }}%)</div>
+                  </td>
                   <td></td>
                   <td class="table-actions"></td>
                 </tr>
                 <!-- Asset block -->
                 <template v-else>
+
                   <!-- Group of assets -->
                   <template v-if="asset.items.length > 0">
+
+                    <!-- Parent row with assets -->
                     <tr class="tr-clickable" @click="asset.showItems = !asset.showItems">
                       <td
                         :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
                         v-tooltip="'Last Update: ' + asset.updated"
-                      >{{ asset.ticker }} <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span>
+                      >
+                        <div class="font-extrabold">{{ asset.name }}</div>
+                        <div class="text-gray-500">
+                          <span class="text-xs">{{ asset.ticker }}</span>
+                          <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center ml-2">short</span>
+                        </div>
                       </td>
-                      <td>{{ asset.name }}</td>
                       <td>{{ asset.quantity }}</td>
                       <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
                       <td>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</td>
                       <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
                       <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
                       <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                        {{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }} ({{ asset.profitPercent }}%)
+                        <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
+                        <div class="text-xs">({{ asset.profitPercent }}%)</div>
                       </td>
                       <td>{{ asset.accountPercent }}%</td>
                       <td class="table-actions"></td>
                     </tr>
+
+                    <!-- Children table -->
                     <tr v-if="asset.showItems">
                       <td colspan="111" class="!p-2 !bg-white">
                         <table class="simple-table sub-table white-header">
                           <thead>
                           <tr>
-                            <th>Ticker</th>
                             <th>Name</th>
                             <th>Quantity</th>
                             <th>Buy Price</th>
@@ -129,15 +139,23 @@
                           </thead>
                           <tbody>
                           <tr v-for="(subItem, subIndex) in asset.items" :key="'sub' + subIndex">
-                            <td>{{ subItem.ticker }} <span v-if="subItem.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span></td>
-                            <td>{{ subItem.name }}</td>
+                            <td>
+                              <div>
+                                <div class="font-extrabold">{{ subItem.name }}</div>
+                                <div class="text-xs text-gray-500">
+                                  <span>{{ subItem.ticker }}</span>
+                                  <span v-if="subItem.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center ml-2">short</span>
+                                </div>
+                              </div>
+                            </td>
                             <td>{{ subItem.quantity }}</td>
                             <td>{{ helpers.formatPrice(subItem.buyPrice) }} {{ subItem.currency }}</td>
                             <td>{{ helpers.formatPrice(subItem.price) }} {{ subItem.currency }}</td>
                             <td>{{ helpers.formatPrice(subItem.fullBuyPrice) }} {{ subItem.currency }}</td>
                             <td>{{ helpers.formatPrice(subItem.fullPrice) }} {{ subItem.currency }}</td>
                             <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                              {{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }} ({{ subItem.profitPercent }}%)
+                              <div>{{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }}</div>
+                              <div class="text-xs">({{ subItem.profitPercent }}%)</div>
                             </td>
                             <td>{{ subItem.accountPercent }}%</td>
                             <td class="table-actions">
@@ -171,23 +189,30 @@
                         </table>
                       </td>
                     </tr>
-
                   </template>
+
                   <!-- Asset without group -->
                   <tr v-else>
                     <td
                       :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']"
                       v-tooltip="'Last Update: ' + asset.updated"
-                    >{{ asset.ticker }} <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex pr-2 pl-2 items-center">short</span>
+                    >
+                      <div>
+                        <div class="font-extrabold">{{ asset.name }}</div>
+                        <div class="text-xs text-gray-500">
+                          <span>{{ asset.ticker }}</span>
+                          <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex ml-2 pr-2 pl-2 items-center">short</span>
+                        </div>
+                      </div>
                     </td>
-                    <td>{{ asset.name }}</td>
                     <td>{{ asset.quantity }}</td>
                     <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
                     <td>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</td>
                     <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
                     <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
                     <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                      {{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }} ({{ asset.profitPercent }}%)
+                      <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
+                      <div class="text-xs">({{ asset.profitPercent }}%)</div>
                     </td>
                     <td>{{ asset.accountPercent }}%</td>
                     <td class="table-actions">
