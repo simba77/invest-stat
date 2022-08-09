@@ -63,6 +63,7 @@
                 <th>Quantity</th>
                 <th>Buy Price</th>
                 <th>Current Price</th>
+                <th>Target Price</th>
                 <th>Profit</th>
                 <th>Percent</th>
                 <th class="flex justify-end" style="min-width: 115px;">Actions</th>
@@ -79,6 +80,7 @@
 
                   <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
                   <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
+                  <td></td>
                   <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
                     <div>{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }}</div>
                     <div class="text-xs">({{ asset.profitPercent }}%)</div>
@@ -113,6 +115,13 @@
                         <div>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</div>
                         <div class="text-xs text-gray-500">{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</div>
                       </td>
+                      <td>
+                        <template v-if="asset.targetPrice">
+                          <div>{{ helpers.formatPrice(asset.targetPrice) }} {{ asset.currency }}</div>
+                          <div class="text-xs text-gray-500">{{ helpers.formatPrice(asset.fullTargetPrice) }} {{ asset.currency }}</div>
+                        </template>
+                        <template v-else>&mdash;</template>
+                      </td>
                       <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
                         <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
                         <div class="text-xs">({{ asset.profitPercent }}%)</div>
@@ -131,6 +140,7 @@
                             <th>Quantity</th>
                             <th>Buy Price</th>
                             <th>Current Price</th>
+                            <th>Target</th>
                             <th>Profit</th>
                             <th>Percent</th>
                             <th class="flex justify-end" style="min-width: 115px;">Actions</th>
@@ -155,6 +165,13 @@
                             <td>
                               <div>{{ helpers.formatPrice(subItem.price) }} {{ subItem.currency }}</div>
                               <div class="text-xs text-gray-500">{{ helpers.formatPrice(subItem.fullPrice) }} {{ subItem.currency }}</div>
+                            </td>
+                            <td>
+                              <template v-if="subItem.targetPrice">
+                                <div>{{ helpers.formatPrice(subItem.targetPrice) }} {{ subItem.currency }}</div>
+                                <div class="text-xs text-gray-500">{{ helpers.formatPrice(subItem.fullTargetPrice) }} {{ subItem.currency }}</div>
+                              </template>
+                              <template v-else>&mdash;</template>
                             </td>
                             <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
                               <div>{{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }}</div>
@@ -216,6 +233,13 @@
                     <td>
                       <div>{{ helpers.formatPrice(asset.price) }} {{ asset.currency }}</div>
                       <div class="text-xs text-gray-500">{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</div>
+                    </td>
+                    <td>
+                      <template v-if="asset.targetPrice">
+                        <div>{{ helpers.formatPrice(asset.targetPrice) }} {{ asset.currency }}</div>
+                        <div class="text-xs text-gray-500">{{ helpers.formatPrice(asset.fullTargetPrice) }} {{ asset.currency }}</div>
+                      </template>
+                      <template v-else>&mdash;</template>
                     </td>
                     <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
                       <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>

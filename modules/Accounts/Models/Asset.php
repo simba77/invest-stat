@@ -20,6 +20,7 @@ class Asset extends Model
         'user_id',
         'currency',
         'buy_price',
+        'target_price',
         'sell_price',
         'account_id',
         'quantity',

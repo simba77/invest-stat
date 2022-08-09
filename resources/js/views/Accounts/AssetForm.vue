@@ -11,6 +11,7 @@
           <checkbox-component
             label="Short"
             name="short"
+            :key="componentKey"
             v-model="form.short"
           ></checkbox-component>
           <input-text
@@ -45,11 +46,21 @@
             v-model="form.buy_price"
             :key="componentKey"
             :error="errors?.buy_price"
-            type="buy_price"
+            type="number"
             class="mt-3"
             name="buy_price"
             label="Buy Price"
             placeholder="Buy Price"
+          />
+          <input-text
+            v-model="form.target_price"
+            :key="componentKey"
+            :error="errors?.target_price"
+            type="number"
+            class="mt-3"
+            name="target_price"
+            label="Target Price"
+            placeholder="Target Price"
           />
           <input-select
             v-model="form.currency"

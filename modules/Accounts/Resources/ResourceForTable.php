@@ -52,6 +52,7 @@ class ResourceForTable
             $fillBuyPrice = $asset->quantity * $asset->buy_price;
             // Current full price
             $fullPrice = $asset->quantity * ($stock?->price ?? 0);
+            $fullTargetPrice = $asset->quantity * ($asset?->target_price ?? 0);
 
             if ($asset->type === Asset::TYPE_SHORT) {
                 $profit = $fillBuyPrice - $fullPrice;
@@ -60,24 +61,26 @@ class ResourceForTable
             }
 
             $items[] = [
-                'id'             => $asset->id,
-                'isShort'        => $asset->type === Asset::TYPE_SHORT,
-                'updated'        => $stock?->updated_at?->timezone(config('app.timezone'))->format('d.m.Y H:i:s'),
-                'ticker'         => $asset->ticker,
-                'name'           => $stock?->short_name ?? '',
-                'stockMarket'    => $asset->stock_market,
-                'buyPrice'       => $asset->buy_price,
-                'sellPrice'      => $asset->sell_price,
-                'price'          => $stock?->price ?? 0,
-                'quantity'       => $asset->quantity,
-                'fullBuyPrice'   => $fillBuyPrice,
-                'fullPrice'      => $fullPrice,
-                'profit'         => $profit,
-                'profitPercent'  => round($profit / $fillBuyPrice * 100, 2),
-                'accountPercent' => round($fullPrice / ($account->current_sum_of_assets + $account->balance) * 100, 2),
-                'currency'       => getCurrencyName($stock?->currency ?? 'USD'),
-                'items'          => [],
-                'showItems'      => false,
+                'id'              => $asset->id,
+                'isShort'         => $asset->type === Asset::TYPE_SHORT,
+                'updated'         => $stock?->updated_at?->timezone(config('app.timezone'))->format('d.m.Y H:i:s'),
+                'ticker'          => $asset->ticker,
+                'name'            => $stock?->short_name ?? '',
+                'stockMarket'     => $asset->stock_market,
+                'buyPrice'        => $asset->buy_price,
+                'sellPrice'       => $asset->sell_price,
+                'price'           => $stock?->price ?? 0,
+                'targetPrice'     => $asset?->target_price ?? '',
+                'quantity'        => $asset->quantity,
+                'fullBuyPrice'    => $fillBuyPrice,
+                'fullPrice'       => $fullPrice,
+                'fullTargetPrice' => $fullTargetPrice > 0 ? $fullTargetPrice : '',
+                'profit'          => $profit,
+                'profitPercent'   => round($profit / $fillBuyPrice * 100, 2),
+                'accountPercent'  => round($fullPrice / ($account->current_sum_of_assets + $account->balance) * 100, 2),
+                'currency'        => getCurrencyName($stock?->currency ?? 'USD'),
+                'items'           => [],
+                'showItems'       => false,
             ];
             $this->total += $asset->sum;
         }

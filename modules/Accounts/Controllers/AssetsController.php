@@ -25,7 +25,9 @@ class AssetsController extends Controller
                 'stock_market' => $asset->stock_market,
                 'quantity'     => $asset->quantity,
                 'buy_price'    => $asset->buy_price,
+                'target_price' => $asset->target_price,
                 'currency'     => $asset->currency,
+                'short'        => $asset->type === Asset::TYPE_SHORT,
             ],
         ];
     }
@@ -38,6 +40,7 @@ class AssetsController extends Controller
                 'stock_market' => ['required'],
                 'quantity'     => ['required', 'numeric'],
                 'buy_price'    => ['required', 'numeric'],
+                'target_price' => ['sometimes', 'numeric'],
                 'currency'     => ['required'],
                 'short'        => [],
             ]
@@ -52,6 +55,7 @@ class AssetsController extends Controller
                     'stock_market' => $fields['stock_market'],
                     'quantity'     => $fields['quantity'],
                     'buy_price'    => $fields['buy_price'],
+                    'target_price' => $fields['target_price'],
                     'currency'     => $fields['currency'],
                     'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
                 ]
@@ -63,6 +67,7 @@ class AssetsController extends Controller
                     'stock_market' => $fields['stock_market'],
                     'quantity'     => $fields['quantity'],
                     'buy_price'    => $fields['buy_price'],
+                    'target_price' => $fields['target_price'],
                     'currency'     => $fields['currency'],
                     'account_id'   => $account,
                     'user_id'      => Auth::user()->id,
