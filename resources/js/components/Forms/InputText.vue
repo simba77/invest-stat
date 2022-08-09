@@ -12,7 +12,7 @@
       :enterkeyhint="enterKeyHint"
       @input="updateModelValue"
       :pattern="type === 'number' ? '[0-9]*' : null"
-      step=".001"
+      step=".0001"
       :autocomplete="autocomplete !== '' ? autocomplete : null"
       v-model="value"
     >
