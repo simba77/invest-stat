@@ -13,8 +13,6 @@ use Modules\Markets\Securities;
 
 class InvestCab
 {
-    private string $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36';
-
     public function __construct(
         private Securities $securities,
         private AccountService $accountService,
@@ -27,12 +25,8 @@ class InvestCab
     public function getDataByTicker(string $ticker, bool $getName = false): array
     {
         if ($getName) {
-            // TODO: Fix it
             $tickerData = Cache::remember('tickerData' . $ticker, 86400, function () use ($ticker) {
-                $data = Http::withUserAgent($this->userAgent)
-                    ->get('https://investcab.ru/api/symbol', ['symbol' => $ticker])
-                    ->throw()
-                    ->body();
+                $data = file_get_contents('https://investcab.ru/api/symbol?symbol=' . $ticker);
                 return json_decode(json_decode($data, true), true);
             });
         }
@@ -71,12 +65,15 @@ class InvestCab
             try {
                 $console?->info($item->ticker);
 
-                $data = $this->getDataByTicker($item->ticker);
+                $data = $this->getDataByTicker($item->ticker, true);
                 $console?->info(json_encode($data));
                 $this->securities->createOrUpdate($item->ticker, 'SPB', [
-                    'lot_size' => 1,
-                    'price'    => $data['price'],
-                    'currency' => 'USD',
+                    'lot_size'   => 1,
+                    'short_name' => $data['name'],
+                    'name'       => $data['name'],
+                    'lat_name'   => $data['name'],
+                    'price'      => $data['price'],
+                    'currency'   => 'USD',
                 ]);
             } catch (\Throwable $exception) {
                 $console?->error($exception->getMessage());
