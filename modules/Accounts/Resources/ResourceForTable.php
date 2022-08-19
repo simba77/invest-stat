@@ -60,6 +60,9 @@ class ResourceForTable
                 $profit = $fullPrice - $fillBuyPrice;
             }
 
+            $commission = $fullPrice * ($account->commission / 100);
+            $profit = round($profit - $commission, 2);
+
             $items[] = [
                 'id'              => $asset->id,
                 'isShort'         => $asset->type === Asset::TYPE_SHORT,
@@ -76,6 +79,7 @@ class ResourceForTable
                 'fullPrice'       => $fullPrice,
                 'fullTargetPrice' => $fullTargetPrice > 0 ? $fullTargetPrice : '',
                 'profit'          => $profit,
+                'commission'      => round($commission, 2),
                 'profitPercent'   => round($profit / $fillBuyPrice * 100, 2),
                 'accountPercent'  => round($fullPrice / ($account->current_sum_of_assets + $account->balance) * 100, 2),
                 'currency'        => getCurrencyName($stock?->currency ?? 'USD'),
@@ -93,7 +97,7 @@ class ResourceForTable
             if ($item->count() > 1) {
                 $subItems = $item->toArray();
                 $avgItem = $this->getAvgValues($subItems);
-                $profit = $avgItem['fullPrice'] - $avgItem['fullBuyPrice'];
+                $profit = round($avgItem['fullPrice'] - $avgItem['fullBuyPrice'] - $avgItem['commission']);
 
                 $items[] = [
                     'id'              => $subItems[0]['id'],
@@ -109,6 +113,7 @@ class ResourceForTable
                     'fullBuyPrice'    => $avgItem['fullBuyPrice'],
                     'fullPrice'       => $avgItem['fullPrice'],
                     'fullTargetPrice' => $avgItem['fullTargetPrice'],
+                    'commission'      => round($avgItem['commission'], 2),
                     'profit'          => $profit,
                     'profitPercent'   => round($profit / $avgItem['fullBuyPrice'] * 100, 2),
                     'accountPercent'  => round($avgItem['fullPrice'] / ($account->current_sum_of_assets + $account->balance) * 100, 2),
@@ -160,6 +165,7 @@ class ResourceForTable
         $quantity = array_sum(array_column($subItems, 'quantity'));
         $fullBuyPrice = array_sum(array_column($subItems, 'fullBuyPrice'));
         $fullPrice = array_sum(array_column($subItems, 'fullPrice'));
+        $commission = array_sum(array_column($subItems, 'commission'));
         $fullTargetPrice = array_sum(array_column($subItems, 'fullTargetPrice'));
 
         return [
@@ -169,6 +175,7 @@ class ResourceForTable
             'fullPrice'       => $fullPrice,
             'targetPrice'     => round($fullTargetPrice / $quantity, 2),
             'fullTargetPrice' => $fullTargetPrice,
+            'commission'      => $commission,
         ];
     }
 }

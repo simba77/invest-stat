@@ -64,7 +64,10 @@
                 <th>Buy Price</th>
                 <th>Current Price</th>
                 <th>Target Price</th>
-                <th>Profit</th>
+                <th>
+                  Profit
+                  <div class="text-xs text-gray-400">(percent, commission)</div>
+                </th>
                 <th>Percent</th>
                 <th class="flex justify-end" style="min-width: 115px;">Actions</th>
               </tr>
@@ -124,7 +127,7 @@
                       </td>
                       <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
                         <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
-                        <div class="text-xs">({{ asset.profitPercent }}%)</div>
+                        <div class="text-xs">({{ asset.profitPercent }}%, {{ asset.commission }}{{ asset.currency }})</div>
                       </td>
                       <td>{{ asset.accountPercent }}%</td>
                       <td class="table-actions"></td>
@@ -141,7 +144,10 @@
                             <th>Buy Price</th>
                             <th>Current Price</th>
                             <th>Target</th>
-                            <th>Profit</th>
+                            <th>
+                              Profit
+                              <div class="text-xs text-gray-400">(percent, commission)</div>
+                            </th>
                             <th>Percent</th>
                             <th class="flex justify-end" style="min-width: 115px;">Actions</th>
                           </tr>
@@ -175,7 +181,7 @@
                             </td>
                             <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
                               <div>{{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }}</div>
-                              <div class="text-xs">({{ subItem.profitPercent }}%)</div>
+                              <div class="text-xs">({{ subItem.profitPercent }}%, {{ subItem.commission }}{{ subItem.currency }})</div>
                             </td>
                             <td>{{ subItem.accountPercent }}%</td>
                             <td class="table-actions">
@@ -243,7 +249,7 @@
                     </td>
                     <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
                       <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
-                      <div class="text-xs">({{ asset.profitPercent }}%)</div>
+                      <div class="text-xs">({{ asset.profitPercent }}%, {{ asset.commission }}{{ asset.currency }})</div>
                     </td>
                     <td>{{ asset.accountPercent }}%</td>
                     <td class="table-actions">
