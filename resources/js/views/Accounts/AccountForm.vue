@@ -15,7 +15,7 @@
             class="mb-3"
             name="name"
             label="Account Name"
-            placeholder="Enter an account name"
+            placeholder="Enter an Account Name"
           />
           <input-text
             v-model="form.balance"
@@ -25,7 +25,17 @@
             type="number"
             name="balance"
             label="Balance"
-            placeholder="Enter balance"
+            placeholder="Enter Balance"
+          />
+          <input-text
+            v-model="form.commission"
+            :key="componentKey"
+            :error="errors?.commission"
+            class="mb-3"
+            type="number"
+            name="commission"
+            label="Commission"
+            placeholder="Commission"
           />
           <input-select
             v-model="form.currency"
@@ -59,6 +69,7 @@ export default {
       form: {
         name: '',
         balance: '',
+        commission: '',
         currency: 'RUB',
       },
       loading: false,

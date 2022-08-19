@@ -19,9 +19,10 @@ class AccountsController extends Controller
     {
         $fields = $request->validate(
             [
-                'name'     => ['required'],
-                'balance'  => ['required', 'numeric'],
-                'currency' => ['required'],
+                'name'       => ['required'],
+                'balance'    => ['required', 'numeric'],
+                'currency'   => ['required'],
+                'commission' => ['sometimes', 'numeric'],
             ]
         );
 
@@ -30,18 +31,20 @@ class AccountsController extends Controller
             $account = Account::findOrFail($id);
             $account->update(
                 [
-                    'name'     => $fields['name'],
-                    'balance'  => $fields['balance'],
-                    'currency' => $fields['currency'],
+                    'name'       => $fields['name'],
+                    'balance'    => $fields['balance'],
+                    'currency'   => $fields['currency'],
+                    'commission' => $fields['commission'],
                 ]
             );
         } else {
             $account = Account::create(
                 [
-                    'name'     => $fields['name'],
-                    'balance'  => $fields['balance'],
-                    'currency' => $fields['currency'],
-                    'user_id'  => Auth::user()->id,
+                    'name'       => $fields['name'],
+                    'balance'    => $fields['balance'],
+                    'currency'   => $fields['currency'],
+                    'commission' => $fields['commission'],
+                    'user_id'    => Auth::user()->id,
                 ]
             );
         }
@@ -53,10 +56,11 @@ class AccountsController extends Controller
         $account = Account::findOrFail($id);
         return [
             'form' => [
-                'id'       => $account->id,
-                'name'     => $account->name,
-                'balance'  => $account->balance,
-                'currency' => $account->currency,
+                'id'         => $account->id,
+                'name'       => $account->name,
+                'balance'    => $account->balance,
+                'currency'   => $account->currency,
+                'commission' => $account->commission,
             ],
         ];
     }

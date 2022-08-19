@@ -21,6 +21,7 @@ class Account extends Model
         'currency',
         'start_sum_of_assets',
         'current_sum_of_assets',
+        'commission',
     ];
 
     public function assets(): HasMany
