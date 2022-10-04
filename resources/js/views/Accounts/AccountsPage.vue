@@ -68,6 +68,7 @@
                   Profit
                   <div class="text-xs text-gray-400">(percent, commission)</div>
                 </th>
+                <th>Target Profit</th>
                 <th>Percent</th>
                 <th class="flex justify-end" style="min-width: 115px;">Actions</th>
               </tr>
@@ -88,6 +89,7 @@
                     <div>{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }}</div>
                     <div class="text-xs">({{ asset.profitPercent }}%)</div>
                   </td>
+                  <td></td>
                   <td></td>
                   <td class="table-actions"></td>
                 </tr>
@@ -126,9 +128,10 @@
                         <template v-else>&mdash;</template>
                       </td>
                       <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                        <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
+                        <div>{{ formatProfit(asset) }}</div>
                         <div class="text-xs">({{ asset.profitPercent }}%, {{ asset.commission }}{{ asset.currency }})</div>
                       </td>
+                      <td v-html="formatTargetProfit(asset)"></td>
                       <td>{{ asset.accountPercent }}%</td>
                       <td class="table-actions"></td>
                     </tr>
@@ -148,6 +151,7 @@
                               Profit
                               <div class="text-xs text-gray-400">(percent, commission)</div>
                             </th>
+                            <th>Target Profit</th>
                             <th>Percent</th>
                             <th class="flex justify-end" style="min-width: 115px;">Actions</th>
                           </tr>
@@ -180,9 +184,10 @@
                               <template v-else>&mdash;</template>
                             </td>
                             <td :class="[subItem.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                              <div>{{ subItem.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(subItem.profit)) }} {{ subItem.currency }}</div>
+                              <div>{{ formatProfit(subItem) }}</div>
                               <div class="text-xs">({{ subItem.profitPercent }}%, {{ subItem.commission }}{{ subItem.currency }})</div>
                             </td>
+                            <td v-html="formatTargetProfit(subItem)"></td>
                             <td>{{ subItem.accountPercent }}%</td>
                             <td class="table-actions">
                               <div class="flex justify-end items-center show-on-row-hover">
@@ -248,9 +253,10 @@
                       <template v-else>&mdash;</template>
                     </td>
                     <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-                      <div>{{ asset.profit > 0 ? '+' : '-' }} {{ helpers.formatPrice(Math.abs(asset.profit)) }} {{ asset.currency }}</div>
+                      <div>{{ formatProfit(asset) }}</div>
                       <div class="text-xs">({{ asset.profitPercent }}%, {{ asset.commission }}{{ asset.currency }})</div>
                     </td>
+                    <td v-html="formatTargetProfit(asset)"></td>
                     <td>{{ asset.accountPercent }}%</td>
                     <td class="table-actions">
                       <template v-if="asset.id">
@@ -337,6 +343,21 @@ export default {
     }
   },
   methods: {
+    formatProfit(asset: { profit: number; currency: string; }) {
+      return (asset.profit > 0 ? '+' : '-') + ' ' + this.helpers.formatPrice(Math.abs(asset.profit)) + ' ' + asset.currency;
+    },
+
+    formatTargetProfit(asset: { targetPrice: number; buyPrice: number; quantity: number; currency: string; fullBuyPrice: number; }) {
+      if (!asset.targetPrice) {
+        return '';
+      }
+
+      let fullTarget = (asset.targetPrice - asset.buyPrice) * asset.quantity;
+      return this.helpers.formatPrice(asset.targetPrice - asset.buyPrice) + ' ' + asset.currency + '' +
+        '<div class="text-xs">(' + this.helpers.formatPrice(fullTarget) + ' ' + asset.currency +
+        ', ' + this.helpers.formatPrice(fullTarget / asset.fullBuyPrice * 100) + '%)</div>';
+    },
+
     openConfirmModal(item: any, type = 'expense') {
       this.deleteItem.type = type;
       this.deleteItem.data = item;
@@ -344,18 +365,22 @@ export default {
         this.$refs.deleteConfirmationModal.openModal();
       });
     },
+
     openSellModal(item: any) {
       this.sell = item;
       setTimeout(() => {
         this.$refs.sellModal.openModal();
       });
     },
+
     closeModal() {
       this.$refs.deleteConfirmationModal.closeModal();
     },
+
     closeSellModal() {
       this.$refs.sellModal.closeModal();
     },
+
     confirmDeletion() {
       if (this.deleteItem.type === 'category') {
         this.deleteCategory(this.deleteItem.data.id)
@@ -369,6 +394,7 @@ export default {
           });
       }
     },
+
     getItems() {
       this.loading = true;
       axios.get('/api/accounts/list')
@@ -382,6 +408,7 @@ export default {
           this.loading = false;
         })
     },
+
     getStat() {
       this.loading = true;
       axios.get('/api/accounts/summary')
@@ -395,6 +422,7 @@ export default {
           this.loading = false;
         })
     },
+
     deleteCategory(id: number) {
       this.deleting = true;
       return new Promise((resolve, reject) => {
