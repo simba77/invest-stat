@@ -10,7 +10,7 @@
       v-model="value"
       @change="updateModelValue"
     >
-      <option v-for="(option, index) in options" :key="index" :value="option.value">{{ option.name }}</option>
+      <option v-for="(option, index) in options" :key="index" :value="getValue(option)">{{ getName(option) }}</option>
     </select>
     <div class="mt-1 text-sm text-gray-500" v-if="help" v-html="help"></div>
     <div class="mt-1 text-sm text-red-500" v-if="error">{{ typeof error === 'object' ? error.join(',') : error }}</div>
@@ -55,6 +55,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayName: {
+      type: String,
+      default: 'name',
+    },
+    fieldValue: {
+      type: String,
+      default: 'value',
+    },
     options: {
       default: () => [],
     },
@@ -68,6 +76,12 @@ export default {
   methods: {
     updateModelValue(event: { target: { value: any; }; }) {
       this.$emit('update:modelValue', event.target.value)
+    },
+    getName(option: string) {
+      return option[this.displayName];
+    },
+    getValue(option: string) {
+      return option[this.fieldValue];
     },
   }
 }

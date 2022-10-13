@@ -17,5 +17,6 @@ class Deposit extends Model
         'user_id',
         'date',
         'sum',
+        'account_id',
     ];
 }

@@ -34,6 +34,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('deposits', [DepositsController::class, 'depositsList'])->name('investments.deposits');
             Route::post('deposits/store', [DepositsController::class, 'store'])->name('investments.deposits.store');
             Route::post('deposits/delete/{id:number}', [DepositsController::class, 'delete'])->name('investments.deposits.delete');
+            Route::get('deposits/edit/{id:number}', [DepositsController::class, 'edit'])->name('investments.deposits.edit');
         });
 
         Route::group(['prefix' => 'accounts'], function () {

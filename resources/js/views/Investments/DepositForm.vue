@@ -27,6 +27,17 @@
             label="Amount of Deposit"
             placeholder="Amount of Deposit"
           />
+          <input-select
+            class="mt-3"
+            label="Account"
+            name="account"
+            placeholder="Select Account"
+            field-value="id"
+            :error="errors?.account"
+            v-model="form.account"
+            :key="componentKey"
+            :options="accounts"
+          />
         </div>
         <div class="border-b"></div>
         <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
@@ -40,25 +51,26 @@
 import PageComponent from "@/components/PageComponent.vue";
 import InputText from "@/components/Forms/InputText.vue";
 import axios from "axios";
+import InputSelect from "@/components/Forms/InputSelect.vue";
 
 export default {
   name: "ExpenseForm",
-  components: {InputText, PageComponent},
+  components: {InputSelect, InputText, PageComponent},
   data() {
     return {
       form: {
         date: '',
         sum: '',
+        account: null,
       },
+      accounts: [],
       loading: false,
       errors: null,
       componentKey: 0,
     }
   },
   mounted() {
-    if (this.$route.params.id) {
-      this.getForm(this.$route.params.id);
-    }
+    this.getForm(this.$route.params.id ?? 0);
   },
   methods: {
     submitForm() {
@@ -74,6 +86,22 @@ export default {
           } else {
             alert('An error has occurred');
           }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+    },
+
+    getForm(id: number) {
+      this.loading = true;
+      axios.get('/api/investments/deposits/edit/' + id)
+        .then((response) => {
+          this.form = response.data.form;
+          this.accounts = response.data.accounts;
+          this.componentKey += 1;
+        })
+        .catch(() => {
+          alert('An error has occurred');
         })
         .finally(() => {
           this.loading = false;
