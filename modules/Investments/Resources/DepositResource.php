@@ -28,6 +28,7 @@ class DepositResource extends JsonResource
             'id'       => $this->id,
             'date'     => $this->date->format('d.m.Y'),
             'sum'      => $this->sum,
+            'account'  => $this->account?->name,
             'currency' => '₽',
         ];
     }

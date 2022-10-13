@@ -8,6 +8,7 @@
       <tr>
         <th>Date</th>
         <th>Sum</th>
+        <th>Account</th>
         <th class="flex justify-end">Actions</th>
       </tr>
       </thead>
@@ -15,9 +16,13 @@
       <tr v-for="(deposit, index) in deposits.data" :key="index">
         <td>{{ deposit.date }}</td>
         <td>{{ helpers.formatPrice(deposit.sum) }} {{ deposit.currency }}</td>
+        <td>{{ deposit.account }}</td>
         <td class="table-actions">
           <template v-if="deposit.id">
             <div class="flex justify-end items-center show-on-row-hover">
+              <router-link class="text-gray-300 hover:text-gray-900 mr-3" :to="{name: 'EditDeposit', params: {id: deposit.id}}">
+                <pencil-icon class="h-5 w-5"></pencil-icon>
+              </router-link>
               <button
                 type="button"
                 class="text-gray-300 hover:text-red-500"
@@ -48,7 +53,7 @@
 
 <script lang="ts">
 import PageComponent from "../components/PageComponent.vue";
-import {XCircleIcon} from "@heroicons/vue/outline";
+import {XCircleIcon, PencilIcon} from "@heroicons/vue/outline";
 import axios from "axios";
 import helpers from "../helpers";
 import BaseModal from "@/components/Modals/BaseModal.vue";
@@ -56,7 +61,7 @@ import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 
 export default {
   name: "InvestmentsPage",
-  components: {PageComponent, XCircleIcon, BaseModal, ConfirmModal},
+  components: {PageComponent, XCircleIcon, PencilIcon, BaseModal, ConfirmModal},
   data() {
     return {
       helpers,

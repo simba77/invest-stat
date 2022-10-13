@@ -26,6 +26,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Investments/DepositForm.vue')
   },
   {
+    name: 'EditDeposit',
+    path: '/accounts/edit-deposit/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Investments/DepositForm.vue')
+  },
+
+  {
     name: 'Expenses',
     path: '/expenses',
     meta: {

@@ -16,6 +16,7 @@ class DepositsController extends Controller
 {
     public function store(Request $request): array
     {
+        $id = (int) $request->input('id', 0);
         $fields = $request->validate(
             [
                 'date'    => ['required'],
@@ -24,14 +25,25 @@ class DepositsController extends Controller
             ]
         );
 
-        $deposit = Deposit::create(
-            [
-                'user_id'    => Auth::user()->id,
-                'date'       => $fields['date'],
-                'sum'        => $fields['sum'],
-                'account_id' => $fields['account'],
-            ]
-        );
+        if ($id > 0) {
+            $deposit = Deposit::findOrFail($id);
+            $deposit->update(
+                [
+                    'date'       => $fields['date'],
+                    'sum'        => $fields['sum'],
+                    'account_id' => $fields['account'],
+                ]
+            );
+        } else {
+            $deposit = Deposit::create(
+                [
+                    'user_id'    => Auth::user()->id,
+                    'date'       => $fields['date'],
+                    'sum'        => $fields['sum'],
+                    'account_id' => $fields['account'],
+                ]
+            );
+        }
 
         return ['success' => true, 'id' => $deposit->id];
     }
@@ -60,7 +72,7 @@ class DepositsController extends Controller
             return [
                 'form'     => [
                     'id'      => $deposit->id,
-                    'date'    => $deposit->date->format('d.m.Y'),
+                    'date'    => $deposit->date->format('Y-m-d'),
                     'account' => $deposit->account_id,
                     'sum'     => $deposit->sum,
                 ],
