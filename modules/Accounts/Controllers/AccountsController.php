@@ -111,7 +111,7 @@ class AccountsController extends Controller
 
     public function index(): array
     {
-        $accounts = Account::forCurrentUser()->activeAssets()->get();
+        $accounts = Account::forCurrentUser()->withSum('deposits', 'sum')->activeAssets()->get();
         return (new ResourceForTable($accounts))->toArray();
     }
 

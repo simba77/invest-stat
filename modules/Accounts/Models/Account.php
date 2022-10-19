@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Modules\Investments\Models\Deposit;
 use Modules\System\Database\CreatedByTrait;
 
 class Account extends Model
@@ -27,6 +28,11 @@ class Account extends Model
     public function assets(): HasMany
     {
         return $this->hasMany(Asset::class, 'account_id', 'id')->orderBy('ticker')->orderBy('created_at');
+    }
+
+    public function deposits(): HasMany
+    {
+        return $this->hasMany(Deposit::class, 'account_id', 'id');
     }
 
     public function scopeForCurrentUser(Builder $builder): Builder

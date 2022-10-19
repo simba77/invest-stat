@@ -26,7 +26,10 @@
         <div class="flex justify-between mb-2 mt-5 py-3 rounded">
           <div class="">
             <div class="font-extrabold text-lg">{{ account.name }}</div>
-            <div class="text-sm"><span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} {{ account.currency }}</span></div>
+            <div class="text-sm">
+              <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} {{ account.currency }}</span>
+              <span class="font-light ml-3">Deposits:</span> <span>{{ helpers.formatPrice(account.deposits) }} ₽</span>
+            </div>
           </div>
           <div class="flex items-center">
             <router-link

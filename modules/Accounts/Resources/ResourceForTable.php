@@ -33,6 +33,7 @@ class ResourceForTable
                 'id'       => $account->id,
                 'name'     => $account->name,
                 'balance'  => $account->balance,
+                'deposits' => $account->deposits_sum_sum ?? 0,
                 'currency' => $account->currency === 'RUB' ? '₽' : '$',
                 'assets'   => $this->getAssets($account),
             ];
