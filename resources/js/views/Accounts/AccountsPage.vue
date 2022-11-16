@@ -29,6 +29,11 @@
             <div class="text-sm">
               <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} {{ account.currency }}</span>
               <span class="font-light ml-3">Deposits:</span> <span>{{ helpers.formatPrice(account.deposits) }} ₽</span>
+              <span class="font-light ml-3">Current Value:</span> <span>{{ helpers.formatPrice(account.currentValue) }} ₽</span>
+              <span class="font-light ml-3">Profit: </span>
+              <span :class="[account.fullProfit > 0 ? 'text-green-600' : 'text-red-700']">
+                {{ helpers.formatPrice(account.fullProfit) }} ₽
+              </span>
             </div>
           </div>
           <div class="flex items-center">

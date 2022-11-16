@@ -29,13 +29,23 @@ class ResourceForTable
     {
         $data = [];
         foreach ($this->accounts as $account) {
+            $assets = $this->getAssets($account);
+            $collection = collect($assets)->where('isSubTotal', '=', true)->first();
+            $currentAssetsPrice = 0;
+            if ($collection) {
+                $currentAssetsPrice = $collection['fullPrice'];
+            }
+            $currentValue = round($currentAssetsPrice + (float) $account->balance, 2);
+
             $data[] = [
-                'id'       => $account->id,
-                'name'     => $account->name,
-                'balance'  => $account->balance,
-                'deposits' => $account->deposits_sum_sum ?? 0,
-                'currency' => $account->currency === 'RUB' ? '₽' : '$',
-                'assets'   => $this->getAssets($account),
+                'id'           => $account->id,
+                'name'         => $account->name,
+                'balance'      => $account->balance,
+                'deposits'     => $account->deposits_sum_sum ?? 0,
+                'currency'     => $account->currency === 'RUB' ? '₽' : '$',
+                'assets'       => $assets,
+                'currentValue' => $currentValue,
+                'fullProfit'   => round($currentValue - (float) $account->deposits_sum_sum, 2),
             ];
         }
 
