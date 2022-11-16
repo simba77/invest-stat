@@ -61,6 +61,7 @@ class SoldAssetsResource
 
             $items[] = [
                 'id'            => $asset->id,
+                'isShort'       => $asset->type === Asset::TYPE_SHORT,
                 'ticker'        => $asset->ticker,
                 'name'          => $stock?->short_name ?? '',
                 'stockMarket'   => $asset->stock_market,
@@ -71,7 +72,7 @@ class SoldAssetsResource
                 'fullBuyPrice'  => $fillBuyPrice,
                 'fullSellPrice' => $fullSellPrice,
                 'profit'        => $profit,
-                'profitPercent' => round($profit / $fillBuyPrice * 100, 2),
+                'profitPercent' => round($profit / ($asset->type === Asset::TYPE_SHORT ? $fullSellPrice : $fillBuyPrice) * 100, 2),
                 'currency'      => getCurrencyName($stock?->currency ?? 'USD'),
                 'items'         => [],
                 'showItems'     => false,
@@ -82,6 +83,7 @@ class SoldAssetsResource
         /** @var \Illuminate\Support\Collection[] $collection */
         $collection = collect($items)->groupBy('ticker');
         $items = [];
+        // Group
         foreach ($collection as $item) {
             if ($item->count() > 1) {
                 $subItems = $item->toArray();
@@ -99,7 +101,7 @@ class SoldAssetsResource
                     'quantity'      => $avgItem['quantity'],
                     'fullBuyPrice'  => $avgItem['fullBuyPrice'],
                     'fullSellPrice' => $avgItem['fullSellPrice'],
-                    'profit'        => $profit,
+                    'profit'        => $avgItem['fullProfit'],
                     'profitPercent' => round($profit / $avgItem['fullBuyPrice'] * 100, 2),
                     'currency'      => $subItems[0]['currency'],
                     'items'         => $subItems,
@@ -145,12 +147,14 @@ class SoldAssetsResource
         $quantity = array_sum(array_column($subItems, 'quantity'));
         $fullBuyPrice = array_sum(array_column($subItems, 'fullBuyPrice'));
         $fullSellPrice = array_sum(array_column($subItems, 'fullSellPrice'));
+        $fullProfit = array_sum(array_column($subItems, 'profit'));
 
         return [
             'buyPrice'      => round($fullBuyPrice / $quantity, 2),
             'quantity'      => $quantity,
             'fullBuyPrice'  => $fullBuyPrice,
             'fullSellPrice' => $fullSellPrice,
+            'fullProfit'    => $fullProfit,
         ];
     }
 }

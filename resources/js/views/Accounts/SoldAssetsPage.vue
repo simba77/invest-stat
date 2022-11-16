@@ -73,7 +73,10 @@
                           </thead>
                           <tbody>
                           <tr v-for="(subItem, subIndex) in asset.items" :key="'sub' + subIndex">
-                            <td :class="[subItem.isSubTotal || subItem.isTotal ? 'text-right' : '']">{{ subItem.ticker }}</td>
+                            <td :class="[subItem.isSubTotal || subItem.isTotal ? 'text-right' : '']">
+                              {{ subItem.ticker }}
+                              <span v-if="subItem.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex ml-2 pr-2 pl-2 items-center">short</span>
+                            </td>
                             <td>{{ subItem.name }}</td>
                             <td>{{ subItem.quantity }}</td>
                             <td>{{ helpers.formatPrice(subItem.buyPrice) }} {{ subItem.currency }}</td>
@@ -92,7 +95,10 @@
                   </template>
                   <!-- Asset without group -->
                   <tr v-else>
-                    <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">{{ asset.ticker }}</td>
+                    <td :class="[asset.isSubTotal || asset.isTotal ? 'text-right' : '']">
+                      {{ asset.ticker }}
+                      <span v-if="asset.isShort" class="bg-red-200 text-red-900 rounded-full inline-flex ml-2 pr-2 pl-2 items-center">short</span>
+                    </td>
                     <td>{{ asset.name }}</td>
                     <td>{{ asset.quantity }}</td>
                     <td>{{ helpers.formatPrice(asset.buyPrice) }} {{ asset.currency }}</td>
