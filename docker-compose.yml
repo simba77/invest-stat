@@ -45,6 +45,7 @@ services:
     environment:
       - PMA_ARBITRARY=0
       - PMA_HOST=${DB_HOST}
+      - UPLOAD_LIMIT=1G
     networks:
       - web
       - default
