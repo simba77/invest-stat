@@ -2,7 +2,7 @@ version: '3.8'
 services:
   webserver:
     build: docker/general
-    container_name: ubuntu.${APP_NAME}
+    container_name: ubuntu.${APP_HOST}
     depends_on:
       - mariadb
     volumes:
@@ -20,7 +20,7 @@ services:
       - traefik.http.routers.web-https.tls=true
   mariadb:
     image: 'mariadb:10'
-    container_name: mariadb.${APP_NAME}
+    container_name: mariadb.${APP_HOST}
     ports:
       - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
@@ -38,7 +38,7 @@ services:
       - traefik.enable=false
   phpmyadmin:
     image: phpmyadmin
-    container_name: phpmyadmin.${APP_NAME}
+    container_name: phpmyadmin.${APP_HOST}
     restart: always
     ports:
       - 8081:80
@@ -54,7 +54,7 @@ services:
       - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.loc`)
   redis:
     image: redis
-    container_name: redis.${APP_NAME}
+    container_name: redis.${APP_HOST}
     volumes:
       - ./docker/redis/data:/data
     ports:
