@@ -96,6 +96,7 @@ class ResourceForTable
                 'currency'        => getCurrencyName($stock?->currency ?? 'USD'),
                 'items'           => [],
                 'showItems'       => false,
+                'blocked'         => $asset->blocked,
             ];
             $this->total += $asset->sum;
         }

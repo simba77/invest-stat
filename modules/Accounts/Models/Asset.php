@@ -28,6 +28,11 @@ class Asset extends Model
         'stock_market',
         'ticker',
         'type',
+        'blocked',
+    ];
+
+    protected $casts = [
+        'blocked' => 'boolean',
     ];
 
     public function account(): HasOne
