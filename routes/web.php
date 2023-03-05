@@ -39,6 +39,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group(['prefix' => 'accounts'], function () {
             Route::get('list', [AccountsController::class, 'index'])->name('accounts.list');
+            Route::get('new-list', [AccountsController::class, 'newIndex'])->name('accounts.newList');
             Route::get('summary', [AccountsController::class, 'summary'])->name('accounts.summary');
             Route::post('store', [AccountsController::class, 'store'])->name('accounts.store');
             Route::get('edit/{id:number}', [AccountsController::class, 'edit'])->name('accounts.edit');

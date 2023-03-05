@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Accounts\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Markets\Models\Security;
 use Modules\System\Database\CreatedByTrait;
 
 class Asset extends Model
@@ -38,5 +40,66 @@ class Asset extends Model
     public function account(): HasOne
     {
         return $this->hasOne(Account::class, 'id', 'account_id');
+    }
+
+    public function security(): HasOne
+    {
+        return $this->hasOne(Security::class, 'ticker', 'ticker');
+    }
+
+    /**
+     * Полная стоимость на момент покупки
+     */
+    public function fullBuyPrice(): Attribute
+    {
+        return Attribute::get(
+            fn() => ($this->buy_price * $this->quantity)
+        );
+    }
+
+    /**
+     * Полная целевая стоимость
+     */
+    public function fullTargetPrice(): Attribute
+    {
+        return Attribute::get(
+            fn() => ($this->target_price * $this->quantity)
+        );
+    }
+
+    /**
+     * Текущая стоимость
+     */
+    public function currentPrice(): Attribute
+    {
+        return Attribute::get(fn() => (float) $this->security->price);
+    }
+
+    /**
+     * Текущая полная стоимость
+     */
+    public function fullCurrentPrice(): Attribute
+    {
+        return Attribute::get(fn() => ((float) $this->current_price * $this->quantity));
+    }
+
+    /**
+     * Комиссия за операцию покупки/продажи
+     */
+    public function commission(): Attribute
+    {
+        return Attribute::get(fn() => $this->full_current_price * ($this->account->commission / 100));
+    }
+
+    /**
+     * Текущий доход с учетом комиссии
+     */
+    public function profit(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                return round($this->full_current_price - $this->full_buy_price - $this->commission);
+            }
+        );
     }
 }

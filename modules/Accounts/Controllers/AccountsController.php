@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Resources\AccountsCollection;
 use Modules\Accounts\Resources\ResourceForTable;
 use Modules\Dashboard\Services\Counters;
 use Modules\Investments\Models\Deposit;
@@ -113,6 +114,12 @@ class AccountsController extends Controller
     {
         $accounts = Account::forCurrentUser()->withSum('deposits', 'sum')->activeAssets()->get();
         return (new ResourceForTable($accounts))->toArray();
+    }
+
+    public function newIndex()
+    {
+        $accounts = Account::forCurrentUser()->withSum('deposits', 'sum')->activeAssets()->get();
+        return new AccountsCollection($accounts);
     }
 
     public function updateData(): array
