@@ -44,6 +44,8 @@ class Account extends Model
     {
         return $builder->with(
             [
+                'assets.security',
+                'assets.account',
                 'assets' => function (HasMany $query) {
                     return $query->where('status', '!=', Asset::SOLD)->orWhereNull('status');
                 },
