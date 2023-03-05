@@ -19,12 +19,15 @@ class AccountsCollection extends ResourceCollection
     public function toArray($request): Collection
     {
         return $this->collection->map(function (Account $account) {
+            $currentValue = round($this->getCurrentValue($account->assets) + $account->balance, 2);
             return [
-                'id'          => $account->id,
-                'name'        => $account->name,
-                'balance'     => $account->balance,
-                'deposits'    => $account->deposits->sum,
-                'blockGroups' => $this->groupBlockAssets($account->assets),
+                'id'           => $account->id,
+                'name'         => $account->name,
+                'balance'      => $account->balance,
+                'deposits'     => $account->deposits_sum_sum ?? 0,
+                'currentValue' => $currentValue,
+                'fullProfit'   => round($currentValue - (float) $account->deposits_sum_sum, 2),
+                'blockGroups'  => $this->groupBlockAssets($account->assets),
             ];
         });
     }
@@ -70,6 +73,14 @@ class AccountsCollection extends ResourceCollection
     private function getGroupedAssetsByTicker(Collection $groupByCurrency)
     {
         return $groupByCurrency->groupBy('ticker')->map(fn($assets) => $this->prepareAssetsGroupRow($assets));
+    }
+
+    /**
+     * Текущая стоимость активов в пересчете на базовую валюту
+     */
+    private function getCurrentValue(Collection $assets)
+    {
+        return $assets->sum('full_current_base_price');
     }
 
     private function prepareAssetsGroupRow(Collection $assets): array

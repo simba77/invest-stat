@@ -2,6 +2,9 @@ export interface Account {
   id: number,
   name: string,
   balance: number,
+  deposits: number,
+  currentValue: number,
+  fullProfit: number,
   blockGroups: BlockGroups[],
 }
 

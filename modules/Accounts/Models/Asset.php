@@ -7,6 +7,7 @@ namespace Modules\Accounts\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Markets\DataProviders\Moex;
 use Modules\Markets\Models\Security;
 use Modules\System\Database\CreatedByTrait;
 
@@ -98,7 +99,24 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
-                return round($this->full_current_price - $this->full_buy_price - $this->commission);
+                return round($this->full_current_price - $this->full_buy_price - $this->commission, 2);
+            }
+        );
+    }
+
+    /**
+     * Текущая полная цена в базовой валюте
+     */
+    public function fullCurrentBasePrice(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if ($this->currency === 'USD') {
+                    $rate = app(Moex::class)->getRate();
+                    return round($this->full_current_price * $rate);
+                } elseif ($this->currency === 'RUB') {
+                    return $this->full_current_price;
+                }
             }
         );
     }
