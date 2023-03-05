@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import type {Account} from "@/models/account";
+import helpers from "../../helpers";
+import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
+
+const props = defineProps<{
+  account: Account
+}>();
+
+</script>
+<template>
+  <div class="flex justify-between mb-2 mt-5 py-3 rounded">
+    <div class="">
+      <div class="font-extrabold text-lg">{{ props.account.name }}</div>
+      <div class="text-sm">
+        <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(props.account.balance) }} ₽</span>
+        <span class="font-light ml-3">Deposits:</span> <span>{{ helpers.formatPrice(account.deposits) }} ₽</span>
+        <span class="font-light ml-3">Current Value:</span> <span>{{ helpers.formatPrice(account.currentValue) }} ₽</span>
+        <span class="font-light ml-3">Profit: </span>
+        <span :class="[account.fullProfit > 0 ? 'text-green-600' : 'text-red-700']">
+          {{ helpers.formatPrice(account.fullProfit) }} ₽
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center">
+      <router-link
+        :to="{name: 'AddAsset', params: {account: props.account.id}}"
+        class="text-gray-300 hover:text-gray-600 mr-2"
+        title="Add Asset">
+        <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
+      </router-link>
+      <router-link
+        :to="{name: 'EditAccount', params: {id: props.account.id}}"
+        class="text-gray-300 hover:text-gray-600 mr-2"
+        title="Edit Account"
+      >
+        <pencil-icon class="h-5 w-5"></pencil-icon>
+      </router-link>
+      <button
+        type="button"
+        class="text-gray-300 hover:text-red-500"
+        @click="openConfirmModal(account, 'category')"
+        title="Delete Account"
+      >
+        <x-circle-icon class="h-5 w-5"></x-circle-icon>
+      </button>
+    </div>
+  </div>
+</template>

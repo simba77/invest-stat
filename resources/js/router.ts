@@ -93,6 +93,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Accounts/AccountsPage.vue')
   },
   {
+    name: 'AccountsNew',
+    path: '/new-accounts',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AccountsNewPage.vue')
+  },
+  {
     name: 'CreateAccount',
     path: '/accounts/create-account',
     meta: {
