@@ -42,7 +42,7 @@ class AssetResource extends JsonResource
             'fullTargetProfit'        => $this->full_target_profit,
             'fullTargetProfitPercent' => $this->full_target_profit_percent,
 
-            'groupPercent' => round($this->full_current_price / ($this->account->current_sum_of_assets + $this->account->balance) * 100, 2),
+            'groupPercent' => round($this->full_current_base_price / ($this->account->current_sum_of_assets + $this->account->balance) * 100, 2),
 
             'currency' => $this->currency,
             'type'     => $this->type,

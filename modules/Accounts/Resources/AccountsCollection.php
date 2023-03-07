@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Services\GroupAssetsCalculator;
+use Modules\Markets\DataProviders\Moex;
 
 /** @see \Modules\Accounts\Models\Account */
 class AccountsCollection extends ResourceCollection
@@ -90,7 +91,7 @@ class AccountsCollection extends ResourceCollection
         /** @var Asset $firstAsset */
         $firstAsset = $assets->first();
 
-        $groupCalculator = new GroupAssetsCalculator($assets);
+        $groupCalculator = new GroupAssetsCalculator($assets, app(Moex::class));
 
         return [
             'group'       => $isGroup,

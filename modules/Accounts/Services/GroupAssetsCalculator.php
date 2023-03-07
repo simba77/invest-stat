@@ -6,6 +6,7 @@ namespace Modules\Accounts\Services;
 
 use Illuminate\Support\Collection;
 use Modules\Accounts\Models\Asset;
+use Modules\Markets\DataProviders\Moex;
 
 class GroupAssetsCalculator
 {
@@ -15,7 +16,8 @@ class GroupAssetsCalculator
      * @param Collection | Asset[] $collection
      */
     public function __construct(
-        protected array | Collection $collection
+        protected array | Collection $collection,
+        protected Moex $moex,
     ) {
         $this->firstAsset = $this->collection->first();
     }
@@ -149,6 +151,6 @@ class GroupAssetsCalculator
      */
     public function getGroupPercent(): float
     {
-        return round($this->getFullCurrentPrice() / ($this->firstAsset->account->current_sum_of_assets + $this->firstAsset->account->balance) * 100, 2);
+        return round($this->collection->sum('full_current_base_price') / ($this->firstAsset->account->current_sum_of_assets + $this->firstAsset->account->balance) * 100, 2);
     }
 }
