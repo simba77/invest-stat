@@ -6,22 +6,22 @@ namespace Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Accounts\Models\Account;
-use Modules\Dashboard\Services\Counters;
 use Modules\Investments\Models\Deposit;
 use Modules\Markets\DataProviders\Moex;
 
 class DashboardController extends Controller
 {
-    public function index(Counters $counters, Moex $moex): array
+    public function index(Moex $moex): array
     {
         $invested = Deposit::sum('sum');
-        $allAssetsSum = $counters->getAllAssetsSum();
-        $profit = $allAssetsSum - $invested;
-        $profitPercent = round($profit / $invested * 100, 2);
+        $allAssetsSum = 0;
 
         $brokers = [];
-        $accounts = Account::forCurrentUser()->get();
+        $accounts = Account::forCurrentUser()->activeAssets()->get();
         foreach ($accounts as $account) {
+            $current_sum_of_assets = $account->assets->sum('full_current_base_price');
+            $allAssetsSum += $current_sum_of_assets;
+
             $cards = [
                 [
                     'name'    => 'Profit',
@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 [
                     'name'  => 'Current Value',
                     'help'  => null,
-                    'total' => $account->current_sum_of_assets,
+                    'total' => $current_sum_of_assets,
                 ],
                 [
                     'name'  => 'Initial Cost',
@@ -47,6 +47,9 @@ class DashboardController extends Controller
                 'cards'    => $cards,
             ];
         }
+
+        $profit = $allAssetsSum - $invested;
+        $profitPercent = round($profit / $invested * 100, 2);
 
         return [
             'usd'     => $moex->getRate(),
