@@ -123,6 +123,7 @@ class AccountsCollection extends ResourceCollection
 
             'currency' => $firstAsset->currency,
             'type'     => $firstAsset->type,
+            'isShort'  => $firstAsset->type === Asset::TYPE_SHORT,
 
             // All items
             'items'    => AssetResource::collection($assets),

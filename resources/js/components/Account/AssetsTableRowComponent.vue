@@ -5,11 +5,10 @@ import helpers from "../../helpers";
 import type {Asset, AssetsGroup} from "@/models/account";
 import {useAssets} from "@/composable/useAssets";
 import {useModal} from "@/composable/useModal";
-import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 import SellModal from "@/components/Modals/SellModal.vue";
 
 function formatProfit(asset: { profit: number; currency: string; }) {
-  return (asset.profit > 0 ? '+' : '-') + ' ' + this.helpers.formatPrice(Math.abs(asset.profit)) + ' ' + asset.currency;
+  return (asset.profit > 0 ? '+' : '-') + ' ' + helpers.formatPrice(Math.abs(asset.profit)) + ' ' + asset.currency;
 }
 
 const emit = defineEmits<{ showChildren: boolean }>()

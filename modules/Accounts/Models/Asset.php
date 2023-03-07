@@ -99,7 +99,49 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
+                if ($this->type === Asset::TYPE_SHORT) {
+                    return round($this->full_buy_price - $this->full_current_price - $this->commission, 2);
+                }
                 return round($this->full_current_price - $this->full_buy_price - $this->commission, 2);
+            }
+        );
+    }
+
+    /**
+     * Целевой доход
+     */
+    public function targetProfit(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if ($this->type === Asset::TYPE_SHORT) {
+                    return round($this->buy_price - $this->target_price, 2);
+                }
+                return round($this->target_price - $this->buy_price, 2);
+            }
+        );
+    }
+
+    public function fullTargetProfit(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if ($this->type === Asset::TYPE_SHORT) {
+                    return round($this->full_buy_price - $this->full_target_price, 2);
+                }
+                return round($this->full_target_price - $this->full_buy_price, 2);
+            }
+        );
+    }
+
+    public function fullTargetProfitPercent(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if ($this->type === Asset::TYPE_SHORT) {
+                    return round(($this->full_buy_price - $this->full_target_price) / $this->full_buy_price * 100, 2);
+                }
+                return round(($this->full_target_price - $this->full_buy_price) / $this->full_buy_price * 100, 2);
             }
         );
     }
@@ -117,6 +159,7 @@ class Asset extends Model
                 } elseif ($this->currency === 'RUB') {
                     return $this->full_current_price;
                 }
+                return $this->full_current_price;
             }
         );
     }
