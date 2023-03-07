@@ -85,10 +85,13 @@ function sellAssetModal(item: Asset | AssetsGroup) {
       <div class="text-xs">({{ item.profitPercent }}%, {{ item.fullCommission }} {{ item.currency }})</div>
     </td>
     <td>
-      {{ item.targetProfit }} {{ item.currency }}
-      <div class="text-xs">
-        ({{ helpers.formatPrice(item.fullTargetProfit) }} {{ item.currency }}, {{ item.fullTargetProfitPercent }}%)
-      </div>
+      <template v-if="item.targetProfit !== 0">
+        {{ item.targetProfit }} {{ item.currency }}
+        <div class="text-xs">
+          ({{ helpers.formatPrice(item.fullTargetProfit) }} {{ item.currency }}, {{ item.fullTargetProfitPercent }}%)
+        </div>
+      </template>
+      <template v-else>&mdash;</template>
     </td>
     <td>{{ item.groupPercent }}%</td>
     <td class="table-actions">

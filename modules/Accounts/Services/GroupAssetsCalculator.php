@@ -89,6 +89,9 @@ class GroupAssetsCalculator
      */
     public function getTargetProfit(): float
     {
+        if ($this->getAvgTargetPrice() == 0) {
+            return 0;
+        }
         if ($this->firstAsset->type === Asset::TYPE_SHORT) {
             return round($this->getAvgBuyPrice() - $this->getAvgTargetPrice(), 2);
         }
@@ -100,6 +103,10 @@ class GroupAssetsCalculator
      */
     public function getFullTargetProfit(): float
     {
+        if ($this->getFullTargetPrice() == 0) {
+            return 0;
+        }
+
         if ($this->firstAsset->type === Asset::TYPE_SHORT) {
             return round($this->getFullBuyPrice() - $this->getFullTargetPrice(), 2);
         }
@@ -111,6 +118,10 @@ class GroupAssetsCalculator
      */
     public function getFullTargetProfitPercent(): float
     {
+        if ($this->getFullTargetPrice() == 0) {
+            return 0;
+        }
+
         if ($this->firstAsset->type === Asset::TYPE_SHORT) {
             return round(($this->getFullBuyPrice() - $this->getFullTargetPrice()) / $this->getFullBuyPrice() * 100, 2);
         }

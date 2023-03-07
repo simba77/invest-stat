@@ -114,6 +114,10 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
+                if (empty($this->target_price)) {
+                    return 0;
+                }
+
                 if ($this->type === Asset::TYPE_SHORT) {
                     return round($this->buy_price - $this->target_price, 2);
                 }
@@ -126,6 +130,10 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
+                if (empty($this->target_price)) {
+                    return 0;
+                }
+
                 if ($this->type === Asset::TYPE_SHORT) {
                     return round($this->full_buy_price - $this->full_target_price, 2);
                 }
@@ -138,6 +146,10 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
+                if (empty($this->target_price)) {
+                    return 0;
+                }
+
                 if ($this->type === Asset::TYPE_SHORT) {
                     return round(($this->full_buy_price - $this->full_target_price) / $this->full_buy_price * 100, 2);
                 }
