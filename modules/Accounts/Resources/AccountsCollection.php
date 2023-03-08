@@ -46,7 +46,9 @@ class AccountsCollection extends ResourceCollection
                     'blocked' => (bool) $key,
                     'items'   => $this->getGroupedAssetsByCurrency($groupByAbility),
                 ];
-            });
+            })
+            ->sortBy('name')
+            ->values();
     }
 
     /**
@@ -65,7 +67,7 @@ class AccountsCollection extends ResourceCollection
                     'name'  => Arr::get($names, $key, 'Currency'),
                     'items' => $this->getGroupedAssetsByTicker($groupByCurrency),
                 ];
-            });
+            })->sortByDesc('name');
     }
 
     /**
