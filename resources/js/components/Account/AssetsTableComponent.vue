@@ -37,16 +37,20 @@ const assets = computed<AssetsGroup[]>({
 
       <!-- Total row -->
       <tr v-if="asset.isSubTotal" class="font-bold">
+        <td>Subtotal:</td>
+        <td></td>
         <td>
-          {{ asset.name }}
+          <div v-if="!asset.isBaseCurrency">{{ helpers.formatPrice(asset.fullBuyPrice) }} $</div>
+          <div>{{ helpers.formatPrice(asset.fullBuyPriceConverted) }} ₽</div>
+        </td>
+        <td>
+          <div v-if="!asset.isBaseCurrency">{{ helpers.formatPrice(asset.fullCurrentPrice) }} $</div>
+          <div>{{ helpers.formatPrice(asset.fullCurrentPriceConverted) }} ₽</div>
         </td>
         <td></td>
-
-        <td>{{ helpers.formatPrice(asset.fullBuyPrice) }} {{ asset.currency }}</td>
-        <td>{{ helpers.formatPrice(asset.fullPrice) }} {{ asset.currency }}</td>
-        <td></td>
         <td :class="[asset.profit > 0 ? 'text-green-600' : 'text-red-700']">
-          <div>{{ helpers.formatPrice(asset.profit) }} {{ asset.currency }}</div>
+          <div v-if="!asset.isBaseCurrency">{{ helpers.formatPrice(asset.profit) }} $</div>
+          <div>{{ helpers.formatPrice(asset.profitConverted) }} ₽</div>
           <div class="text-xs">({{ asset.profitPercent }}%)</div>
         </td>
         <td></td>

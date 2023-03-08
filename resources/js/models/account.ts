@@ -43,7 +43,16 @@ export interface AssetsGroup {
   groupPercent: number,
   currency: string,
   showItems: boolean,
-  items: []
+  isShort: boolean,
+  items: [],
+
+  // Поля для Subtotal строк
+  isSubTotal: boolean,
+  isBaseCurrency: boolean,
+  fullBuyPriceConverted: number,
+  fullCurrentPriceConverted: number,
+  profitConverted: number,
+
 }
 
 export interface Asset {
@@ -70,5 +79,6 @@ export interface Asset {
   fullTargetProfitPercent: number,
   groupPercent: number,
   currency: string,
+  isShort: boolean,
 }
 

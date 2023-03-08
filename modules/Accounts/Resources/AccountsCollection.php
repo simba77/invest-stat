@@ -75,7 +75,39 @@ class AccountsCollection extends ResourceCollection
      */
     private function getGroupedAssetsByTicker(Collection $groupByCurrency)
     {
-        return $groupByCurrency->groupBy('ticker')->map(fn($assets) => $this->prepareAssetsGroupRow($assets));
+        $groups = $groupByCurrency->groupBy('ticker')
+            ->map(fn($assets) => $this->prepareAssetsGroupRow($assets))
+            ->values();
+
+        $currency = $groups->first()['currency'];
+
+        // Итог по группе
+        $fullBuyPrice = $groups->sum('fullBuyPrice');
+        $fullCurrentPrice = $groups->sum('fullCurrentPrice');
+        $profit = $groups->sum('profit');
+        if ($currency === 'USD') {
+            $rate = app(Moex::class)->getRate();
+            $fullBuyPriceConverted = $fullBuyPrice * $rate;
+            $fullCurrentPriceConverted = $fullCurrentPrice * $rate;
+            $profitConverted = $profit * $rate;
+        }
+
+        $groups->push(
+            [
+                'currency'                  => $currency,
+                'isBaseCurrency'            => $currency === 'RUB',
+                'isSubTotal'                => true,
+                'fullBuyPrice'              => $fullBuyPrice,
+                'fullBuyPriceConverted'     => $fullBuyPriceConverted ?? $fullBuyPrice,
+                'fullCurrentPrice'          => $fullCurrentPrice,
+                'fullCurrentPriceConverted' => $fullCurrentPriceConverted ?? $fullCurrentPrice,
+                'profit'                    => $profit,
+                'profitConverted'           => $profitConverted ?? $profit,
+                'profitPercent'             => round(($fullCurrentPrice - $fullBuyPrice - $groups->sum('fullCommission')) / $fullBuyPrice * 100, 2),
+            ]
+        );
+
+        return $groups;
     }
 
     /**
