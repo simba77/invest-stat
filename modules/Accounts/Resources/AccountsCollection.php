@@ -20,7 +20,7 @@ class AccountsCollection extends ResourceCollection
     public function toArray($request): Collection
     {
         return $this->collection->map(function (Account $account) {
-            $currentValue = round($this->getCurrentValue($account->assets) + $account->balance, 2);
+            $currentValue = round($account->current_sum_of_assets + $account->balance, 2);
             return [
                 'id'           => $account->id,
                 'name'         => $account->name,
