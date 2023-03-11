@@ -126,7 +126,11 @@ class AccountsController extends Controller
 
     public function newIndex(): AccountsCollection
     {
-        $accounts = Account::forCurrentUser()->withSum('deposits', 'sum')->activeAssets()->get();
+        $accounts = Account::forCurrentUser()
+            ->withSum('deposits', 'sum')
+            ->activeAssets()
+            ->orderBy('sort')
+            ->get();
         return new AccountsCollection($accounts);
     }
 
