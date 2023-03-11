@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('securities:update-data')->everyThirtyMinutes();
+        $schedule->command('securities:update-data')->everyFiveMinutes();
         $schedule->command('securities:update-data-investcab')->everyFifteenMinutes();
     }
 
