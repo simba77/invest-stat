@@ -21,8 +21,13 @@ class AccountService
         $startSum = 0;
         $currentSum = 0;
         foreach ($account->assets as $asset) {
-            $startSum += $asset->full_buy_price;
-            $currentSum += $asset->full_current_base_price;
+            if ($asset->security->is_future) {
+                $startSum += 0;
+                $currentSum += $asset->profit;
+            } else {
+                $startSum += $asset->full_buy_price;
+                $currentSum += $asset->full_current_base_price;
+            }
         }
 
         $account->start_sum_of_assets = $startSum;
