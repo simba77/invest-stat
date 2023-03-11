@@ -25,11 +25,12 @@ class UpdateSecuritiesInfo extends Command
      */
     protected $description = 'Update securities data';
 
-    public function handle(Moex $moex, YahooFinance $yahooFinance, AccountService $accountService): int
+    public function handle(Moex $moex, AccountService $accountService): int
     {
         $moex->import();
         $moex->importEtf();
         $moex->importShares();
+        $moex->importFutures();
         // $yahooFinance->import();
         $accountService->updateAll();
 

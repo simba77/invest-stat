@@ -18,6 +18,9 @@ class Securities
             'price'      => $params['price'] ?? 0,
             'currency'   => $this->getCurrencyByCode($params['currency']),
             'isin'       => $params['isin'] ?? '',
+            'is_future'  => $params['is_future'] ?? null,
+            'step_price' => $params['step_price'] ?? null,
+            'expiration' => $params['expiration'] ?? null,
         ];
 
         foreach ($fields as $key => $field) {

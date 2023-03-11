@@ -18,5 +18,13 @@ class Security extends Model
         'price',
         'lot_size',
         'isin',
+        'is_future',
+        'expiration',
+        'step_price',
+    ];
+
+    protected $casts = [
+        'expiration' => 'date',
+        'is_future'  => 'boolean',
     ];
 }
