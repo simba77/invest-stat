@@ -82,7 +82,6 @@ export default {
         name: '',
         balance: '',
         commission: '',
-        currency: 'RUB',
         futures_commission: '',
         sort: 100,
       },

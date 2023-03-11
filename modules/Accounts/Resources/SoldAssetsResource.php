@@ -33,7 +33,6 @@ class SoldAssetsResource
                 'id'       => $account->id,
                 'name'     => $account->name,
                 'balance'  => $account->balance,
-                'currency' => $account->currency === 'RUB' ? '₽' : '$',
                 'assets'   => $this->getAssets($account),
             ];
         }

@@ -42,9 +42,8 @@ class DashboardController extends Controller
             ];
 
             $brokers[] = [
-                'name'     => $account->name,
-                'currency' => getCurrencyName($account->currency),
-                'cards'    => $cards,
+                'name'  => $account->name,
+                'cards' => $cards,
             ];
         }
 

@@ -22,7 +22,6 @@ class AccountsController extends Controller
             [
                 'name'               => ['required'],
                 'balance'            => ['required', 'numeric'],
-                'currency'           => ['required'],
                 'commission'         => ['sometimes', 'numeric'],
                 'futures_commission' => ['sometimes', 'numeric'],
                 'sort'               => ['required', 'numeric'],
@@ -36,7 +35,6 @@ class AccountsController extends Controller
                 [
                     'name'               => $fields['name'],
                     'balance'            => $fields['balance'],
-                    'currency'           => $fields['currency'],
                     'commission'         => $fields['commission'],
                     'futures_commission' => $fields['futures_commission'],
                     'sort'               => $fields['sort'],
@@ -47,7 +45,6 @@ class AccountsController extends Controller
                 [
                     'name'               => $fields['name'],
                     'balance'            => $fields['balance'],
-                    'currency'           => $fields['currency'],
                     'commission'         => $fields['commission'],
                     'futures_commission' => $fields['futures_commission'],
                     'sort'               => $fields['sort'],
@@ -66,7 +63,6 @@ class AccountsController extends Controller
                 'id'                 => $account->id,
                 'name'               => $account->name,
                 'balance'            => $account->balance,
-                'currency'           => $account->currency,
                 'commission'         => $account->commission,
                 'futures_commission' => $account->futures_commission,
                 'sort'               => $account->sort,
@@ -84,6 +80,9 @@ class AccountsController extends Controller
         return ['success' => true];
     }
 
+    /**
+     * @deprecated
+     */
     public function summary(Counters $counters): array
     {
         $invested = Deposit::sum('sum');
@@ -118,6 +117,9 @@ class AccountsController extends Controller
         ];
     }
 
+    /**
+     * @deprecated
+     */
     public function index(): array
     {
         $accounts = Account::forCurrentUser()->withSum('deposits', 'sum')->activeAssets()->get();
@@ -134,6 +136,9 @@ class AccountsController extends Controller
         return new AccountsCollection($accounts);
     }
 
+    /**
+     * @deprecated
+     */
     public function updateData(): array
     {
         Artisan::call('securities:update-data');
