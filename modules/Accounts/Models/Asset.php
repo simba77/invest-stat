@@ -48,6 +48,30 @@ class Asset extends Model
         return $this->hasOne(Security::class, 'ticker', 'ticker');
     }
 
+    public function buyPrice(): Attribute
+    {
+        return Attribute::get(
+            function ($value) {
+                if ($this->security->is_future) {
+                    return $value * $this->security->step_price * $this->security->lot_size;
+                }
+                return $value;
+            }
+        );
+    }
+
+    public function targetPrice(): Attribute
+    {
+        return Attribute::get(
+            function ($value) {
+                if ($this->security->is_future) {
+                    return $value * $this->security->step_price * $this->security->lot_size;
+                }
+                return $value;
+            }
+        );
+    }
+
     /**
      * Полная стоимость на момент покупки
      */
@@ -73,7 +97,14 @@ class Asset extends Model
      */
     public function currentPrice(): Attribute
     {
-        return Attribute::get(fn() => (float) $this->security->price);
+        return Attribute::get(
+            function () {
+                if ($this->security->is_future) {
+                    return $this->security->price * $this->security->step_price * $this->security->lot_size;
+                }
+                return (float) $this->security->price;
+            }
+        );
     }
 
     /**
@@ -89,7 +120,13 @@ class Asset extends Model
      */
     public function commission(): Attribute
     {
-        return Attribute::get(fn() => $this->full_current_price * ($this->account->commission / 100));
+        return Attribute::get(function () {
+            if ($this->security->is_future) {
+                // TODO: Change commission
+                return 5 * $this->quantity;
+            }
+            return $this->full_current_price * ($this->account->commission / 100);
+        });
     }
 
     /**

@@ -34,9 +34,10 @@ class AssetResource extends JsonResource
             'currentPrice'     => $this->current_price,
             'fullCurrentPrice' => $this->full_current_price,
 
-            'profit'        => $this->profit,
-            'profitPercent' => round($this->profit / $this->full_buy_price * 100, 2),
-            'commission'    => $this->commission,
+            'profit'         => $this->profit,
+            'profitPercent'  => round($this->profit / $this->full_buy_price * 100, 2),
+            'commission'     => $this->commission,
+            'fullCommission' => $this->commission,
 
             'targetProfit'            => $this->target_profit,
             'fullTargetProfit'        => $this->full_target_profit,
