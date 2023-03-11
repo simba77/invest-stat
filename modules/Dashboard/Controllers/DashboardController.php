@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $allAssetsSum = 0;
 
         $brokers = [];
-        $accounts = Account::forCurrentUser()->activeAssets()->get();
+        $accounts = Account::forCurrentUser()->activeAssets()->orderBy('sort')->get();
         foreach ($accounts as $account) {
             $current_sum_of_assets = $account->current_sum_of_assets + $account->balance;
             $allAssetsSum += $current_sum_of_assets;
