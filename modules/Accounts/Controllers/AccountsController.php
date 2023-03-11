@@ -20,10 +20,12 @@ class AccountsController extends Controller
     {
         $fields = $request->validate(
             [
-                'name'       => ['required'],
-                'balance'    => ['required', 'numeric'],
-                'currency'   => ['required'],
-                'commission' => ['sometimes', 'numeric'],
+                'name'               => ['required'],
+                'balance'            => ['required', 'numeric'],
+                'currency'           => ['required'],
+                'commission'         => ['sometimes', 'numeric'],
+                'futures_commission' => ['sometimes', 'numeric'],
+                'sort'               => ['required', 'numeric'],
             ]
         );
 
@@ -32,20 +34,24 @@ class AccountsController extends Controller
             $account = Account::findOrFail($id);
             $account->update(
                 [
-                    'name'       => $fields['name'],
-                    'balance'    => $fields['balance'],
-                    'currency'   => $fields['currency'],
-                    'commission' => $fields['commission'],
+                    'name'               => $fields['name'],
+                    'balance'            => $fields['balance'],
+                    'currency'           => $fields['currency'],
+                    'commission'         => $fields['commission'],
+                    'futures_commission' => $fields['futures_commission'],
+                    'sort'               => $fields['sort'],
                 ]
             );
         } else {
             $account = Account::create(
                 [
-                    'name'       => $fields['name'],
-                    'balance'    => $fields['balance'],
-                    'currency'   => $fields['currency'],
-                    'commission' => $fields['commission'],
-                    'user_id'    => Auth::user()->id,
+                    'name'               => $fields['name'],
+                    'balance'            => $fields['balance'],
+                    'currency'           => $fields['currency'],
+                    'commission'         => $fields['commission'],
+                    'futures_commission' => $fields['futures_commission'],
+                    'sort'               => $fields['sort'],
+                    'user_id'            => Auth::user()->id,
                 ]
             );
         }
@@ -57,11 +63,13 @@ class AccountsController extends Controller
         $account = Account::findOrFail($id);
         return [
             'form' => [
-                'id'         => $account->id,
-                'name'       => $account->name,
-                'balance'    => $account->balance,
-                'currency'   => $account->currency,
-                'commission' => $account->commission,
+                'id'                 => $account->id,
+                'name'               => $account->name,
+                'balance'            => $account->balance,
+                'currency'           => $account->currency,
+                'commission'         => $account->commission,
+                'futures_commission' => $account->futures_commission,
+                'sort'               => $account->sort,
             ],
         ];
     }

@@ -23,6 +23,8 @@ class Account extends Model
         'start_sum_of_assets',
         'current_sum_of_assets',
         'commission',
+        'futures_commission',
+        'sort',
     ];
 
     public function assets(): HasMany
