@@ -12,6 +12,7 @@ use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\Asset;
 use Modules\Accounts\Resources\SoldAssetsResource;
 use Modules\Accounts\Services\AccountService;
+use Modules\Markets\Models\Security;
 
 class AssetsController extends Controller
 {
@@ -46,6 +47,11 @@ class AssetsController extends Controller
             ]
         );
 
+        $sec = Security::query()
+            ->where('ticker', $fields['ticker'])
+            ->where('stock_market', $fields['stock_market'])
+            ->first();
+
         $id = $request->input('id');
         if ($id) {
             $asset = Asset::findOrFail($id);
@@ -55,7 +61,7 @@ class AssetsController extends Controller
                     'stock_market' => $fields['stock_market'],
                     'quantity'     => $fields['quantity'],
                     'buy_price'    => $fields['buy_price'],
-                    'target_price' => $fields['target_price'],
+                    'target_price' => ! empty($fields['target_price']) ? $fields['target_price'] : null,
                     'currency'     => $fields['currency'],
                     'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
                 ]
@@ -67,7 +73,7 @@ class AssetsController extends Controller
                     'stock_market' => $fields['stock_market'],
                     'quantity'     => $fields['quantity'],
                     'buy_price'    => $fields['buy_price'],
-                    'target_price' => $fields['target_price'],
+                    'target_price' => ! empty($fields['target_price']) ? $fields['target_price'] : null,
                     'currency'     => $fields['currency'],
                     'account_id'   => $account,
                     'user_id'      => Auth::user()->id,
@@ -75,15 +81,17 @@ class AssetsController extends Controller
                 ]
             );
 
-            // Change the balance
-            $account = Account::findOrFail($asset->account_id);
-            $sum = $fields['buy_price'] * $fields['quantity'];
-            if (empty($fields['short'])) {
-                $account->balance -= $sum;
-            } else {
-                $account->balance += $sum;
+            if (! $sec?->is_future) {
+                // Change the balance
+                $account = Account::findOrFail($asset->account_id);
+                $sum = $fields['buy_price'] * $fields['quantity'];
+                if (empty($fields['short'])) {
+                    $account->balance -= $sum;
+                } else {
+                    $account->balance += $sum;
+                }
+                $account->save();
             }
-            $account->save();
         }
 
         $accountService->updateAll();
