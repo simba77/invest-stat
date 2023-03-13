@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $brokers = [];
         $accounts = Account::forCurrentUser()->activeAssets()->orderBy('sort')->get();
         foreach ($accounts as $account) {
-            $current_sum_of_assets = $account->current_sum_of_assets + $account->balance;
+            $current_sum_of_assets = $account->current_sum_of_assets + $account->balance + ($account->usd_balance * $moex->getRate());
             $allAssetsSum += $current_sum_of_assets;
 
             $cards = [

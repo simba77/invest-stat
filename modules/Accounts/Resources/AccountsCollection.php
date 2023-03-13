@@ -19,12 +19,14 @@ class AccountsCollection extends ResourceCollection
 
     public function toArray($request): Collection
     {
-        return $this->collection->map(function (Account $account) {
-            $currentValue = round($account->current_sum_of_assets + $account->balance, 2);
+        $moex = app(Moex::class);
+        return $this->collection->map(function (Account $account) use ($moex) {
+            $currentValue = round($account->current_sum_of_assets + $account->balance + ($account->usd_balance * $moex->getRate()), 2);
             return [
                 'id'           => $account->id,
                 'name'         => $account->name,
                 'balance'      => $account->balance,
+                'usdBalance'   => $account->usd_balance,
                 'deposits'     => $account->deposits_sum_sum ?? 0,
                 'currentValue' => $currentValue,
                 'fullProfit'   => round($currentValue - (float) $account->deposits_sum_sum, 2),
