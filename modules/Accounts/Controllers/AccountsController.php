@@ -22,6 +22,7 @@ class AccountsController extends Controller
             [
                 'name'               => ['required'],
                 'balance'            => ['required', 'numeric'],
+                'usd_balance'        => ['sometimes', 'numeric'],
                 'commission'         => ['sometimes', 'numeric'],
                 'futures_commission' => ['sometimes', 'numeric'],
                 'sort'               => ['required', 'numeric'],
@@ -35,6 +36,7 @@ class AccountsController extends Controller
                 [
                     'name'               => $fields['name'],
                     'balance'            => $fields['balance'],
+                    'usd_balance'        => $fields['usd_balance'],
                     'commission'         => $fields['commission'],
                     'futures_commission' => $fields['futures_commission'],
                     'sort'               => $fields['sort'],
@@ -45,6 +47,7 @@ class AccountsController extends Controller
                 [
                     'name'               => $fields['name'],
                     'balance'            => $fields['balance'],
+                    'usd_balance'        => $fields['usd_balance'],
                     'commission'         => $fields['commission'],
                     'futures_commission' => $fields['futures_commission'],
                     'sort'               => $fields['sort'],
@@ -63,6 +66,7 @@ class AccountsController extends Controller
                 'id'                 => $account->id,
                 'name'               => $account->name,
                 'balance'            => $account->balance,
+                'usd_balance'        => $account->usd_balance,
                 'commission'         => $account->commission,
                 'futures_commission' => $account->futures_commission,
                 'sort'               => $account->sort,

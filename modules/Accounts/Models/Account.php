@@ -19,6 +19,7 @@ class Account extends Model
         'user_id',
         'name',
         'balance',
+        'usd_balance',
         'start_sum_of_assets',
         'current_sum_of_assets',
         'commission',

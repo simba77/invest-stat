@@ -28,6 +28,16 @@
             placeholder="Enter Balance"
           />
           <input-text
+            v-model="form.usd_balance"
+            :key="componentKey"
+            :error="errors?.usd_balance"
+            class="mb-3"
+            type="number"
+            name="usd_balance"
+            label="USD Balance"
+            placeholder="Enter USD Balance"
+          />
+          <input-text
             v-model="form.commission"
             :key="componentKey"
             :error="errors?.commission"
@@ -81,6 +91,7 @@ export default {
       form: {
         name: '',
         balance: '',
+        usd_balance: '',
         commission: '',
         futures_commission: '',
         sort: 100,
