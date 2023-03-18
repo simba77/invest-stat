@@ -1,10 +1,11 @@
 <template>
   <page-component title="Expenses">
-    <template v-if="stat">
+    <preloader-component class="mb-3" v-if="loadingSummary"/>
+    <template v-else>
       <div class="text-xl mb-3">Summary</div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-5">
         <stat-card
-          v-for="(card, i) in stat.summary"
+          v-for="(card, i) in summary"
           :key="i"
           :name="card.name"
           :help-text="card.helpText ?? null"
@@ -17,7 +18,9 @@
     <div class="mb-4">
       <router-link :to="{name: 'CreateCategory'}" class="btn btn-primary">Create Category</router-link>
     </div>
-    <table class="simple-table white-header">
+
+    <preloader-component v-if="loadingExpenses"/>
+    <table v-else class="simple-table white-header">
       <thead>
       <tr>
         <th>Name</th>
@@ -41,7 +44,7 @@
                 <button
                   type="button"
                   class="text-gray-300 hover:text-red-500"
-                  @click="openConfirmModal(cat, 'category')"
+                  @click="confirmCategoryDeletion(cat, () => getExpenses())"
                 >
                   <x-circle-icon class="h-5 w-5"></x-circle-icon>
                 </button>
@@ -61,7 +64,7 @@
                     <button
                       type="button"
                       class="text-gray-300 hover:text-red-500"
-                      @click="openConfirmModal(expense, 'expense')"
+                      @click="confirmDeletion(expense, () => getExpenses())"
                     >
                       <x-circle-icon class="h-5 w-5"></x-circle-icon>
                     </button>
@@ -79,128 +82,27 @@
       </tbody>
     </table>
   </page-component>
-
-  <base-modal ref="deleteConfirmationModal">
-    <confirm-modal
-      :close="closeModal"
-      :confirm="confirmDeletion"
-      title="Deletion confirmation"
-      :text="'Are you sure you want to delete &quot;<b>'+ deleteItem.data.name +'</b>&quot;?'"
-    ></confirm-modal>
-  </base-modal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PageComponent from "../components/PageComponent.vue";
-import axios from "axios";
 import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
-import BaseModal from "@/components/Modals/BaseModal.vue";
-import ConfirmModal from "@/components/Modals/ConfirmModal.vue";
 import StatCard from "@/components/Cards/StatCard.vue";
+import {useExpenses} from "@/composable/useExpenses";
+import PreloaderComponent from "@/components/Common/PreloaderComponent.vue";
+import {useExpensesCategory} from "@/composable/useExpensesCategory";
 
-export default {
-  name: "ExpensesPage",
-  components: {StatCard, ConfirmModal, BaseModal, PageComponent, PencilIcon, XCircleIcon, PlusCircleIcon},
-  mounted() {
-    this.getItems();
-    this.getStat();
-  },
-  data() {
-    return {
-      loading: true,
-      deleting: false,
-      stat: {},
-      deleteItem: {
-        type: '',
-        data: {},
-      },
-      expenses: {},
-    }
-  },
-  methods: {
-    openConfirmModal(item: any, type = 'expense') {
-      this.deleteItem.type = type;
-      this.deleteItem.data = item;
-      setTimeout(() => {
-        this.$refs.deleteConfirmationModal.openModal();
-      });
-    },
-    closeModal() {
-      this.$refs.deleteConfirmationModal.closeModal();
-    },
-    confirmDeletion() {
-      if (this.deleteItem.type === 'category') {
-        this.deleteCategory(this.deleteItem.data.id)
-          .finally(() => {
-            this.closeModal();
-          });
-      } else {
-        this.deleteExpense(this.deleteItem.data.id)
-          .finally(() => {
-            this.closeModal();
-          });
-      }
-    },
-    getItems() {
-      this.loading = true;
-      axios.get('/api/expenses/list')
-        .then((response) => {
-          this.expenses = response.data;
-        })
-        .catch(() => {
-          alert('An error has occurred');
-        })
-        .finally(() => {
-          this.loading = false;
-        })
-    },
-    getStat() {
-      this.loading = true;
-      axios.get('/api/expenses/summary')
-        .then((response) => {
-          this.stat = response.data;
-        })
-        .catch(() => {
-          alert('An error has occurred');
-        })
-        .finally(() => {
-          this.loading = false;
-        })
-    },
-    deleteCategory(id: number) {
-      this.deleting = true;
-      return new Promise((resolve, reject) => {
-        axios.post('/api/expenses/delete-category/' + id)
-          .then(() => {
-            this.getItems();
-            resolve({deleted: true});
-          })
-          .catch(() => {
-            alert('An error has occurred');
-            reject('An error has occurred');
-          })
-          .finally(() => {
-            this.deleting = false;
-          })
-      });
-    },
-    deleteExpense(id: number) {
-      this.deleting = true;
-      return new Promise((resolve, reject) => {
-        axios.post('/api/expenses/delete-expense/' + id)
-          .then(() => {
-            this.getItems();
-            resolve({deleted: true});
-          })
-          .catch(() => {
-            alert('An error has occurred');
-            reject('An error has occurred');
-          })
-          .finally(() => {
-            this.deleting = false;
-          })
-      });
-    }
-  }
-}
+const {confirmDeletion: confirmCategoryDeletion} = useExpensesCategory()
+const {
+  loadingExpenses,
+  loadingSummary,
+  getSummary,
+  getExpenses,
+  expenses,
+  summary,
+  confirmDeletion
+} = useExpenses();
+
+getExpenses()
+getSummary()
 </script>
