@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import type {Account} from "@/models/account";
-import helpers from "../../helpers";
-import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
-
-const props = defineProps<{
-  account: Account
-}>();
-
-</script>
 <template>
   <div class="flex justify-between mb-2 mt-5 py-3 rounded">
     <div class="">
@@ -39,7 +29,7 @@ const props = defineProps<{
       <button
         type="button"
         class="text-gray-300 hover:text-red-500"
-        @click="openConfirmModal(account, 'category')"
+        @click="confirmDeletion(account, () => getAccounts())"
         title="Delete Account"
       >
         <x-circle-icon class="h-5 w-5"></x-circle-icon>
@@ -47,3 +37,18 @@ const props = defineProps<{
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import type {Account} from "@/models/account";
+import helpers from "../../helpers";
+import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
+import useAccounts from "@/composable/useAccounts";
+import {inject} from "vue";
+
+const props = defineProps<{
+  account: Account
+}>();
+
+const {getAccounts} = inject('accounts')
+const {confirmDeletion} = useAccounts()
+
+</script>

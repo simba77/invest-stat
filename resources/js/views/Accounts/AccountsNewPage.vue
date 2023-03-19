@@ -1,21 +1,3 @@
-<script setup lang="ts">
-import PageComponent from "@/components/PageComponent.vue";
-import PreloaderComponent from "@/components/Common/PreloaderComponent.vue";
-import {provide} from "vue";
-import AccountComponent from "@/components/Account/AccountComponent.vue";
-import AssetsTableComponent from "@/components/Account/AssetsTableComponent.vue";
-import useAccounts from "@/composable/useAccounts";
-
-const {
-  getAccounts,
-  accounts,
-  loading
-} = useAccounts();
-
-provide('accounts', {getAccounts})
-
-getAccounts();
-</script>
 <template>
   <page-component title="Accounts" ref="accounts">
     <div class="mb-4">
@@ -56,3 +38,21 @@ getAccounts();
     </template>
   </page-component>
 </template>
+<script setup lang="ts">
+import PageComponent from "@/components/PageComponent.vue";
+import PreloaderComponent from "@/components/Common/PreloaderComponent.vue";
+import {provide} from "vue";
+import AccountComponent from "@/components/Account/AccountComponent.vue";
+import AssetsTableComponent from "@/components/Account/AssetsTableComponent.vue";
+import useAccounts from "@/composable/useAccounts";
+
+const {
+  getAccounts,
+  accounts,
+  loading
+} = useAccounts();
+
+provide('accounts', {getAccounts})
+
+getAccounts();
+</script>
