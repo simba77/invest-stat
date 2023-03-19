@@ -1,52 +1,3 @@
-<script setup lang="ts">
-import {inject} from 'vue'
-import {LockClosedIcon, PencilIcon, XCircleIcon, CashIcon} from "@heroicons/vue/outline";
-import helpers from "../../helpers";
-import type {Asset, AssetsGroup} from "@/models/account";
-import {useAssets} from "@/composable/useAssets";
-import {useModal} from "@/composable/useModal";
-import SellModal from "@/components/Modals/SellModal.vue";
-
-function formatProfit(asset: { profit: number; currency: string; }) {
-  return (asset.profit > 0 ? '+' : '-') + ' ' + helpers.formatPrice(Math.abs(asset.profit)) + ' ' + asset.currency;
-}
-
-const emit = defineEmits<{ showChildren: boolean }>()
-
-defineProps<{
-  item: Asset | AssetsGroup,
-  showActions?: boolean,
-  clickable?: boolean,
-}>();
-
-const {confirmDeletion: confirmDeletionAsset, sellAsset} = useAssets()
-const {getAccounts} = inject('accounts')
-const modal = useModal()
-
-function sellAssetModal(item: Asset | AssetsGroup) {
-  modal.open(
-    SellModal,
-    {price: item.currentPrice, name: item.name},
-    [
-      {
-        label: 'Sell',
-        classes: ['btn-success mr-3 md:mr-0 ml-3'],
-        callback: async (model: { price: number }) => {
-          await sellAsset(item.id, model.price)
-          getAccounts()
-          modal.close()
-        },
-      },
-      {
-        label: 'Cancel',
-        classes: ['btn-secondary'],
-        callback: () => modal.close(),
-      }
-    ]
-  );
-}
-
-</script>
 <template>
   <tr :class="{'tr-clickable': clickable}" @click="emit('showChildren')">
     <td
@@ -122,3 +73,52 @@ function sellAssetModal(item: Asset | AssetsGroup) {
     </td>
   </tr>
 </template>
+<script setup lang="ts">
+import {inject} from 'vue'
+import {LockClosedIcon, PencilIcon, XCircleIcon, CashIcon} from "@heroicons/vue/outline";
+import helpers from "../../helpers";
+import type {Asset, AssetsGroup} from "@/models/account";
+import {useAssets} from "@/composable/useAssets";
+import {useModal} from "@/composable/useModal";
+import SellModal from "@/components/Modals/SellModal.vue";
+
+function formatProfit(asset: { profit: number; currency: string; }) {
+  return (asset.profit > 0 ? '+' : '-') + ' ' + helpers.formatPrice(Math.abs(asset.profit)) + ' ' + asset.currency;
+}
+
+const emit = defineEmits<{ showChildren: boolean }>()
+
+defineProps<{
+  item: Asset | AssetsGroup,
+  showActions?: boolean,
+  clickable?: boolean,
+}>();
+
+const {confirmDeletion: confirmDeletionAsset, sellAsset} = useAssets()
+const {getAccounts} = inject('accounts')
+const modal = useModal()
+
+function sellAssetModal(item: Asset | AssetsGroup) {
+  modal.open(
+    SellModal,
+    {price: item.currentPrice, name: item.name},
+    [
+      {
+        label: 'Sell',
+        classes: ['btn-success mr-3 md:mr-0 ml-3'],
+        callback: async (model: { price: number }) => {
+          await sellAsset(item.id, model.price)
+          getAccounts()
+          modal.close()
+        },
+      },
+      {
+        label: 'Cancel',
+        classes: ['btn-secondary'],
+        callback: () => modal.close(),
+      }
+    ]
+  );
+}
+
+</script>

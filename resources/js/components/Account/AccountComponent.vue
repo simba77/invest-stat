@@ -1,9 +1,9 @@
 <template>
   <div class="flex justify-between mb-2 mt-5 py-3 rounded">
     <div class="">
-      <div class="font-extrabold text-lg">{{ props.account.name }}</div>
+      <div class="font-extrabold text-lg">{{ account.name }}</div>
       <div class="text-sm">
-        <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(props.account.balance) }} ₽</span> / <span>{{ helpers.formatPrice(props.account.usdBalance) }} $</span>
+        <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} ₽</span> / <span>{{ helpers.formatPrice(account.usdBalance) }} $</span>
         <span class="font-light ml-3">Deposits:</span> <span>{{ helpers.formatPrice(account.deposits) }} ₽</span>
         <span class="font-light ml-3">Current Value:</span> <span>{{ helpers.formatPrice(account.currentValue) }} ₽</span>
         <span class="font-light ml-3">Profit: </span>
@@ -14,13 +14,13 @@
     </div>
     <div class="flex items-center">
       <router-link
-        :to="{name: 'AddAsset', params: {account: props.account.id}}"
+        :to="{name: 'AddAsset', params: {account: account.id}}"
         class="text-gray-300 hover:text-gray-600 mr-2"
         title="Add Asset">
         <plus-circle-icon class="h-5 w-5"></plus-circle-icon>
       </router-link>
       <router-link
-        :to="{name: 'EditAccount', params: {id: props.account.id}}"
+        :to="{name: 'EditAccount', params: {id: account.id}}"
         class="text-gray-300 hover:text-gray-600 mr-2"
         title="Edit Account"
       >
@@ -44,7 +44,7 @@ import {PencilIcon, XCircleIcon, PlusCircleIcon} from "@heroicons/vue/outline";
 import useAccounts from "@/composable/useAccounts";
 import {inject} from "vue";
 
-const props = defineProps<{
+defineProps<{
   account: Account
 }>();
 

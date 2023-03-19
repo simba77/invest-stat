@@ -1,17 +1,3 @@
-<script setup lang="ts">
-import helpers from "../../helpers";
-import AssetsTableRowComponent from "@/components/Account/AssetsTableRowComponent.vue";
-import {computed} from "vue";
-import {AssetsGroup} from "@/models/account";
-
-const props = defineProps(['modelValue'])
-const emit = defineEmits(['update:modelValue'])
-const assets = computed<AssetsGroup[]>({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
-</script>
-
 <template>
   <table class="simple-table sub-table white-header">
     <thead>
@@ -111,3 +97,16 @@ const assets = computed<AssetsGroup[]>({
     </tbody>
   </table>
 </template>
+<script setup lang="ts">
+import helpers from "../../helpers";
+import AssetsTableRowComponent from "@/components/Account/AssetsTableRowComponent.vue";
+import {computed} from "vue";
+import {AssetsGroup} from "@/models/account";
+
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
+const assets = computed<AssetsGroup[]>({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
+</script>
