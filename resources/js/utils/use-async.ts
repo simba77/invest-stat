@@ -16,7 +16,7 @@ export default function useAsync<T extends (...args: unknown[]) => unknown>(fn: 
       return result as ReturnType<T>
     } catch (error) {
       console.log(error);
-      alert('An Error has Occured');
+      //alert('An Error has Occured');
       throw error
     } finally {
       loading.value = false

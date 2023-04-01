@@ -4,5 +4,5 @@
 </template>
 
 <script setup lang="ts">
-import BaseModal from "@/components/Modals/BaseModal.vue";
+import BaseModal from "./components/Modals/BaseModal.vue";
 </script>

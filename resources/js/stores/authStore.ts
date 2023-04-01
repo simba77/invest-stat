@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
+import {config} from "@/config";
 
 export const authStore = defineStore('auth', {
   state: () => {
@@ -9,16 +10,13 @@ export const authStore = defineStore('auth', {
   },
   actions: {
     async checkAuth() {
-      return new Promise((resolve, reject) => {
-        axios.get('/api/checkAuth')
-          .then((response) => {
-            this.userData = response.data;
-            resolve('');
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
+      return axios.get(config.API_HOST + '/api/checkAuth')
+        .then((response) => {
+          this.userData = response.data;
+        })
+        .catch(() => {
+          console.log('unauth');
+        });
     }
   }
 });

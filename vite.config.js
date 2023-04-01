@@ -1,16 +1,14 @@
 import {defineConfig} from 'vite';
-import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'
+import path from 'node:path'
 
 export default defineConfig({
+  resolve:{
+    alias:{
+      '@' : path.resolve(__dirname, './resources/js')
+    },
+  },
   plugins: [
     vue(),
-    laravel({
-      input: [
-        'resources/sass/app.scss',
-        'resources/js/app.ts',
-      ],
-      refresh: true,
-    }),
   ],
 });

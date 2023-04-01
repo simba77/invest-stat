@@ -54,9 +54,10 @@
 </template>
 
 <script lang="ts">
-import {LockClosedIcon} from '@heroicons/vue/solid'
+import {LockClosedIcon} from '@heroicons/vue/24/solid'
 import axios from "axios";
 import {authStore} from "@/stores/authStore";
+import {config} from "@/config";
 
 export default {
   name: "HomePage",
@@ -75,7 +76,7 @@ export default {
   methods: {
     authorize() {
       this.loading = true;
-      axios.post('/api/login', this.form)
+      axios.post(config.API_HOST + '/api/login', this.form)
         .then(() => {
           // Check auth and redirect to homepage
           authStore()
