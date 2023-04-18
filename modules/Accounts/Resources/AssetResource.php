@@ -17,10 +17,10 @@ class AssetResource extends JsonResource
         return [
             'id'          => $this->id,
             'createdAt'   => $this->created_at,
-            'updatedAt'   => $this->security->updated_at?->format('d.m.Y H:i:s'),
+            'updatedAt'   => $this->security?->updated_at?->format('d.m.Y H:i:s'),
             'accountId'   => $this->account_id,
             'ticker'      => $this->ticker,
-            'name'        => $this->security->short_name,
+            'name'        => $this->security?->short_name,
             'stockMarket' => $this->stock_market,
             'blocked'     => $this->blocked,
             'quantity'    => $this->quantity,

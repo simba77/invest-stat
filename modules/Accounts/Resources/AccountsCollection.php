@@ -132,10 +132,10 @@ class AccountsCollection extends ResourceCollection
         return [
             'group'       => $isGroup,
             'id'          => $isGroup ? null : $firstAsset->id,
-            'updatedAt'   => $firstAsset->security->updated_at?->format('d.m.Y H:i:s'),
+            'updatedAt'   => $firstAsset->security?->updated_at?->format('d.m.Y H:i:s'),
             'accountId'   => $firstAsset->account_id,
             'ticker'      => $firstAsset->ticker,
-            'name'        => $firstAsset->security->short_name,
+            'name'        => $firstAsset->security?->short_name,
             'stockMarket' => $firstAsset->stock_market,
             'blocked'     => $firstAsset->blocked,
             'quantity'    => $groupCalculator->getQuantity(),

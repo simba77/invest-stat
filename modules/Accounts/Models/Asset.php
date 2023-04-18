@@ -52,7 +52,7 @@ class Asset extends Model
     {
         return Attribute::get(
             function ($value) {
-                if ($this->security->is_future) {
+                if ($this->security?->is_future) {
                     return $value * $this->security->step_price * $this->security->lot_size;
                 }
                 return $value;
@@ -64,7 +64,7 @@ class Asset extends Model
     {
         return Attribute::get(
             function ($value) {
-                if ($this->security->is_future) {
+                if ($this->security?->is_future) {
                     return $value * $this->security->step_price * $this->security->lot_size;
                 }
                 return $value;
@@ -99,10 +99,10 @@ class Asset extends Model
     {
         return Attribute::get(
             function () {
-                if ($this->security->is_future) {
+                if ($this->security?->is_future) {
                     return $this->security->price * $this->security->step_price * $this->security->lot_size;
                 }
-                return (float) $this->security->price;
+                return (float) $this->security?->price ?? 0;
             }
         );
     }
@@ -121,7 +121,7 @@ class Asset extends Model
     public function commission(): Attribute
     {
         return Attribute::get(function () {
-            if ($this->security->is_future) {
+            if ($this->security?->is_future) {
                 // TODO: Change commission
                 return 5 * $this->quantity;
             }

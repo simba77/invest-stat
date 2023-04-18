@@ -21,7 +21,7 @@ class AccountService
         $startSum = 0;
         $currentSum = 0;
         foreach ($account->assets as $asset) {
-            if ($asset->security->is_future) {
+            if ($asset->security?->is_future) {
                 $startSum += 0;
                 $currentSum += $asset->profit;
             } else {
