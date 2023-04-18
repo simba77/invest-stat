@@ -16,6 +16,7 @@ class Moex
     private string $moexShares = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQIF/securities.xml';
     private string $rates = 'https://iss.moex.com/iss/statistics/engines/futures/markets/indicativerates/securities.xml';
     private string $futures = 'https://iss.moex.com/iss/engines/futures/markets/forts/securities.xml';
+    private string $currency = 'https://iss.moex.com/iss/engines/currency/markets/selt/securities.xml';
 
     public function __construct(private Securities $securities)
     {
@@ -43,6 +44,12 @@ class Moex
     {
         $xmlDataString = Http::get($this->futures)->body();
         $this->processFutures($xmlDataString);
+    }
+
+    public function importCurrencies(): void
+    {
+        $xmlDataString = Http::get($this->currency)->body();
+        $this->processCurrencies($xmlDataString);
     }
 
     private function processData(string $xmlDataString): void
@@ -94,6 +101,28 @@ class Moex
                     'is_future'  => true,
                     'expiration' => $row['LASTDELDATE'],
                     'step_price' => $row['STEPPRICE'],
+                ]);
+            }
+        }
+    }
+
+    private function processCurrencies(string $xmlDataString): void
+    {
+        $xmlObject = simplexml_load_string($xmlDataString);
+        $data = json_decode(json_encode($xmlObject), true) ?? [];
+        $stocks = $data['data'][0]['rows']['row'];
+        $rows = array_column($stocks, '@attributes');
+
+        foreach ($rows as $row) {
+            $price = $row['PREVPRICE'] ?? 0;
+            if (! empty($price)) {
+                $this->securities->createOrUpdate($row['SECID'], 'MOEX', [
+                    'name'       => $row['SECNAME'],
+                    'short_name' => $row['SHORTNAME'],
+                    'lat_name'   => $row['LATNAME'],
+                    'lot_size'   => $row['LOTSIZE'],
+                    'price'      => $price,
+                    'currency'   => $row['CURRENCYID'],
                 ]);
             }
         }
