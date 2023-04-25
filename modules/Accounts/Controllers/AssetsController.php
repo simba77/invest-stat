@@ -18,7 +18,7 @@ class AssetsController extends Controller
 {
     public function edit(int $id): array
     {
-        $asset = Asset::findOrFail($id);
+        $asset = Asset::query()->findOrFail($id);
         return [
             'form' => [
                 'id'           => $asset->id,
@@ -54,7 +54,7 @@ class AssetsController extends Controller
 
         $id = $request->input('id');
         if ($id) {
-            $asset = Asset::findOrFail($id);
+            $asset = Asset::query()->findOrFail($id);
             $asset->update(
                 [
                     'ticker'       => $fields['ticker'],
@@ -67,7 +67,7 @@ class AssetsController extends Controller
                 ]
             );
         } else {
-            $asset = Asset::create(
+            $asset = Asset::query()->create(
                 [
                     'ticker'       => $fields['ticker'],
                     'stock_market' => $fields['stock_market'],
@@ -83,12 +83,20 @@ class AssetsController extends Controller
 
             if (! $sec?->is_future) {
                 // Change the balance
-                $account = Account::findOrFail($asset->account_id);
+                $account = Account::query()->findOrFail($asset->account_id);
                 $sum = $fields['buy_price'] * $fields['quantity'];
                 if (empty($fields['short'])) {
-                    $account->balance -= $sum;
+                    if ($fields['currency'] === 'USD') {
+                        $account->usd_balance -= $sum;
+                    } else {
+                        $account->balance -= $sum;
+                    }
                 } else {
-                    $account->balance += $sum;
+                    if ($fields['currency'] === 'USD') {
+                        $account->usd_balance += $sum;
+                    } else {
+                        $account->balance += $sum;
+                    }
                 }
                 $account->save();
             }
@@ -101,7 +109,7 @@ class AssetsController extends Controller
 
     public function delete(int $id, AccountService $accountService): array
     {
-        $asset = Asset::findOrFail($id);
+        $asset = Asset::query()->findOrFail($id);
         $asset->delete();
         $accountService->updateAll();
         return ['success' => true];
@@ -116,16 +124,24 @@ class AssetsController extends Controller
         );
 
         DB::transaction(function () use ($id, $fields) {
-            $asset = Asset::findOrFail($id);
+            $asset = Asset::query()->findOrFail($id);
             $asset->update(['sell_price' => $fields['price'], 'status' => Asset::SOLD]);
 
             // Change the balance
-            $account = Account::findOrFail($asset->account_id);
+            $account = Account::query()->findOrFail($asset->account_id);
             $sum = $fields['price'] * $asset->quantity;
             if ($asset->type === Asset::TYPE_SHORT) {
-                $account->balance -= $sum;
+                if ($asset->currency === 'USD') {
+                    $account->usd_balance -= $sum;
+                } else {
+                    $account->balance -= $sum;
+                }
             } else {
-                $account->balance += $sum;
+                if ($asset->currency === 'USD') {
+                    $account->usd_balance += $sum;
+                } else {
+                    $account->balance += $sum;
+                }
             }
             $account->save();
         });
