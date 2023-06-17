@@ -60,6 +60,18 @@ class Asset extends Model
         );
     }
 
+    public function sellPrice(): Attribute
+    {
+        return Attribute::get(
+            function ($value) {
+                if ($this->security?->is_future) {
+                    return $value * $this->security->step_price * $this->security->lot_size;
+                }
+                return $value;
+            }
+        );
+    }
+
     public function targetPrice(): Attribute
     {
         return Attribute::get(
