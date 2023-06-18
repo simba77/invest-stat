@@ -26,7 +26,7 @@ class AssetsController extends Controller
                 'ticker'       => $asset->ticker,
                 'stock_market' => $asset->stock_market,
                 'quantity'     => $asset->quantity,
-                'buy_price'    => $asset->buy_price,
+                'buy_price'    => $asset->getRawOriginal('buy_price'),
                 'target_price' => $asset->target_price,
                 'currency'     => $asset->currency,
                 'short'        => $asset->type === Asset::TYPE_SHORT,
