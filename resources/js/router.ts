@@ -116,6 +116,14 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Accounts/AccountForm.vue')
   },
+  {
+    name: 'AccountDetail',
+    path: '/accounts/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Accounts/AccountDetail.vue')
+  },
 
   // Assets
   {

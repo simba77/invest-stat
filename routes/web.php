@@ -45,6 +45,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('edit/{id:number}', [AccountsController::class, 'edit'])->name('accounts.edit');
             Route::post('delete/{id:number}', [AccountsController::class, 'delete'])->name('accounts.delete');
             Route::get('update-data', [AccountsController::class, 'updateData'])->name('accounts.updateData');
+            Route::get('show/{id:number}', [AccountsController::class, 'getAccount'])->name('accounts.show');
         });
 
         Route::group(['prefix' => 'assets'], function () {

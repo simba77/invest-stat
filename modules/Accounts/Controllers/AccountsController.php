@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Modules\Accounts\Models\Account;
+use Modules\Accounts\Resources\AccountDetail;
 use Modules\Accounts\Resources\AccountsCollection;
 use Modules\Accounts\Resources\ResourceForTable;
 use Modules\Dashboard\Services\Counters;
@@ -138,6 +139,16 @@ class AccountsController extends Controller
             ->orderBy('sort')
             ->get();
         return new AccountsCollection($accounts);
+    }
+
+    public function getAccount(int $id): AccountDetail
+    {
+        $accounts = Account::forCurrentUser()
+            ->withSum('deposits', 'sum')
+            ->activeAssets()
+            ->orderBy('sort')
+            ->findOrFail($id);
+        return new AccountDetail($accounts);
     }
 
     /**

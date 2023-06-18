@@ -1,7 +1,11 @@
 <template>
   <div class="flex justify-between mb-2 mt-5 py-3 rounded">
     <div class="">
-      <div class="font-extrabold text-lg">{{ account.name }}</div>
+      <div class="font-extrabold text-lg">
+        <router-link :to="{name: 'AccountDetail', params: {id: account.id}}">
+          {{ account.name }}
+        </router-link>
+      </div>
       <div class="text-sm">
         <span class="font-light">Balance:</span> <span>{{ helpers.formatPrice(account.balance) }} ₽</span> / <span>{{ helpers.formatPrice(account.usdBalance) }} $</span>
         <span class="font-light ml-3">Deposits:</span> <span>{{ helpers.formatPrice(account.deposits) }} ₽</span>

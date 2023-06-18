@@ -11,22 +11,18 @@ async function getAccounts() {
   accounts.value = await axios.get('/api/accounts/new-list').then((response) => response.data);
 }
 
-const {loading, run: asyncGetAccount} = useAsync(getAccounts)
+const {loading, run: asyncGetAccounts} = useAsync(getAccounts)
 
 export default function () {
   // Обработчик модального окна
   const modal = useModal()
+  const account = ref<Account>();
 
   // Delete expense with the specific id
   async function deleteAccount(id: number) {
     await axios.post('/api/accounts/delete/' + id).then((response) => response.data);
   }
 
-  /**
-   * Подтверждение удаления
-   * @param item
-   * @param completeCallback
-   */
   function confirmDeletion(item: { name: string, id: number }, completeCallback?: () => void) {
     modal.open(
       ConfirmModal,
@@ -57,10 +53,19 @@ export default function () {
     );
   }
 
+  async function getAccount(id: number) {
+    account.value = await axios.get('/api/accounts/show/' + id).then((response) => response.data);
+  }
+
+  const {loading: loadingAccount, run: asyncGetAccount} = useAsync((id: any) => getAccount(id))
+
   return {
     accounts,
+    account,
     loading,
+    loadingAccount,
     confirmDeletion,
-    getAccounts: asyncGetAccount,
+    getAccounts: asyncGetAccounts,
+    getAccount: asyncGetAccount,
   }
 }
