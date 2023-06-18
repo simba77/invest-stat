@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('securities:update-data')->everyFiveMinutes();
         $schedule->command('securities:update-data-investcab')->everyFifteenMinutes();
+        $schedule->command('statistic:collect-for-accounts')->everyThirtyMinutes();
     }
 
     /**
