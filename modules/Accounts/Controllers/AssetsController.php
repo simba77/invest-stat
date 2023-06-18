@@ -67,39 +67,41 @@ class AssetsController extends Controller
                 ]
             );
         } else {
-            $asset = Asset::query()->create(
-                [
-                    'ticker'       => $fields['ticker'],
-                    'stock_market' => $fields['stock_market'],
-                    'quantity'     => $fields['quantity'],
-                    'buy_price'    => $fields['buy_price'],
-                    'target_price' => ! empty($fields['target_price']) ? $fields['target_price'] : null,
-                    'currency'     => $fields['currency'],
-                    'account_id'   => $account,
-                    'user_id'      => Auth::user()->id,
-                    'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
-                ]
-            );
+            DB::transaction(function () use ($fields, $sec, $account) {
+                $asset = Asset::query()->create(
+                    [
+                        'ticker'       => $fields['ticker'],
+                        'stock_market' => $fields['stock_market'],
+                        'quantity'     => $fields['quantity'],
+                        'buy_price'    => $fields['buy_price'],
+                        'target_price' => ! empty($fields['target_price']) ? $fields['target_price'] : null,
+                        'currency'     => $fields['currency'],
+                        'account_id'   => $account,
+                        'user_id'      => Auth::user()->id,
+                        'type'         => ! empty($fields['short']) ? Asset::TYPE_SHORT : null,
+                    ]
+                );
 
-            if (! $sec?->is_future) {
-                // Change the balance
-                $account = Account::query()->findOrFail($asset->account_id);
-                $sum = $fields['buy_price'] * $fields['quantity'];
-                if (empty($fields['short'])) {
-                    if ($fields['currency'] === 'USD') {
-                        $account->usd_balance -= $sum;
+                if (! $sec?->is_future) {
+                    // Change the balance
+                    $account = Account::query()->findOrFail($asset->account_id);
+                    $sum = $fields['buy_price'] * $fields['quantity'];
+                    if (empty($fields['short'])) {
+                        if ($fields['currency'] === 'USD') {
+                            $account->usd_balance -= $sum;
+                        } else {
+                            $account->balance -= $sum;
+                        }
                     } else {
-                        $account->balance -= $sum;
+                        if ($fields['currency'] === 'USD') {
+                            $account->usd_balance += $sum;
+                        } else {
+                            $account->balance += $sum;
+                        }
                     }
-                } else {
-                    if ($fields['currency'] === 'USD') {
-                        $account->usd_balance += $sum;
-                    } else {
-                        $account->balance += $sum;
-                    }
+                    $account->save();
                 }
-                $account->save();
-            }
+            });
         }
 
         $accountService->updateAll();
