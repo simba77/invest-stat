@@ -51,6 +51,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::group(['prefix' => 'assets'], function () {
             Route::post('delete/{id:number}', [AssetsController::class, 'delete'])->name('assets.delete');
             Route::get('edit/{id:number}', [AssetsController::class, 'edit'])->name('assets.edit');
+            Route::get('get-by-ticker/{ticker}/{stockMarket?}', [AssetsController::class, 'getByTicker'])->name('assets.getByTicker');
             Route::post('store/{account:number}', [AssetsController::class, 'store'])->name('assets.store');
             Route::post('sell/{id:number}', [AssetsController::class, 'sell'])->name('assets.sell');
 

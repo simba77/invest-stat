@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Accounts\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -106,7 +107,7 @@ class AssetsController extends Controller
 
         $accountService->updateAll();
 
-        return ['success' => true, 'id' => $asset->id];
+        return ['success' => true];
     }
 
     public function delete(int $id, AccountService $accountService): array
@@ -157,5 +158,28 @@ class AssetsController extends Controller
     {
         $accounts = Account::forCurrentUser()->soldAssets()->get();
         return (new SoldAssetsResource($accounts))->toArray();
+    }
+
+    public function getByTicker(string $ticker, string $stockMarket = null): array
+    {
+        $security = Security::query()
+            ->where('ticker', $ticker)
+            ->when($stockMarket, function (Builder $query) use ($stockMarket) {
+                return $query->where('stock_market', $stockMarket);
+            })
+            ->first();
+        if ($security) {
+            return [
+                'ticker'      => $security->ticker,
+                'shortName'   => $security->short_name,
+                'name'        => $security->name,
+                'stockMarket' => $security->stock_market,
+                'price'       => $security->price,
+                'currency'    => $security->currency,
+                'lotSize'     => $security->is_future ? 1 : $security->lot_size,
+            ];
+        }
+
+        return [];
     }
 }
