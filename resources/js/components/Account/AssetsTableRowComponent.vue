@@ -64,7 +64,7 @@
         <button
           type="button"
           class="text-gray-300 hover:text-red-500"
-          @click="confirmDeletionAsset(item, getAccounts)"
+          @click="confirmDeletionAsset(item, () => getAccounts(item.accountId))"
           title="Delete"
         >
           <x-circle-icon class="h-5 w-5"></x-circle-icon>
@@ -108,7 +108,7 @@ function sellAssetModal(item: Asset | AssetsGroup) {
         classes: ['btn-success mr-3 md:mr-0 ml-3'],
         callback: async (model: { price: number }) => {
           await sellAsset(item.id, model.price)
-          getAccounts()
+          getAccounts(item.accountId)
           modal.close()
         },
       },

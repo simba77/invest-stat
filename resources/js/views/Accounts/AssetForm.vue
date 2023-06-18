@@ -75,7 +75,7 @@
         </div>
         <div class="border-b"></div>
         <button type="submit" class="btn btn-primary" :disabled="loading">Save</button>
-        <router-link :to="{name: 'Accounts'}" class="btn btn-secondary ml-3">Back</router-link>
+        <router-link :to="{name: 'AccountDetail', params: {id: $route.params.account}}" class="btn btn-secondary ml-3">Back</router-link>
       </form>
     </div>
   </page-component>
@@ -116,7 +116,7 @@ export default {
       this.loading = true;
       axios.post('/api/assets/store/' + this.$route.params.account, this.form)
         .then(() => {
-          this.$router.push({name: 'Accounts'});
+          this.$router.push({name: 'AccountDetail', params: {id: this.$route.params.account}});
         })
         .catch((error) => {
           if (error.response.data.errors) {
