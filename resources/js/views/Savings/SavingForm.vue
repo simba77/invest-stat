@@ -3,6 +3,7 @@ import PageComponent from "@/components/PageComponent.vue";
 import {useSavings} from '@/composable/useSavings'
 import FormComponent from '@/components/Forms/FormComponent.vue'
 import {useRoute, useRouter} from 'vue-router'
+import PreloaderComponent from '@/components/Common/PreloaderComponent.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -24,8 +25,9 @@ function submitForm() {
         <div>
           <h3 class="text-lg font-medium text-gray-900">Deposit</h3>
         </div>
-        <div class="w-full md:w-2/4">
-          <form-component v-model="saving.form" :errors="saving.formErrors.value"/>
+        <preloader-component v-if="saving.loadingForm.value"></preloader-component>
+        <div v-else class="w-full md:w-2/4">
+          <form-component v-model="saving.form.value" :errors="saving.formErrors.value"/>
         </div>
         <div class="border-b"></div>
         <button type="submit" class="btn btn-primary" :disabled="saving.creating.value">Save</button>
