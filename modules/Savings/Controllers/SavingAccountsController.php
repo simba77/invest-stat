@@ -18,14 +18,24 @@ class SavingAccountsController
         return SavingAccountsResource::collection($savings);
     }
 
-    public function create(Request $request, SavingAccountForm $form): array
+    public function create(Request $request, SavingAccountForm $form, int $id = 0): array
     {
+        $savingAccount = null;
+        if ($id > 0) {
+            $savingAccount = SavingAccount::query()->forCurrentUser()->findOrFail($id);
+            $form->setModelData($savingAccount);
+        }
+
         $form->form();
         if ($request->isMethod('POST')) {
             $form->validate();
             $fields = $form->getFieldsFromRequest();
-            $fields['user_id'] = \Auth::user()->id;
-            $savingAccount = SavingAccount::query()->create($fields);
+            if ($id > 0) {
+                $savingAccount->update($fields);
+            } else {
+                $fields['user_id'] = \Auth::user()->id;
+                $savingAccount = SavingAccount::query()->create($fields);
+            }
             return ['id' => $savingAccount->id];
         }
 

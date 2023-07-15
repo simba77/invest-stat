@@ -59,7 +59,7 @@ export const useSavingAccounts = () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const {loading: creating, run: create} = useAsync(async (item: any, completeCallback?: (response: any) => void) => {
-    await axios.post('/api/savings/accounts/create/', item)
+    await axios.post('/api/savings/accounts/create/' + item.id, item)
       .then((response) => {
         if (completeCallback) {
           completeCallback(response)

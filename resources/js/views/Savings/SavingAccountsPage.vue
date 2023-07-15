@@ -29,7 +29,7 @@ savingAccount.getAccounts()
         <td class="table-actions">
           <template v-if="item.id">
             <div class="flex justify-end items-center show-on-row-hover">
-              <router-link class="text-gray-300 hover:text-gray-900 mr-3" :to="{name: 'EditDeposit', params: {id: item.id}}">
+              <router-link class="text-gray-300 hover:text-gray-900 mr-3" :to="{name: 'SavingAccountsEdit', params: {id: item.id}}">
                 <pencil-icon class="h-5 w-5"></pencil-icon>
               </router-link>
               <button

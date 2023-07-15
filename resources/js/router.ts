@@ -168,6 +168,14 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Savings/SavingAccountForm.vue')
   },
+  {
+    name: 'SavingAccountsEdit',
+    path: '/savings/accounts/edit/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Savings/SavingAccountForm.vue')
+  },
 
 ];
 
