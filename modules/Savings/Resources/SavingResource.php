@@ -19,6 +19,7 @@ class SavingResource extends JsonResource
             'date'     => $this->created_at?->format('d.m.Y H:i'),
             'sum'      => $this->sum,
             'type'     => $this->type,
+            'account'  => new SavingAccountsResource($this->account),
             'currency' => '₽',
         ];
     }
