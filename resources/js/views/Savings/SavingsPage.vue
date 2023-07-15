@@ -14,6 +14,7 @@ savings.getSavings()
   <page-component title="Savings">
     <div class="mb-4">
       <router-link :to="{name: 'SavingCreate'}" class="btn btn-primary">Add Deposit</router-link>
+      <router-link :to="{name: 'SavingAccounts'}" class="btn btn-secondary ml-2">Accounts</router-link>
     </div>
     <table class="simple-table">
       <thead>

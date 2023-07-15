@@ -141,6 +141,11 @@ const navigation = [
     current: routeName === 'Expenses'
   },
   {
+    name: 'Savings',
+    routeName: 'Savings',
+    current: routeName === 'Savings'
+  },
+  {
     name: 'Investments and Results',
     routeName: 'Investments',
     current: routeName === 'Investments'
