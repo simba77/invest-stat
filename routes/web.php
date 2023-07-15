@@ -9,6 +9,8 @@ use Modules\Auth\Controllers\AuthController;
 use Modules\Dashboard\Controllers\DashboardController;
 use Modules\Expenses\Controllers\ExpensesController;
 use Modules\Investments\Controllers\DepositsController;
+use Modules\Savings\Controllers\SavingAccountsController;
+use Modules\Savings\Controllers\SavingsController;
 
 Route::group(['prefix' => 'api'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('api.login');
@@ -56,6 +58,19 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('sell/{id:number}', [AssetsController::class, 'sell'])->name('assets.sell');
 
             Route::get('sold', [AssetsController::class, 'soldAssets'])->name('assets.sold-assets');
+        });
+
+        // Сбережения
+        Route::group(['prefix' => 'savings'], function () {
+            // Счета
+            Route::get('accounts', [SavingAccountsController::class, 'index'])->name('savings.accounts');
+            Route::post('accounts/delete/{id:number}', [SavingAccountsController::class, 'delete'])->name('savings.accounts.delete');
+            Route::post('accounts/create', [SavingAccountsController::class, 'create'])->name('savings.accounts.create');
+
+            // Операции
+            Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
+            Route::post('delete/{id:number}', [SavingsController::class, 'delete'])->name('savings.delete');
+            Route::post('create', [SavingsController::class, 'create'])->name('savings.create');
         });
     });
 });

@@ -150,6 +150,17 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Accounts/SoldAssetsPage.vue')
   },
+
+  // Savings
+  {
+    name: 'SavingAccounts',
+    path: '/savings/accounts',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Savings/SavingAccountsPage.vue')
+  },
+
 ];
 
 const router = createRouter({
