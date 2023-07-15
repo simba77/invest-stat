@@ -11,9 +11,9 @@ savings.getSavings()
 </script>
 
 <template>
-  <page-component title="Saving Accounts">
+  <page-component title="Savings">
     <div class="mb-4">
-      <router-link :to="{name: 'SavingAccountsCreate'}" class="btn btn-primary">Add Account</router-link>
+      <router-link :to="{name: 'SavingCreate'}" class="btn btn-primary">Add Deposit</router-link>
     </div>
     <table class="simple-table">
       <thead>
@@ -36,7 +36,7 @@ savings.getSavings()
         <td class="table-actions">
           <template v-if="item.id">
             <div class="flex justify-end items-center show-on-row-hover">
-              <router-link class="text-gray-300 hover:text-gray-900 mr-3" :to="{name: 'SavingAccountsEdit', params: {id: item.id}}">
+              <router-link class="text-gray-300 hover:text-gray-900 mr-3" :to="{name: 'SavingEdit', params: {id: item.id}}">
                 <pencil-icon class="h-5 w-5"></pencil-icon>
               </router-link>
               <button

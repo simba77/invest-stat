@@ -18,9 +18,22 @@ class SavingResource extends JsonResource
             'id'       => $this->id,
             'date'     => $this->created_at?->format('d.m.Y H:i'),
             'sum'      => $this->sum,
-            'type'     => $this->type,
+            'type'     => $this->getType(),
             'account'  => new SavingAccountsResource($this->account),
             'currency' => '₽',
         ];
+    }
+
+    private function getType(): string
+    {
+        if ($this->type === 1) {
+            return 'Deposit';
+        }
+
+        if ($this->type === 2) {
+            return 'Percent';
+        }
+
+        return '';
     }
 }

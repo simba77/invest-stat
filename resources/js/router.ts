@@ -177,6 +177,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Savings/SavingAccountForm.vue')
   },
 
+  // Пополнения и списания с накопительных счетов
   {
     name: 'Savings',
     path: '/savings',
@@ -184,6 +185,22 @@ const routes: Array<RouteRecordRaw> = [
       requiresAuth: true,
     },
     component: () => import('@/views/Savings/SavingsPage.vue')
+  },
+  {
+    name: 'SavingCreate',
+    path: '/savings/create',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Savings/SavingForm.vue')
+  },
+  {
+    name: 'SavingEdit',
+    path: '/savings/edit/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Savings/SavingForm.vue')
   },
 
 ];

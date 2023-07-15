@@ -70,7 +70,7 @@ Route::group(['prefix' => 'api'], function () {
             // Операции
             Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
             Route::post('delete/{id:number}', [SavingsController::class, 'delete'])->name('savings.delete');
-            Route::post('create', [SavingsController::class, 'create'])->name('savings.create');
+            Route::any('create/{id:number?}', [SavingsController::class, 'create'])->name('savings.create');
         });
     });
 });
