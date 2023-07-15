@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Modules\Accounts\Models\Account;
 use Modules\Investments\Models\Deposit;
 use Modules\Markets\DataProviders\Moex;
+use Modules\Savings\Models\Saving;
 
 class DashboardController extends Controller
 {
@@ -50,6 +51,8 @@ class DashboardController extends Controller
         $profit = $allAssetsSum - $invested;
         $profitPercent = round($profit / $invested * 100, 2);
 
+        $savingAmount = Saving::query()->forCurrentUser()->sum('sum');
+
         return [
             'usd'     => $moex->getRate(),
             'summary' => [
@@ -60,13 +63,13 @@ class DashboardController extends Controller
                 ],
                 [
                     'name'     => 'The Saving Amount',
-                    'total'    => config('invest.savingAmount'),
+                    'total'    => $savingAmount,
                     'currency' => '₽',
                 ],
                 [
                     'name'     => 'Savings + Invested',
                     'helpText' => 'The Saving Amount + The Invested Amount',
-                    'total'    => $invested + config('invest.savingAmount'),
+                    'total'    => $invested + $savingAmount,
                     'currency' => '₽',
                 ],
 
@@ -88,7 +91,7 @@ class DashboardController extends Controller
                 [
                     'name'     => 'Saving + All Brokers Assets',
                     'helpText' => 'Assets for The Current Day + The Saving Amount',
-                    'total'    => $allAssetsSum + config('invest.savingAmount'),
+                    'total'    => $allAssetsSum + $savingAmount,
                     'currency' => '₽',
                 ],
             ],
