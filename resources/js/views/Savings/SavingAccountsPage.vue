@@ -48,6 +48,10 @@ savingAccount.getAccounts()
       </tr>
       </tbody>
     </table>
+
+    <div class="mt-5">
+      <router-link :to="{name: 'Savings'}" class="btn btn-secondary">Back</router-link>
+    </div>
   </page-component>
 </template>
 
