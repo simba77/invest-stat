@@ -52,10 +52,42 @@ export const useSavingAccounts = () => {
     );
   }
 
+  // Форма создания/редактирования
+  const form = ref({})
+  const formErrors = ref({})
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const {loading: creating, run: create} = useAsync(async (item: any, completeCallback?: (response: any) => void) => {
+    await axios.post('/api/savings/accounts/create/', item)
+      .then((response) => {
+        if (completeCallback) {
+          completeCallback(response)
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 422) {
+          formErrors.value = e.response.data.errors;
+        } else {
+          throw e;
+        }
+      })
+  })
+
+  const {loading: loadingForm, run: loadForm} = useAsync(async (id: any) => {
+    form.value = await axios.get('/api/savings/accounts/create/' + (id > 0 ? id : '')).then((response) => response.data)
+  })
+
   return {
     accounts,
     loading,
+    creating,
+    form,
+    formErrors,
+    loadingForm,
     confirmDeletion,
-    getAccounts: asyncGetAccounts,
+    create,
+    loadForm,
+    getAccounts: asyncGetAccounts
   }
 }

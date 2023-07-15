@@ -16,6 +16,7 @@ class SavingAccountForm extends AbstractForm
 
             'name' => (new InputText())
                 ->setNameAndId('name.value')
+                ->setValidationRule('required')
                 ->setLabel('Name')
                 ->setPlaceholder('Name')
                 ->setValue($this->getFieldValue('name.value'))

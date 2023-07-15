@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import PageComponent from "@/components/PageComponent.vue"
 import {XCircleIcon, PencilIcon} from "@heroicons/vue/outline"
-import BaseModal from "@/components/Modals/BaseModal.vue"
-import ConfirmModal from "@/components/Modals/ConfirmModal.vue"
 import {useSavingAccounts} from '@/composable/useSavingAccounts'
 
 const savingAccount = useSavingAccounts()
@@ -14,7 +12,7 @@ savingAccount.getAccounts()
 <template>
   <page-component title="Saving Accounts">
     <div class="mb-4">
-      <router-link :to="{name: 'AddDeposit'}" class="btn btn-primary">Add Account</router-link>
+      <router-link :to="{name: 'SavingAccountsCreate'}" class="btn btn-primary">Add Account</router-link>
     </div>
     <table class="simple-table">
       <thead>

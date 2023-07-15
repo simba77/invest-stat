@@ -1,0 +1,36 @@
+<script setup lang="ts">
+import PageComponent from "@/components/PageComponent.vue";
+import {useSavingAccounts} from '@/composable/useSavingAccounts'
+import FormComponent from '@/components/Forms/FormComponent.vue'
+import {useRoute, useRouter} from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+const savingAccounts = useSavingAccounts()
+savingAccounts.loadForm(route.params.id ?? 0)
+
+function submitForm() {
+  savingAccounts.create(savingAccounts.form.value, () => {
+    router.push({'name': 'SavingAccounts'})
+  })
+}
+</script>
+
+<template>
+  <page-component title="Add Saving Account">
+    <div class="card">
+      <form class="space-y-6 w-full md:w-2/3 mx-auto" @submit.prevent="submitForm">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">Saving Account</h3>
+        </div>
+        <div class="w-full md:w-2/4">
+          <form-component v-model="savingAccounts.form" :errors="savingAccounts.formErrors.value"/>
+        </div>
+        <div class="border-b"></div>
+        <button type="submit" class="btn btn-primary" :disabled="savingAccounts.creating.value">Save</button>
+        <router-link :to="{name: 'SavingAccounts'}" class="btn btn-secondary ml-3">Back</router-link>
+      </form>
+    </div>
+  </page-component>
+</template>

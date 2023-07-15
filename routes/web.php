@@ -65,7 +65,7 @@ Route::group(['prefix' => 'api'], function () {
             // Счета
             Route::get('accounts', [SavingAccountsController::class, 'index'])->name('savings.accounts');
             Route::post('accounts/delete/{id:number}', [SavingAccountsController::class, 'delete'])->name('savings.accounts.delete');
-            Route::post('accounts/create', [SavingAccountsController::class, 'create'])->name('savings.accounts.create');
+            Route::any('accounts/create', [SavingAccountsController::class, 'create'])->name('savings.accounts.create');
 
             // Операции
             Route::get('/', [SavingsController::class, 'index'])->name('savings.index');

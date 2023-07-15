@@ -20,6 +20,7 @@ class SavingAccountsController
 
     public function create(Request $request, SavingAccountForm $form): array
     {
+        $form->form();
         if ($request->isMethod('POST')) {
             $form->validate();
             $fields = $form->getFieldsFromRequest();
@@ -28,7 +29,7 @@ class SavingAccountsController
             return ['id' => $savingAccount->id];
         }
 
-        return $form->form()->toArray();
+        return $form->toArray();
     }
 
     public function delete(int $id): array
