@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\Savings\Forms;
 
+use Carbon\Carbon;
 use Modules\Savings\Models\Saving;
 use Modules\Savings\Models\SavingAccount;
 use Modules\System\Forms\AbstractForm;
+use Modules\System\Forms\Inputs\InputDate;
 use Modules\System\Forms\Inputs\InputNumber;
 use Modules\System\Forms\Inputs\Select;
 
@@ -67,6 +69,14 @@ class SavingForm extends AbstractForm
                 )
                 ->setValue($this->getFieldValue('type.value', 1))
                 ->get(),
+
+            'date' => (new InputDate())
+                ->setNameAndId('date.value')
+                ->setValidationRule('required')
+                ->setLabel('Date')
+                ->setPlaceholder('Date')
+                ->setValue($this->getDateField('date.value'))
+                ->get(),
         ];
 
         return $this;
@@ -79,6 +89,16 @@ class SavingForm extends AbstractForm
             'saving_account_id' => 'account.value',
             'sum'               => 'sum.value',
             'type'              => 'type.value',
+            'created_at'        => 'date.value',
         ];
+    }
+
+    private function getDateField(string $fieldName): string
+    {
+        if ($this->modelData) {
+            return $this->modelData->$fieldName?->format('Y-m-d') ?? '';
+        }
+
+        return Carbon::now()->format('Y-m-d');
     }
 }

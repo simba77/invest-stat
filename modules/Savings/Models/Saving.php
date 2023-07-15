@@ -19,6 +19,7 @@ class Saving extends Model
         'saving_account_id',
         'sum',
         'type',
+        'created_at',
     ];
 
     public function scopeForCurrentUser(Builder $builder): Builder

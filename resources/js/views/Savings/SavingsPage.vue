@@ -52,7 +52,7 @@ savings.getSavings()
         </td>
       </tr>
       <tr v-if="savings.savings.value.data?.length < 1">
-        <td colspan="3" class="text-center">The list is empty</td>
+        <td colspan="6" class="text-center">The list is empty</td>
       </tr>
       </tbody>
     </table>

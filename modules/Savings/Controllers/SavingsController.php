@@ -14,7 +14,7 @@ class SavingsController
 {
     public function index(): AnonymousResourceCollection
     {
-        $savings = Saving::query()->forCurrentUser()->get();
+        $savings = Saving::query()->forCurrentUser()->orderByDesc('created_at')->orderByDesc('id')->get();
         return SavingResource::collection($savings);
     }
 

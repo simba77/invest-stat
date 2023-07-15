@@ -2,7 +2,7 @@
   <div>
     <div v-for="(item, index) in fields" :key="index" class="mb-3">
       <template v-if="item && item.type && !item.isHidden">
-        <div v-if="item.type === 'text' || item.type === 'password' || item.type === 'number'">
+        <div v-if="item.type === 'text' || item.type === 'password' || item.type === 'number' || item.type === 'date'">
           <!-- Text or number input -->
           <input-text
             v-model="item.value"

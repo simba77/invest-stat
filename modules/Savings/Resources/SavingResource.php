@@ -16,7 +16,7 @@ class SavingResource extends JsonResource
     {
         return [
             'id'       => $this->id,
-            'date'     => $this->created_at?->format('d.m.Y H:i'),
+            'date'     => $this->created_at?->format('d.m.Y'),
             'sum'      => $this->sum,
             'type'     => $this->getType(),
             'account'  => new SavingAccountsResource($this->account),
