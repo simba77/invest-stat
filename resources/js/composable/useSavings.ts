@@ -73,7 +73,7 @@ export const useSavings = () => {
   })
 
   const {loading: loadingForm, run: loadForm} = useAsync(async (id: any) => {
-    form.value = await axios.get('/api/savings/create/' + (id > 0 ? id : '')).then((response) => response.data)
+    form.value = await axios.get('/api/savings/create/' + id).then((response) => response.data)
   })
 
   return {

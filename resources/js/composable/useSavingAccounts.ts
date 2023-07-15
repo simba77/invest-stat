@@ -75,7 +75,7 @@ export const useSavingAccounts = () => {
   })
 
   const {loading: loadingForm, run: loadForm} = useAsync(async (id: any) => {
-    form.value = await axios.get('/api/savings/accounts/create/' + (id > 0 ? id : '')).then((response) => response.data)
+    form.value = await axios.get('/api/savings/accounts/create/' + id).then((response) => response.data)
   })
 
   return {
