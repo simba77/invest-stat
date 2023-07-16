@@ -10,6 +10,7 @@ class Securities
 {
     public function createOrUpdate(string $ticker, string $market, array $params): void
     {
+        // Бесполезный массив. Переделать бы это
         $fields = [
             'name'       => $params['name'] ?? null,
             'short_name' => $params['short_name'] ?? null,
@@ -18,10 +19,9 @@ class Securities
             'price'      => $params['price'] ?? 0,
             'currency'   => $this->getCurrencyByCode($params['currency']),
             'isin'       => $params['isin'] ?? '',
-            'is_future'  => $params['is_future'] ?? null,
-            'step_price' => $params['step_price'] ?? null,
-            'expiration' => $params['expiration'] ?? null,
         ];
+
+        $fields = array_merge($params, $fields);
 
         foreach ($fields as $key => $field) {
             if (is_null($field)) {

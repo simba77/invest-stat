@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Markets\DataProviders;
 
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -123,6 +124,9 @@ class Moex
         foreach ($rows as $row) {
             $price = $row['PREVPRICE'] ?? 0;
             if (! empty($price)) {
+                $maturityDate = Carbon::parse($row['MATDATE']);
+                $nextCouponDate = Carbon::parse($row['NEXTCOUPON']);
+
                 $this->securities->createOrUpdate($row['SECID'], 'MOEX', [
                     'name'               => $row['SECNAME'],
                     'short_name'         => $row['SHORTNAME'],
@@ -132,11 +136,11 @@ class Moex
                     'currency'           => 'RUB',
                     'step_price'         => $row['MINSTEP'],
                     'is_bond'            => true,
-                    'coupon_percent'     => $row['COUPONPERCENT'],
-                    'coupon_value'       => $row['COUPONVALUE'],
-                    'coupon_accumulated' => $row['ACCRUEDINT'],
-                    'next_coupon_date'   => $row['NEXTCOUPON'],
-                    'maturity_date'      => $row['MATDATE'],
+                    'coupon_percent'     => (float) $row['COUPONPERCENT'],
+                    'coupon_value'       => (float) $row['COUPONVALUE'],
+                    'coupon_accumulated' => (float) $row['ACCRUEDINT'],
+                    'next_coupon_date'   => $nextCouponDate->isCurrentCentury() ? $nextCouponDate : null,
+                    'maturity_date'      => $maturityDate->isCurrentCentury() ? $maturityDate : null,
                 ]);
             }
         }
