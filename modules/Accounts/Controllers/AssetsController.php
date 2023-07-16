@@ -83,7 +83,7 @@ class AssetsController extends Controller
                     ]
                 );
 
-                if (! $sec?->is_future) {
+                if (! $sec?->is_future && ! $sec?->is_bond) {
                     // Change the balance
                     $account = Account::query()->findOrFail($asset->account_id);
                     $sum = $fields['buy_price'] * $fields['quantity'];
@@ -100,6 +100,14 @@ class AssetsController extends Controller
                             $account->balance += $sum;
                         }
                     }
+                    $account->save();
+                }
+
+                // Рассчитываем стоимость облигации на момент покупки
+                if ($sec?->is_bond) {
+                    $sum = ($sec->lot_size * $sec->price / 100 * $fields['quantity']) + ($sec->coupon_accumulated * $fields['quantity']);
+                    $account = Account::query()->findOrFail($asset->account_id);
+                    $account->balance -= $sum;
                     $account->save();
                 }
             });
@@ -176,7 +184,7 @@ class AssetsController extends Controller
                 'stockMarket' => $security->stock_market,
                 'price'       => $security->price,
                 'currency'    => $security->currency,
-                'lotSize'     => $security->is_future ? 1 : $security->lot_size,
+                'lotSize'     => ($security->is_future || $security->is_bond) ? 1 : $security->lot_size,
             ];
         }
 
