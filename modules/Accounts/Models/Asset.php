@@ -55,6 +55,9 @@ class Asset extends Model
                 if ($this->security?->is_future) {
                     return $value * $this->security->step_price * $this->security->lot_size;
                 }
+                if ($this->security?->is_bond) {
+                    return $value * $this->security->lot_size / 100;
+                }
                 return $value;
             }
         );
@@ -78,6 +81,9 @@ class Asset extends Model
             function ($value) {
                 if ($this->security?->is_future) {
                     return $value * $this->security->step_price * $this->security->lot_size;
+                }
+                if ($this->security?->is_bond) {
+                    return $value * $this->security->lot_size / 100;
                 }
                 return $value;
             }
@@ -114,6 +120,9 @@ class Asset extends Model
                 if ($this->security?->is_future) {
                     return $this->security->price * $this->security->step_price * $this->security->lot_size;
                 }
+                if ($this->security?->is_bond) {
+                    return $this->security->price * $this->security->lot_size / 100;
+                }
                 return (float) $this->security?->price ?? 0;
             }
         );
@@ -136,6 +145,10 @@ class Asset extends Model
             if ($this->security?->is_future) {
                 // TODO: Change commission
                 return 5 * $this->quantity;
+            }
+            if ($this->security?->is_bond) {
+                // TODO: Change commission
+                return 0.5 * $this->quantity;
             }
             return $this->full_current_price * ($this->account->commission / 100);
         });
