@@ -27,6 +27,7 @@ class UpdateSecuritiesInfo extends Command
 
     public function handle(Moex $moex, AccountService $accountService): int
     {
+        $moex->importBonds();
         $moex->import();
         $moex->importEtf();
         $moex->importShares();
