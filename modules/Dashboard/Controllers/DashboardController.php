@@ -9,10 +9,11 @@ use Modules\Accounts\Models\Account;
 use Modules\Investments\Models\Deposit;
 use Modules\Markets\DataProviders\Moex;
 use Modules\Savings\Models\Saving;
+use Modules\Savings\Services\SavingsService;
 
 class DashboardController extends Controller
 {
-    public function index(Moex $moex): array
+    public function index(Moex $moex, SavingsService $savings): array
     {
         $invested = Deposit::sum('sum');
         $allAssetsSum = 0;
@@ -54,8 +55,9 @@ class DashboardController extends Controller
         $savingAmount = Saving::query()->forCurrentUser()->sum('sum');
 
         return [
-            'usd'     => $moex->getRate(),
-            'summary' => [
+            'usd'            => $moex->getRate(),
+            'savingAccounts' => $savings->getGroupedByAccount(),
+            'summary'        => [
                 [
                     'name'     => 'The Invested Amount',
                     'total'    => $invested,
@@ -95,7 +97,7 @@ class DashboardController extends Controller
                     'currency' => '₽',
                 ],
             ],
-            'brokers' => $brokers,
+            'brokers'        => $brokers,
         ];
     }
 }

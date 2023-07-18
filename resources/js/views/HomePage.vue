@@ -17,6 +17,17 @@
         ></stat-card>
       </div>
 
+      <div class="text-2xl font-extrabold mt-6 mb-3">Saving Accounts</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+        <stat-card
+          v-for="(card, i) in dashboard.savingAccounts"
+          :key="i"
+          :name="card.name"
+          :total="card.sum"
+        ></stat-card>
+      </div>
+
+
       <div class="text-2xl font-extrabold mt-6 mb-3">Assets by Brokers</div>
       <div v-for="(broker, index) in dashboard.brokers" :key="index">
         <div class="text-xl mb-3 mt-5">{{ broker.name }}</div>
