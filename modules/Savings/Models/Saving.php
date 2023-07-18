@@ -14,6 +14,12 @@ class Saving extends Model
 {
     use CreatedByTrait;
 
+    // Пополнение
+    public const TYPE_DEPOSIT = 1;
+
+    // Начисленный процент
+    public const TYPE_PERCENT = 2;
+
     protected $fillable = [
         'user_id',
         'saving_account_id',

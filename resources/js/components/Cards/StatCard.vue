@@ -20,6 +20,18 @@
         </template>
         {{ Math.abs(percent) }}%
       </div>
+      <div
+        :class="[profit > 0 ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900', 'rounded-full pr-2 pl-1 flex items-center']"
+        v-if="profit"
+      >
+        <template v-if="profit > 0">
+          <arrow-sm-up-icon class="h-5 mr-0.5 text-green-500"></arrow-sm-up-icon>
+        </template>
+        <template v-else>
+          <arrow-sm-down-icon class="h-5 mr-0.5 text-red-500"></arrow-sm-down-icon>
+        </template>
+        {{ new Intl.NumberFormat('ru-RU').format(profit) }} {{ currency }}
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +61,10 @@ export default {
     },
     helpText: {
       type: String,
+      default: null,
+    },
+    profit: {
+      type: Number,
       default: null,
     }
   }

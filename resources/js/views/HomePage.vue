@@ -24,6 +24,7 @@
           :key="i"
           :name="card.name"
           :total="card.sum"
+          :profit="card.profit"
         ></stat-card>
       </div>
 
