@@ -159,6 +159,11 @@ const navigation = [
     name: 'Sold Assets',
     routeName: 'SoldAssets',
     current: routeName === 'SoldAssets'
+  },
+  {
+    name: 'Analytics',
+    routeName: 'Analytics',
+    current: routeName === 'Analytics'
   }
 ]
 const userNavigation = [

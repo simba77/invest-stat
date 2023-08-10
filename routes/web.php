@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Modules\Accounts\Controllers\AccountsController;
 use Modules\Accounts\Controllers\AssetsController;
+use Modules\Analytics\Controllers\AnalyticsController;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Dashboard\Controllers\DashboardController;
 use Modules\Expenses\Controllers\ExpensesController;
@@ -71,6 +72,11 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
             Route::post('delete/{id:number}', [SavingsController::class, 'delete'])->name('savings.delete');
             Route::any('create/{id:number?}', [SavingsController::class, 'create'])->name('savings.create');
+        });
+
+        // Аналитика
+        Route::group(['prefix' => 'analytics'], function () {
+            Route::get('/', [AnalyticsController::class, 'index'])->name('analytics.index');
         });
     });
 });

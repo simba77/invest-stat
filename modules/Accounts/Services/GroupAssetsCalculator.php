@@ -18,6 +18,8 @@ class GroupAssetsCalculator
     public function __construct(
         protected array | Collection $collection,
         protected Moex $moex,
+        protected ?float $sumOfAssets = null,
+        protected ?float $balance = null,
     ) {
         $this->firstAsset = $this->collection->first();
     }
@@ -146,11 +148,27 @@ class GroupAssetsCalculator
         return $this->firstAsset->current_price;
     }
 
+    public function getSumOfAssets(): float
+    {
+        if ($this->sumOfAssets !== null) {
+            return $this->sumOfAssets;
+        }
+        return (float) $this->firstAsset->account->current_sum_of_assets;
+    }
+
+    public function getBalance(): float
+    {
+        if ($this->balance !== null) {
+            return $this->balance;
+        }
+        return (float) $this->firstAsset->account->balance;
+    }
+
     /**
      * Доля в портфеле
      */
     public function getGroupPercent(): float
     {
-        return round($this->collection->sum('full_current_base_price') / ($this->firstAsset->account->current_sum_of_assets + $this->firstAsset->account->balance) * 100, 2);
+        return round($this->collection->sum('full_current_base_price') / ($this->getSumOfAssets() + $this->getBalance()) * 100, 2);
     }
 }

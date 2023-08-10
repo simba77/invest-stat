@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Accounts\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -46,6 +47,11 @@ class Asset extends Model
     public function security(): HasOne
     {
         return $this->hasOne(Security::class, 'ticker', 'ticker');
+    }
+
+    public function scopeActive(Builder $builder): Builder
+    {
+        return $builder->where('status', '!=', Asset::SOLD)->orWhereNull('status');
     }
 
     public function buyPrice(): Attribute

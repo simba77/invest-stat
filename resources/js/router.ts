@@ -203,6 +203,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Savings/SavingForm.vue')
   },
 
+  {
+    name: 'Analytics',
+    path: '/analytics',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Analytics/AnalyticsPage.vue')
+  },
+
 ];
 
 const router = createRouter({
